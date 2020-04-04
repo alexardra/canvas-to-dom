@@ -27,5 +27,8 @@
     "babel-loader": "^8.1.0",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "opencv.js": "^1.2.1"
   }
 }

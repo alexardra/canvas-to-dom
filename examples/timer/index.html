@@ -1,8 +1,13 @@
 <html>
-  <head> </head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timer Example</title>
+  </head>
   <body>
     <canvas id="app"></canvas>
   </body>
+  <script src="../../build/app.js"></script>
   <script async>
     var canvas = document.getElementById("app");
     var context = canvas.getContext("2d");
@@ -13,7 +18,7 @@
     context.font = "20px Georgia";
     context.fillText(frameCount.toString(), 10, 50);
 
-    var updateCounter = function() {
+    var updateCounter = function () {
       frameCount += 1;
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.fillText(frameCount.toString(), 10, 50);

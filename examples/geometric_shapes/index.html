@@ -1,0 +1,46 @@
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Geometric Shapes</title>
+</head>
+
+<body>
+    <canvas id="app"></canvas>
+    <canvas id="boundaries"></canvas>
+    <canvas id="dst"></canvas>
+</body>
+<script src="app.js"></script>
+<script>
+    var canvas = document.getElementById("app");
+    var context = canvas.getContext("2d");
+
+    canvas.width = 300;
+    canvas.height = 300;
+
+    context.beginPath();
+    context.lineWidth = "6";
+    context.strokeStyle = "red";
+    context.rect(5, 5, 290, 140);
+    context.stroke();
+
+    context.beginPath();
+    context.strokeStyle = "blue";
+    context.arc(100, 75, 50, 0, 2 * Math.PI);
+    // context.fill();
+    context.stroke();
+
+    context.beginPath();
+    context.lineWidth = "1";
+    context.strokeStyle = "green";
+    context.moveTo(220, 50);
+    context.lineTo(260, 100);
+    context.lineTo(180, 100);
+    context.closePath();
+    context.fillStyle = "green";
+    context.fill();
+    context.stroke();
+</script>
+
+</html>

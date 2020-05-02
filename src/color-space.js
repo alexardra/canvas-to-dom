@@ -17,5 +17,5 @@ export const adjustColorSpace = (src, dst, colorSpace, canvasColorSpace = "RGB")
     }
 
     cv.cvtColor(src, dst, cv[supportedColorSpaceMap[colorSpace]]);
-    return dst;
+    // return dst;
 }

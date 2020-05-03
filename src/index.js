@@ -1,5 +1,6 @@
 import * as cv from "../lib/opencv.js";
 import { adjustColorSpace } from "./color-space";
+import Shape from "./shape";
 
 window.onload = () => {
   console.log("window loaded");
@@ -7,9 +8,8 @@ window.onload = () => {
     // do all your work here
     console.log("opencv loaded");
 
-    // canvasToDom("app")
+    canvasToDom("app");
   };
-  canvasToDom("app");
 };
 
 
@@ -25,13 +25,16 @@ const canvasToDom = (canvasEl, options = sampleOptions) => {
   preProcess(src);
   cv.imshow('boundaries', src);
 
+  // erode_boundaries(src);
+  // cv.imshow('erode', src);
+
   let { contours, hierarchy } = getContourInfo(src);
+  printShapes(contours);
 
   let dst = cv.Mat.zeros(src.cols, src.rows, cv.CV_8UC3);
   drawContours(dst, contours, hierarchy);
-
   cv.imshow('dst', dst);
-  src.delete(); dst.delete(); contours.delete(); hierarchy.delete();
+  // src.delete(); dst.delete(); contours.delete(); hierarchy.delete();
 }
 
 const preProcess = (mat) => {
@@ -45,6 +48,18 @@ const preProcess = (mat) => {
   //threshold - binarization
   cv.adaptiveThreshold(mat, mat, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, 5, 2);
 }
+
+const erode_boundaries = (mat) => {
+  // let src = cv.imread('canvasInput');
+  // let dst = new cv.Mat();
+  let kernel = cv.Mat.ones(2, 2, cv.CV_8U);
+  let anchor = new cv.Point(-1, -1);
+
+  cv.erode(mat, mat, kernel, anchor, 1, cv.BORDER_CONSTANT, cv.morphologyDefaultBorderValue());
+  kernel.delete();
+  //anchor.delete();
+}
+
 
 const getContourInfo = (mat) => {
   let contours = new cv.MatVector();
@@ -62,3 +77,9 @@ const drawContours = (mat, contours, hierarchy) => {
     cv.drawContours(mat, contours, i, color, 1, cv.LINE_8, hierarchy);
   }
 }
+
+const printShapes = (contours) => {
+  for (let i = 0; i < contours.size(); ++i) {
+    console.log(new Shape(contours.get(i)).getShape());
+  }
+} 

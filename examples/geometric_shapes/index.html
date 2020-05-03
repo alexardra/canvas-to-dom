@@ -9,6 +9,7 @@
 <body>
     <canvas id="app"></canvas>
     <canvas id="boundaries"></canvas>
+    <canvas id="erode"></canvas>
     <canvas id="dst"></canvas>
 </body>
 <script src="app.js"></script>
@@ -22,25 +23,25 @@
     context.beginPath();
     context.lineWidth = "6";
     context.strokeStyle = "red";
-    context.rect(5, 5, 290, 140);
+    context.rect(5, 5, 290, 290);
     context.stroke();
 
-    context.beginPath();
-    context.strokeStyle = "blue";
-    context.arc(100, 75, 50, 0, 2 * Math.PI);
+    // context.beginPath();
+    // context.strokeStyle = "blue";
+    // context.arc(100, 75, 50, 0, 2 * Math.PI);
+    // // context.fill();
+    // context.stroke();
+
+    // context.beginPath();
+    // context.lineWidth = "1";
+    // context.strokeStyle = "green";
+    // context.moveTo(220, 50);
+    // context.lineTo(260, 100);
+    // context.lineTo(180, 100);
+    // context.closePath();
+    // context.fillStyle = "green";
     // context.fill();
-    context.stroke();
-
-    context.beginPath();
-    context.lineWidth = "1";
-    context.strokeStyle = "green";
-    context.moveTo(220, 50);
-    context.lineTo(260, 100);
-    context.lineTo(180, 100);
-    context.closePath();
-    context.fillStyle = "green";
-    context.fill();
-    context.stroke();
+    // context.stroke();
 </script>
 
 </html>

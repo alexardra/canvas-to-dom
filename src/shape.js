@@ -5,6 +5,10 @@ export default class Shape {
     constructor(contour) {
         this.contour = contour;
         this.moments = cv.moments(this.contour, false);
+
+        this.shape = null;
+        this.vertices = [];
+
         this.computeShape();
     }
 
@@ -27,36 +31,38 @@ export default class Shape {
         // TODO
     }
 
+    getVertices() {
+        return this.vertices;
+    }
+
     computeShape() {
         const perimeter = this.getPerimeter();
-        let shape = null;
 
         let approx = new cv.Mat();
         cv.approxPolyDP(this.contour, approx, 0.04 * perimeter, true);
 
-        const verticeCoordinates = approx.data32S;
-        const verticesCount = verticeCoordinates.length / 2;
+        for (let i = 0; i < approx.data32S.length; i += 2) {
+            this.vertices.push(approx.data32S.slice(i, i + 2));
+        }
 
-
-        if (verticesCount === 3) {
-            shape = "triangle";
-        } else if (verticesCount === 4) {
+        if (this.vertices.length === 3) {
+            this.shape = "triangle";
+        } else if (this.vertices.length === 4) {
             const { x, y, width, height } = cv.boundingRect(approx);
             const aspectRatio = width / height;
 
             if (aspectRatio >= 0.95 && aspectRatio <= 1.05)
-                shape = "square";
+                this.shape = "square";
             else
-                shape = "rectangle";
-        } else if (verticesCount == 5) {
-            shape = "pentagon";
+                this.shape = "rectangle";
+        } else if (this.vertices.length == 5) {
+            this.shape = "pentagon";
         } else {
             // assume circle - TODO
-            shape = "circle";
+            this.shape = "circle";
         }
 
-        // approx.delete();
-        this.shape = shape;
+        approx.delete();
     }
 
     getShape() {

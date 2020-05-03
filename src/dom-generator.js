@@ -1,6 +1,15 @@
 import TagGenerator from "./tag-generator";
 
+const tagProperties = [
+    "center",
+    "width", "height", "diameter", "points",
+    "color",
+    "zOrder",
+    "orientation"
+]
+
 export default class DomGenerator {
+
 
     constructor(domInfo) {
         this.domInfo = domInfo;
@@ -12,28 +21,31 @@ export default class DomGenerator {
             let tag = new TagGenerator(tagInfo.identity);
             tag.init();
 
-            // center
-            let { cx, cy } = tagInfo.center;
-            tag.addAttribute("center", `(${cx},${cy})`);
+            for (let property of tagProperties) {
+                if (tagInfo.hasOwnProperty(property)) {
+                    this.addTagProperty(tag, property, tagInfo[property]);
+                }
 
-            // size 
-            if (tagInfo.identity === "rectangle" || tagInfo.identity === "square") {
-                tag.addAttribute("width", tagInfo.width);
-                tag.addAttribute("height", tagInfo.height);
-            } else if (tagInfo.identity === "triangle") {
-                tag.addAttribute("point-a", `(${tagInfo.points[0].cx},${tagInfo.points[0].cy})`);
-                tag.addAttribute("point-b", `(${tagInfo.points[1].cx},${tagInfo.points[1].cy})`);
-                tag.addAttribute("point-c", `(${tagInfo.points[2].cx},${tagInfo.points[2].cy})`);
-            } else if (tagInfo.identity === "circle") {
-                tag.addAttribute("diameter", tagInfo.diameter);
             }
-
-            // z-order 
-            tag.addAttribute("z-order", tagInfo.zOrder);
             tag.end();
-
             console.log(tag.getGenerated());
         }
     }
 
+    addTagProperty(tag, property, value) {
+        // center
+        if (property === "center") {
+            console.log(value);
+            let { cx, cy } = value;
+            tag.addAttribute("center", `(${cx},${cy})`);
+        } else if (property === "width" || property === "height" || property === "diameter") {
+            tag.addAttribute(property, value);
+        } else if (property === "points") {
+            tag.addAttribute("point-a", `(${value[0].cx},${value[0].cy})`);
+            tag.addAttribute("point-b", `(${value[1].cx},${value[1].cy})`);
+            tag.addAttribute("point-c", `(${value[2].cx},${value[2].cy})`);
+        } else if (property === "zOrder") {
+            tag.addAttribute("z-order", value);
+        }
+    }
 }

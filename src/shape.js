@@ -35,8 +35,12 @@ export default class Shape {
         cv.approxPolyDP(this.contour, approx, 0.04 * perimeter, true);
 
         const verticeCoordinates = approx.data32S;
+        const verticesCount = verticeCoordinates.length / 2;
 
-        if (verticeCoordinates.length / 2 === 4) {
+
+        if (verticesCount === 3) {
+            shape = "triangle";
+        } else if (verticesCount === 4) {
             const { x, y, width, height } = cv.boundingRect(approx);
             const aspectRatio = width / height;
 
@@ -44,9 +48,14 @@ export default class Shape {
                 shape = "square";
             else
                 shape = "rectangle";
+        } else if (verticesCount == 5) {
+            shape = "pentagon";
+        } else {
+            // assume circle - TODO
+            shape = "circle";
         }
 
-        approx.delete();
+        // approx.delete();
         this.shape = shape;
     }
 

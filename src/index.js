@@ -1,6 +1,7 @@
 import * as cv from "../lib/opencv.js";
 import { adjustColorSpace } from "./color-space";
 import Shape from "./shape";
+import DomGenerator from "./dom-generator";
 
 window.onload = () => {
   console.log("window loaded");
@@ -8,7 +9,46 @@ window.onload = () => {
     // do all your work here
     console.log("opencv loaded");
 
-    canvasToDom("app");
+    // canvasToDom("app");
+    let instance = [{
+      "identity": "square",
+      "center": {
+        "cx": 12,
+        "cy": 23
+      },
+      "width": 5,
+      "height": 5,
+      "color": "#fffff",
+      "orientation": 90,
+      "zOrder": -1
+    },
+    {
+      "identity": "triangle",
+      "center": {
+        "cx": 12,
+        "cy": 23
+      },
+      "points": [
+        {
+          "cx": 22,
+          "cy": 12,
+        },
+        {
+          "cx": 22,
+          "cy": 12,
+        },
+        {
+          "cx": 22,
+          "cy": 12,
+        }
+      ],
+      "color": "#fffff",
+      "orientation": 90,
+      "zOrder": -1
+    }
+    ];
+    let domGenerator = new DomGenerator(instance);
+    domGenerator.parse();
   };
 };
 

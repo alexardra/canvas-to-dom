@@ -7,8 +7,20 @@ export default class TagGenerator {
         this.tag = `<${this.tagName}`;
     }
 
+    end_opening_tag() {
+        this.tag += ">";
+    }
+
     end() {
-        this.tag += `></${this.tagName}>`;
+        this.tag += `</${this.tagName}>`;
+    }
+
+    getEnd() {
+        return `</${this.tagName}>`;
+    }
+
+    is_ended() {
+        return this.tag.endsWith(`</${this.tagName}>`);
     }
 
     addAttribute(attributeName, attributeValue) {
@@ -17,7 +29,6 @@ export default class TagGenerator {
     }
 
     getGenerated() {
-        // TODO: end if tag is not ended
         return this.tag;
     }
 }

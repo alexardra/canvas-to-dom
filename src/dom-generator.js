@@ -17,8 +17,12 @@ export default class DomGenerator {
     }
 
     generate() {
-        // assume info is array - TODO: hierarchy
-        for (let tagInfo of this.domInfo) {
+        this.dom = this.generateDomFromInfo(this.domInfo);
+    }
+
+    generateDomFromInfo(domInfo) {
+        let dom = "";
+        for (let tagInfo of domInfo) {
             let tag = new TagGenerator(tagInfo.identity);
             tag.init();
 
@@ -27,10 +31,21 @@ export default class DomGenerator {
                     this.addTagProperty(tag, property, tagInfo[property]);
                 }
             }
+            tag.end_opening_tag();
+
+            dom += tag.getGenerated();
+
+            if (tagInfo.hasOwnProperty("children") &&
+                Array.isArray(tagInfo.children) &&
+                tagInfo.children.length > 0) {
+
+                dom += this.generateDomFromInfo(tagInfo.children);
+            }
+
             tag.end();
-            // console.log(tag.getGenerated());
-            this.dom += tag.getGenerated();
+            dom += tag.getEnd();
         }
+        return dom;
     }
 
     getDom() {
@@ -39,7 +54,6 @@ export default class DomGenerator {
 
     addTagProperty(tag, property, value) {
         if (property === "center") {
-            console.log(value);
             let { cx, cy } = value;
             tag.addAttribute("center", `(${cx},${cy})`);
         } else if (property === "width" || property === "height" || property === "diameter") {

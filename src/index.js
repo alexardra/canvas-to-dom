@@ -2,7 +2,7 @@ import * as cv from "../lib/opencv.js";
 import { adjustColorSpace } from "./color-space";
 import Shape from "./shape";
 import DomGenerator from "./dom-generator";
-import * as infoInstance from "../tests/simple-info-no-hierarchy.json";
+import * as infoInstance from "../tests/simple-info-hierarchy.json";
 
 window.onload = () => {
   console.log("window loaded");
@@ -11,7 +11,7 @@ window.onload = () => {
     console.log("opencv loaded");
 
     canvasToDom("app");
-    let domGenerator = new DomGenerator(infoInstance.info);
+    let domGenerator = new DomGenerator(infoInstance.canvas);
     domGenerator.generate();
 
     console.log(domGenerator.getDom());

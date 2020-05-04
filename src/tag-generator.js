@@ -1,34 +1,27 @@
 export default class TagGenerator {
     constructor(tagName) {
-        this.tagName = tagName;
-    }
-
-    init() {
-        this.tag = `<${this.tagName}`;
-    }
-
-    end_opening_tag() {
-        this.tag += ">";
-    }
-
-    end() {
-        this.tag += `</${this.tagName}>`;
-    }
-
-    getEnd() {
-        return `</${this.tagName}>`;
-    }
-
-    is_ended() {
-        return this.tag.endsWith(`</${this.tagName}>`);
+        this._tagName = tagName;
+        this._tag = `<${this._tagName}>`;
     }
 
     addAttribute(attributeName, attributeValue) {
-        this.tag += " ";
-        this.tag += `${attributeName}="${attributeValue}"`;
+        let attribute = `${attributeName}="${attributeValue}"`;
+        this._tag = `${this._tag.substring(0, this._tag.length - 2)} ${attribute}>`
     }
 
-    getGenerated() {
-        return this.tag;
+    endTag() {
+        this._tag += `</${this._tagName}>`;
+    }
+
+    get tag() {
+        return this._tag;
+    }
+
+    get startingTag() {
+        return `<${this._tagName}>`;
+    }
+
+    get endingTag() {
+        return `</${this._tagName}>`;
     }
 }

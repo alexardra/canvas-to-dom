@@ -1,5 +1,5 @@
 import * as cv from "../lib/opencv.js";
-import { adjustColorSpace } from "./color-space";
+import TemplateProcessor from "./visual-inference/template-processor"
 
 window.onload = () => {
   console.log("window loaded");
@@ -7,11 +7,9 @@ window.onload = () => {
     // do all your work here
     console.log("opencv loaded");
 
-    // canvasToDom("app")
-  };
-  canvasToDom("app");
-};
-
+    canvasToDom("app")
+  }
+}
 
 // nothing yet, will be added when neccessary
 const sampleOptions = {
@@ -21,6 +19,8 @@ const sampleOptions = {
 
 const canvasToDom = (canvasEl, options = sampleOptions) => {
   let src = cv.imread(canvasEl);
+
+  const testTemplateProcessor = new TemplateProcessor(src, "./examples/texts/assets");
 
   preProcess(src);
   cv.imshow('boundaries', src);

@@ -1,0 +1,31 @@
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Texts</title>
+</head>
+
+<body>
+    <canvas id="app"></canvas>
+    <canvas id="boundaries"></canvas>
+    <canvas id="template"></canvas>
+    <canvas id="dst"></canvas>
+    <img src="assets/one.png">
+</body>
+<script src="app.js"></script>
+<script>
+    var canvas = document.getElementById("app");
+    var context = canvas.getContext("2d");
+
+    canvas.width = 300;
+    canvas.height = 300;
+    context.font = "30px Arial";
+    context.fillStyle = "red";
+    context.fillText("Hello World", 10, 50);
+
+    context.fillStyle = "blue";
+    context.fillText("1 2 3 4", 200, 50);
+</script>
+
+</html>

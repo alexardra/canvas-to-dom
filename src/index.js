@@ -1,8 +1,12 @@
 import * as cv from "../lib/opencv.js";
+import PreProcessor from "./visual-inference/preprocessor";
+import TemplateProcessor from "./visual-inference/template-processor";
+import TemplateMatcher from "./visual-inference/template-matcher";
 import { adjustColorSpace } from "./color-space";
 import Shape from "./shape";
 import DomGenerator from "./dom-generator";
 import * as infoInstance from "../tests/simple-info-hierarchy.json";
+
 
 window.onload = () => {
   console.log("window loaded");
@@ -18,17 +22,19 @@ window.onload = () => {
   };
 };
 
-
 // nothing yet, will be added when neccessary
 const sampleOptions = {
   colorSpace: "YCbCr"
 };
 
-
 const canvasToDom = (canvasEl, options = sampleOptions) => {
   let src = cv.imread(canvasEl);
 
-  preProcess(src);
+  const srcPreProcessor = new PreProcessor(src);
+  srcPreProcessor.process();
+
+  const testTemplateProcessor = new TemplateProcessor(src); // TODO
+
   cv.imshow('boundaries', src);
 
   // erode_boundaries(src);
@@ -41,18 +47,6 @@ const canvasToDom = (canvasEl, options = sampleOptions) => {
   drawContours(dst, contours, hierarchy);
   cv.imshow('dst', dst);
   // src.delete(); dst.delete(); contours.delete(); hierarchy.delete();
-}
-
-const preProcess = (mat) => {
-  // convert to greyscale
-  cv.cvtColor(mat, mat, cv.COLOR_RGBA2GRAY, 0);
-
-  // blur - reduce noise
-  let ksize = new cv.Size(5, 5);
-  // cv.GaussianBlur(mat, mat, ksize, 0, 0, cv.BORDER_DEFAULT);
-
-  //threshold - binarization
-  cv.adaptiveThreshold(mat, mat, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, 5, 2);
 }
 
 const erode_boundaries = (mat) => {
@@ -89,3 +83,4 @@ const printShapes = (contours) => {
     console.log(new Shape(contours.get(i)).getShape());
   }
 } 
+

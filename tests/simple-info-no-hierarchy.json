@@ -1,0 +1,40 @@
+{
+    "canvas": [
+        {
+            "identity": "square",
+            "center": {
+                "cx": 12,
+                "cy": 23
+            },
+            "width": 5,
+            "height": 5,
+            "color": "#fffff",
+            "orientation": 90,
+            "zOrder": -1
+        },
+        {
+            "identity": "triangle",
+            "center": {
+                "cx": 12,
+                "cy": 23
+            },
+            "points": [
+                {
+                    "cx": 22,
+                    "cy": 12
+                },
+                {
+                    "cx": 22,
+                    "cy": 12
+                },
+                {
+                    "cx": 22,
+                    "cy": 12
+                }
+            ],
+            "color": "#fffff",
+            "orientation": 90,
+            "zOrder": -1
+        }
+    ]
+}

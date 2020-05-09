@@ -1,4 +1,4 @@
-import * as cv from "../../lib/opencv.js";
+import * as cv from "../../vendor/opencv.js";
 import TemplateMatcher from "./template-matcher";
 import PreProcessor from "./preprocessor.js";
 

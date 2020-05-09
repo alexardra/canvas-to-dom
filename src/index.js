@@ -1,4 +1,4 @@
-import * as cv from "../lib/opencv.js";
+import * as cv from "../vendor/opencv.js";
 import PreProcessor from "./visual-inference/preprocessor";
 import TemplateProcessor from "./visual-inference/template-processor";
 import TemplateMatcher from "./visual-inference/template-matcher";

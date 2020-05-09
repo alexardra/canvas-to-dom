@@ -1,16 +1,21 @@
+import * as cv from "../../lib/opencv.js";
 import TemplateMatcher from "./template-matcher";
+import PreProcessor from "./preprocessor.js";
 
 export default class TemplateProcessor {
 
     constructor(src, assets) {
-        // console.log(assets);
         this.matchers = [];
-        for (let asset of assets) {
-            let image = new Image();
-            image.src = asset;
-            image.onload = () => {
-                this.matchers.push(new TemplateMatcher(src, asset));
-            }
+
+        var image = new Image();
+        image.src = "assets/one.png";  // temp hardcoded for testing
+        image.onload = () => {
+            let template = cv.imread(image);
+            const templatePreProcessor = new PreProcessor(template);
+            templatePreProcessor.process();
+
+            const matcher = new TemplateMatcher(src, template);
+            matcher.drawRectangle('template');
         }
     }
 

@@ -1,4 +1,4 @@
-import * as cv from "../lib/opencv.js";
+import * as cv from "../../lib/opencv.js";
 
 const supportedColorSpaceMap = {
     "lab": "COLOR_RGB2Lab",

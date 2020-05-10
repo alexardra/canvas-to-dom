@@ -1,29 +1,15 @@
+const fs = require("fs");
 const puppeteer = require("puppeteer");
-
-const generateFrameScreenshot = async (options) => {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    try {
-        await page.goto(options.url);
-        await page.waitForSelector(options.selector);
-        const canvasEl = await page.$(options.selector);
-        await canvasEl.screenshot({
-            path: options.outputFrame
-        });
-    } catch (err) {
-        console.log(err);
-    }
-    await browser.close();
-}
 
 const supportedOptions = [
     "url",
     "selectorId",
     "selectorCls",
-    "outputFrame"
+    "outputFrame",
+    "frameGrabTimeout"
 ]
 
-const generateOptionsFromCmd = () => {
+const getOptionsFromCmd = () => {
     const options = {};
     const argsCount = process.argv.length - 2;
     for (let i = 0; i < argsCount; i++) {
@@ -39,6 +25,11 @@ const generateOptionsFromCmd = () => {
             console.log(err);
         }
     }
+    return options;
+}
+
+const generateFullOptions = (cmdOptions) => {
+    const options = cmdOptions;
 
     if (options.hasOwnProperty("selectorId")) {
         options.selector = options.selectorId;
@@ -52,8 +43,47 @@ const generateOptionsFromCmd = () => {
         options.outputFrame = "screenshot.png";
     }
 
+    if (!options.hasOwnProperty("frameGrabTimeout")) {
+        options.frameGrabTimeout = 0;
+    }
+
     return options;
 }
 
-const options = generateOptionsFromCmd();
-generateFrameScreenshot(options);
+const getCanvasScreenshotUrl = async (page, canvasEl, frameGrabTimeout) => {
+    return await page.evaluate(async (canvasEl, frameGrabTimeout) => {
+        return await new Promise(resolve => {
+            setTimeout(() => {
+                const imgUrl = canvasEl.toDataURL("image/png");
+                resolve(imgUrl);
+            }, frameGrabTimeout);
+        });
+    }, canvasEl, frameGrabTimeout);
+}
+
+const generateFrameFromUrl = async (url, outputFrame) => {
+    let data = url.replace(/^data:image\/\w+;base64,/, "");
+    let buf = Buffer.from(data, "base64");
+    fs.writeFileSync(outputFrame, buf);
+}
+
+const generateFrameScreenshot = async (options) => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    try {
+        await page.goto(options.url);
+        await page.waitForSelector(options.selector);
+        const canvasEl = await page.$(options.selector);
+
+        let imgUrl = await getCanvasScreenshotUrl(page, canvasEl, options);
+        generateFrameFromUrl(imgUrl, options.outputFrame);
+    } catch (err) {
+        console.log(err);
+    }
+    await browser.close();
+}
+
+
+const cmdOptions = getOptionsFromCmd();
+const options = generateFullOptions(cmdOptions);
+generateFrameScreenshot(options); 

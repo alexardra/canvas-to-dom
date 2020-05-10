@@ -1,4 +1,6 @@
 const fs = require("fs");
+const http = require("http");
+const path = require("path");
 const puppeteer = require("puppeteer");
 
 const supportedOptions = [
@@ -50,7 +52,7 @@ const generateFullOptions = (cmdOptions) => {
     return options;
 }
 
-const getCanvasScreenshotUrl = async (page, canvasEl, frameGrabTimeout) => {
+const getCanvasScreenshotUrlFromPage = async (page, canvasEl, frameGrabTimeout) => {
     return await page.evaluate(async (canvasEl, frameGrabTimeout) => {
         return await new Promise(resolve => {
             setTimeout(() => {
@@ -62,12 +64,55 @@ const getCanvasScreenshotUrl = async (page, canvasEl, frameGrabTimeout) => {
 }
 
 const generateFrameFromUrl = async (url, outputFrame) => {
+    const frameDir = path.join(assetsDir, "frame");
+    if (!fs.existsSync(frameDir)) {
+        fs.mkdirSync(frameDir);
+    }
     let data = url.replace(/^data:image\/\w+;base64,/, "");
     let buf = Buffer.from(data, "base64");
-    fs.writeFileSync(outputFrame, buf);
+    fs.writeFileSync(path.join(frameDir, outputFrame), buf);
 }
 
-const generateFrameScreenshot = async (options) => {
+const download = (url, destination) => new Promise((resolve, reject) => {
+    const file = fs.createWriteStream(destination);
+
+    http.get(url, response => {
+        response.pipe(file);
+
+        file.on('finish', () => {
+            file.close(resolve(true));
+        });
+    }).on('error', error => {
+        fs.unlink(destination);
+
+        reject(error.message);
+    });
+});
+
+const getImages = async (page) => {
+    return await page.evaluate(async () => {
+        return await new Promise(resolve => {
+            const images = Array.from(document.images, e => e.src);
+            resolve(images);
+        });
+    });
+}
+
+const generateImageAssetsFromPage = async (page) => {
+    const images = await getImages(page);
+
+    const imagesDir = path.join(assetsDir, "images");
+    if (!fs.existsSync(imagesDir)) {
+        fs.mkdirSync(imagesDir);
+    }
+
+    for (let image of images) {
+        const imagePath = path.join(imagesDir, path.basename(image));
+        await download(image, imagePath);
+    }
+}
+
+const generateAssets = async (options) => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     try {
@@ -75,8 +120,11 @@ const generateFrameScreenshot = async (options) => {
         await page.waitForSelector(options.selector);
         const canvasEl = await page.$(options.selector);
 
-        let imgUrl = await getCanvasScreenshotUrl(page, canvasEl, options);
+        let imgUrl = await getCanvasScreenshotUrlFromPage(page, canvasEl, options);
         generateFrameFromUrl(imgUrl, options.outputFrame);
+
+        await generateImageAssetsFromPage(page);
+
     } catch (err) {
         console.log(err);
     }
@@ -86,4 +134,12 @@ const generateFrameScreenshot = async (options) => {
 
 const cmdOptions = getOptionsFromCmd();
 const options = generateFullOptions(cmdOptions);
-generateFrameScreenshot(options); 
+
+const parentDir = path.resolve(__dirname, "../..");
+const assetsDir = path.join(parentDir, "assets");
+
+if (!fs.existsSync(assetsDir)) {
+    fs.mkdirSync(assetsDir);
+}
+
+generateAssets(options); 

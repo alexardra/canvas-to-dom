@@ -1,11 +1,11 @@
-import * as cv from "../vendor/opencv.js";
-import PreProcessor from "./visual-inference/preprocessor";
-import TemplateProcessor from "./visual-inference/template-processor";
-import TemplateMatcher from "./visual-inference/template-matcher";
-import Shape from "./visual-inference/shape";
-import DomGenerator from "./dom-generation/dom-generator";
+import * as cv from "../../vendor/opencv.js";
+import PreProcessor from "../visual-inference/preprocessor";
+import TemplateProcessor from "../visual-inference/template-processor";
+import TemplateMatcher from "../visual-inference/template-matcher";
+import Shape from "../visual-inference/shape";
+import DomGenerator from "../dom-generation/dom-generator";
 
-import * as infoInstance from "../tests/simple-info-hierarchy.json";
+import * as infoInstance from "../../tests/simple-info-hierarchy.json";
 
 window.onload = () => {
   console.log("window loaded");

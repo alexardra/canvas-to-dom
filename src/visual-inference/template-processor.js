@@ -7,16 +7,16 @@ export default class TemplateProcessor {
     constructor(src, assets) {
         this.matchers = [];
 
-        var image = new Image();
-        image.src = "assets/one.png";  // temp hardcoded for testing
-        image.onload = () => {
-            let template = cv.imread(image);
-            const templatePreProcessor = new PreProcessor(template);
-            templatePreProcessor.process();
+        // var image = new Image();
+        // image.src = "assets/one.png";  // temp hardcoded for testing
+        // image.onload = () => {
+        //     let template = cv.imread(image);
+        //     const templatePreProcessor = new PreProcessor(template);
+        //     templatePreProcessor.process();
 
-            const matcher = new TemplateMatcher(src, template);
-            matcher.drawRectangle('template');
-        }
+        //     const matcher = new TemplateMatcher(src, template);
+        //     matcher.drawRectangle('template');
+        // }
     }
 
     removeMatchedTemplatesFromCanvas() {

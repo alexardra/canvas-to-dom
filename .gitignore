@@ -17,3 +17,6 @@ node_modules
 # exclude build files
 build/*
 !build/.gitkeep
+
+# exclude generated asset files
+assets

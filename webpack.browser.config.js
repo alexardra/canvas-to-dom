@@ -1,6 +1,7 @@
+require("babel-polyfill");
 module.exports = {
   entry: {
-    main: "./src/browser/index.js"
+    main: ["babel-polyfill", "./src/browser/index.js"]
   },
   module: {
     rules: [

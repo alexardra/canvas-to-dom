@@ -29,6 +29,7 @@
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
     "babel-loader": "^8.1.0",
+    "babel-polyfill": "^6.26.0",
     "node-loader": "^0.6.0",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"

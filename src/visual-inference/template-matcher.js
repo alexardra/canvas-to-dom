@@ -43,4 +43,8 @@ export default class TemplateMatcher {
     get maxLoc() {
         return this.locations.maxLoc;
     }
+
+    get templateDimensions() {
+        return { w: this.template.cols, h: this.template.rows }
+    }
 }

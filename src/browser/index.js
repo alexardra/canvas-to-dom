@@ -6,6 +6,7 @@ import Shape from "../visual-inference/shape";
 import DomGenerator from "../dom-generation/dom-generator";
 
 import * as infoInstance from "../../tests/simple-info-hierarchy.json";
+import ContourProcessor from "../visual-inference/contour-processor.js";
 
 const loadDOM = () => {
     return new Promise(resolve => {
@@ -43,20 +44,23 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
     const srcPreProcessor = await new PreProcessor(src);
     srcPreProcessor.process();
 
-    const testTemplateProcessor = new TemplateProcessor(src);
-    await testTemplateProcessor.process()
-    testTemplateProcessor.removeTemplates()
+    // const testTemplateProcessor = new TemplateProcessor(src);
+    // await testTemplateProcessor.process()
+    // testTemplateProcessor.removeTemplates()
 
     // erode_boundaries(src);
     // cv.imshow('erode', src);
 
-    let { contours, hierarchy } = getContourInfo(src);
+    const testContourProcessor = new ContourProcessor(src);
+    testContourProcessor.process();
+    testContourProcessor.constructHierarchyTree();
+    console.log(testContourProcessor.HierachyTree);
     // printShapes(contours);
 
     let dst = cv.Mat.zeros(src.cols, src.rows, cv.CV_8UC3);
-    drawContours(dst, contours, hierarchy);
+    // drawContours(dst, contours, hierarchy);
     cv.imshow('dst', dst);
-    src.delete(); dst.delete(); contours.delete(); hierarchy.delete();
+    // src.delete(); dst.delete(); contours.delete(); hierarchy.delete();
 }
 
 const erode_boundaries = (mat) => {
@@ -68,24 +72,6 @@ const erode_boundaries = (mat) => {
     cv.erode(mat, mat, kernel, anchor, 1, cv.BORDER_CONSTANT, cv.morphologyDefaultBorderValue());
     kernel.delete();
     //anchor.delete();
-}
-
-
-const getContourInfo = (mat) => {
-    let contours = new cv.MatVector();
-    let hierarchy = new cv.Mat();
-
-    cv.findContours(mat, contours, hierarchy, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
-
-    return { contours, hierarchy };
-}
-
-const drawContours = (mat, contours, hierarchy) => {
-    for (let i = 0; i < contours.size(); ++i) {
-        let color = new cv.Scalar(Math.round(Math.random() * 255), Math.round(Math.random() * 255),
-            Math.round(Math.random() * 255));
-        cv.drawContours(mat, contours, i, color, 1, cv.LINE_8, hierarchy);
-    }
 }
 
 const printShapes = (contours) => {

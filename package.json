@@ -11,7 +11,7 @@
     "build:browser": "webpack --config webpack.browser.config.js",
     "watch": "webpack --watch",
     "watch:browser": "webpack --config webpack.browser.config.js --watch",
-    "start:dev": "node examples/texts/server",
+    "start:dev": "node examples/geometric_shapes/server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

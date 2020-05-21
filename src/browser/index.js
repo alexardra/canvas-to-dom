@@ -54,8 +54,9 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
     const testContourProcessor = new ContourProcessor(src);
     testContourProcessor.process();
     testContourProcessor.constructHierarchyTree();
-    console.log(testContourProcessor.HierachyTree);
-    // printShapes(contours);
+    console.log(testContourProcessor.hierachyTree);
+    let tree = testContourProcessor.generateShapeTree();
+    console.log(tree);
 
     let dst = cv.Mat.zeros(src.cols, src.rows, cv.CV_8UC3);
     // drawContours(dst, contours, hierarchy);
@@ -74,9 +75,4 @@ const erode_boundaries = (mat) => {
     //anchor.delete();
 }
 
-const printShapes = (contours) => {
-    for (let i = 0; i < contours.size(); ++i) {
-        console.log(new Shape(contours.get(i)).getShape());
-    }
-}
 

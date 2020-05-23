@@ -41,8 +41,7 @@ const sampleOptions = {
 const canvasToDom = async (canvasEl, options = sampleOptions) => {
     let src = cv.imread(canvasEl);
 
-    const srcPreProcessor = await new PreProcessor(src);
-    srcPreProcessor.process();
+    const srcPreProcessor = new PreProcessor(src);
 
     // const testTemplateProcessor = new TemplateProcessor(src);
     // await testTemplateProcessor.process()
@@ -52,10 +51,8 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
     // cv.imshow('erode', src);
 
     const testContourProcessor = new ContourProcessor(src);
-    testContourProcessor.constructHierarchyTree();
-    // console.log(testContourProcessor.hierachyTree);
-    let tree = testContourProcessor.generateShapeTree();
-    // console.log(tree);
+    console.log(testContourProcessor.hierachyTree);
+    console.log(testContourProcessor.shapeTree);
 
     // let domGenerator = new DomGenerator([tree]);
     // domGenerator.generate();
@@ -64,7 +61,6 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
     // var doc = new DOMParser().parseFromString(domGenerator.getDom(), "text/html");
     // console.log(doc);
 
-    testContourProcessor.drawContours()
     cv.imshow('dst', src);
 }
 

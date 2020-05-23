@@ -104,7 +104,6 @@ export default class ContourProcessor {
         let shapeEntryInfos = Array(this._shapes.length).fill(null);
         for (let i = 0; i < this._shapes.length; i++) {
             if (i in this._duplicateContourIndicesMap) {
-                this._shapes[i].generateFullShapeEntry()
                 shapeEntryInfos[i] = this._shapes[i].fullShapeEntry;
             }
         }

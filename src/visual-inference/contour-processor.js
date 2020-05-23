@@ -18,7 +18,7 @@ export default class ContourProcessor {
     _process() {
         [this._contours, this._hierarchy] = this._createContours();
         this._shapes = this._createShapes();
-        this._duplicateContourIndices = this._createDuplicateContourIndices();
+        this._duplicateContourIndicesMap = this._createDuplicateContourIndicesMap();
     }
 
     _createContours() {
@@ -36,27 +36,46 @@ export default class ContourProcessor {
         return shapes;
     }
 
-    _createDuplicateContourIndices() {
+    _createDuplicateContourIndicesMap() {
+        let duplicateContourIndicesMap = {};
         let duplicateContourIndices = [];
         for (let i = 0; i < this._contours.size() - 1; i++) {
             for (let j = i + 1; j < this._contours.size(); j++) {
-                let close = this._shapes[i].canApproxShape(this._shapes[j]);
-                if (close && !duplicateContourIndices.includes(j)) {
+                if (this._shapes[i].canApproxShape(this._shapes[j]) && !duplicateContourIndices.includes(j)) {
+                    if (i in duplicateContourIndicesMap) {
+                        duplicateContourIndicesMap[i].push(j);
+                    } else {
+                        duplicateContourIndicesMap[i] = [j];
+                    }
                     duplicateContourIndices.push(j);
                 }
             }
         }
-        return duplicateContourIndices;
+        const indices = Array.from(Array(this._contours.size()).keys());
+        const uniqueIndices = indices.filter(i => !duplicateContourIndices.includes(i));
+        for (let i of uniqueIndices) {
+            if (!(i in duplicateContourIndicesMap))
+                duplicateContourIndicesMap[i] = [];
+        }
+        return duplicateContourIndicesMap;
     }
 
     _createHierarchyTree() {
         let tree = {}
         for (let i = 0; i < this._contours.size(); ++i) {
-            if (!this._duplicateContourIndices.includes(i)) {
-                const parent = this._hierarchy.intPtr(0, i)[3];
+            if (i in this._duplicateContourIndicesMap) {
+                let parent = this._hierarchy.intPtr(0, i)[3];
                 if (parent == -1) {
                     tree[i] = [];
                 } else {
+                    if (!(parent in this._duplicateContourIndicesMap)) {
+                        for (const uniqueIndex in this._duplicateContourIndicesMap) {
+                            if (this._duplicateContourIndicesMap[uniqueIndex].includes(parent)) {
+                                parent = Number(uniqueIndex);
+                                break;
+                            }
+                        }
+                    }
                     this._searchForParentInSubtreeAndAppend(tree, i, parent);
                 }
             }
@@ -66,7 +85,6 @@ export default class ContourProcessor {
 
     _searchForParentInSubtreeAndAppend(tree, index, parent) {
         const siblings = Object.keys(tree).map(Number);
-
         if (siblings.includes(parent)) {
             const node = {}
             node[index] = [];
@@ -85,7 +103,7 @@ export default class ContourProcessor {
     _createShapeTree() {
         let shapeEntryInfos = Array(this._shapes.length).fill(null);
         for (let i = 0; i < this._shapes.length; i++) {
-            if (!this._duplicateContourIndices.includes(i)) {
+            if (i in this._duplicateContourIndicesMap) {
                 this._shapes[i].generateFullShapeEntry()
                 shapeEntryInfos[i] = this._shapes[i].fullShapeEntry;
             }

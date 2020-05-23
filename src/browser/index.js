@@ -5,7 +5,7 @@ import TemplateMatcher from "../visual-inference/template-matcher";
 import Shape from "../visual-inference/shape";
 import DomGenerator from "../dom-generation/dom-generator";
 
-import * as infoInstance from "../../tests/simple-info-hierarchy.json";
+import * as infoInstance from "../../tests/test.json";
 import ContourProcessor from "../visual-inference/contour-processor.js";
 
 const loadDOM = () => {
@@ -52,16 +52,20 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
     // cv.imshow('erode', src);
 
     const testContourProcessor = new ContourProcessor(src);
-    testContourProcessor.process();
     testContourProcessor.constructHierarchyTree();
     console.log(testContourProcessor.hierachyTree);
     let tree = testContourProcessor.generateShapeTree();
     console.log(tree);
 
-    let dst = cv.Mat.zeros(src.cols, src.rows, cv.CV_8UC3);
-    // drawContours(dst, contours, hierarchy);
-    cv.imshow('dst', dst);
-    // src.delete(); dst.delete(); contours.delete(); hierarchy.delete();
+    // let domGenerator = new DomGenerator([tree]);
+    // domGenerator.generate();
+    // // console.log(domGenerator.getDom())
+
+    // var doc = new DOMParser().parseFromString(domGenerator.getDom(), "text/html");
+    // console.log(doc);
+
+    testContourProcessor.drawContours()
+    cv.imshow('dst', src);
 }
 
 const erode_boundaries = (mat) => {

@@ -6,7 +6,7 @@ export default class TagGenerator {
 
     addAttribute(attributeName, attributeValue) {
         let attribute = `${attributeName}="${attributeValue}"`;
-        this._tag = `${this._tag.substring(0, this._tag.length - 2)} ${attribute}>`
+        this._tag = `${this._tag.substring(0, this._tag.length - 1)} ${attribute}>`
     }
 
     endTag() {

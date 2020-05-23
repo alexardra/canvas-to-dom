@@ -10,10 +10,12 @@ export default class Shape {
         this._vertices = [];
 
         this.computeShape();
-        this.generateFullShapeEntry();
+        // this.generateFullShapeEntry();
     }
 
     get center() {
+        // const cx = Math.round(((this._moments.m10 / this._moments.m00) + Number.EPSILON) * 100) / 100;
+        // const cy = Math.round(((this._moments.m01 / this._moments.m00) + Number.EPSILON) * 100) / 100;
         const cx = this._moments.m10 / this._moments.m00;
         const cy = this._moments.m01 / this._moments.m00;
         return { cx, cy };
@@ -75,11 +77,35 @@ export default class Shape {
     }
 
     generateFullShapeEntry() {
-
         this._entry = {};
 
         this._entry.identity = this.identity;
         this._entry.center = this.center;
         this._entry.children = [];
+    }
+
+    canApproxShape(shape) {
+        let cxDelta = Math.abs(this.center.cx - shape.center.cx);
+        let cyDelta = Math.abs(this.center.cy - shape.center.cy);
+        let centersClose = cxDelta < 2 && cyDelta < 2;
+
+        if (!centersClose) return false;
+        let perimetersClose = Math.abs(this.perimeter - shape.perimeter) < 100;
+
+        if (!perimetersClose) return false;
+
+        let verticesClose = false;
+        for (let i = 0; i < this.vertices.length; i++) {
+
+            let verticeXDelta = Math.abs(this.vertices[i][0] - shape.vertices[i][0]);
+            let verticeYDelta = Math.abs(this.vertices[i][1] - shape.vertices[i][1]);
+
+            if (verticeXDelta < 70 && verticeYDelta < 70) verticesClose = true;
+
+        }
+
+        if (!verticesClose) return false;
+
+        return true;
     }
 }

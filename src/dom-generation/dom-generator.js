@@ -24,13 +24,11 @@ export default class DomGenerator {
         let dom = "";
         for (let tagInfo of domInfo) {
             let tagGenerator = new TagGenerator(tagInfo.identity);
-
             for (let property of tagProperties) {
                 if (tagInfo.hasOwnProperty(property)) {
                     this.addTagProperty(tagGenerator, property, tagInfo[property]);
                 }
             }
-
             dom += tagGenerator.tag;
 
             if (tagInfo.hasOwnProperty("children") &&
@@ -39,10 +37,11 @@ export default class DomGenerator {
 
                 dom += this.generateDomFromInfo(tagInfo.children);
             }
-
             tagGenerator.endTag();
-            dom += tagGenerator.tag;
+            dom += tagGenerator.endingTag;
+
         }
+
         return dom;
     }
 

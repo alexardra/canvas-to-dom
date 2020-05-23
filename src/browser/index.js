@@ -5,7 +5,7 @@ import TemplateMatcher from "../visual-inference/template-matcher";
 import Shape from "../visual-inference/shape";
 import DomGenerator from "../dom-generation/dom-generator";
 
-import * as infoInstance from "../../tests/test.json";
+import * as infoInstance from "../../tests/simple-info-hierarchy.json";
 import ContourProcessor from "../visual-inference/contour-processor.js";
 
 const loadDOM = () => {
@@ -53,9 +53,9 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
 
     const testContourProcessor = new ContourProcessor(src);
     testContourProcessor.constructHierarchyTree();
-    console.log(testContourProcessor.hierachyTree);
+    // console.log(testContourProcessor.hierachyTree);
     let tree = testContourProcessor.generateShapeTree();
-    console.log(tree);
+    // console.log(tree);
 
     // let domGenerator = new DomGenerator([tree]);
     // domGenerator.generate();

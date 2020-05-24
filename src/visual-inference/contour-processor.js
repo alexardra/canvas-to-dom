@@ -108,16 +108,17 @@ export default class ContourProcessor {
             }
         }
         let shapeTree = [];
-        this._translateContourIndicesToShapes(shapeTree, [this.hierachyTree], shapeEntryInfos);
+        this._translateContourIndicesToShapes(shapeTree, [this.hierachyTree], shapeEntryInfos, 0);
         return shapeTree[0];
     }
 
-    _translateContourIndicesToShapes(shapeTree, hierarchies, shapes) {
+    _translateContourIndicesToShapes(shapeTree, hierarchies, shapes, depth) {
         for (let entry of hierarchies) {
             let siblings = Object.keys(entry).map(Number);
             for (let sibling of siblings) {
+                shapes[sibling].zOrder = depth;
                 shapeTree.push(shapes[sibling]);
-                this._translateContourIndicesToShapes(shapes[sibling].children, entry[sibling], shapes);
+                this._translateContourIndicesToShapes(shapes[sibling].children, entry[sibling], shapes, depth + 1);
             }
         }
     }

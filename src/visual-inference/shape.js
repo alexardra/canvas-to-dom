@@ -10,6 +10,7 @@ export default class Shape {
         this._shape = null;
         this._fullShapeInfo = null;
         this._vertices = null;
+        this._zOrder = null;
 
         this._process();
     }
@@ -95,6 +96,10 @@ export default class Shape {
             this._fullShapeInfo = this._createFullShapeEntry();
         }
         return this._fullShapeInfo;
+    }
+
+    set zOrder(zOrder) {
+        this._zOrder = zOrder;
     }
 
     _createFullShapeEntry() {

@@ -1,5 +1,5 @@
 import * as cv from "../../vendor/opencv.js";
-import PreProcessor from "../visual-inference/preprocessor";
+import PreProcessor from "../visual-inference/pre-processor";
 import TemplateProcessor from "../visual-inference/template-processor";
 import TemplateMatcher from "../visual-inference/template-matcher";
 import Shape from "../visual-inference/shape";
@@ -25,10 +25,6 @@ const loadOpenCV = () => {
     await loadOpenCV();
     console.log("opencv loaded");
     await canvasToDom("app");
-    // let domGenerator = new DomGenerator(infoInstance.canvas);
-    // domGenerator.generate();
-
-    // console.log(domGenerator.getDom());
 })();
 
 
@@ -50,13 +46,13 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
     // erode_boundaries(src);
     // cv.imshow('erode', src);
 
-    const testContourProcessor = new ContourProcessor(src);
-    console.log(testContourProcessor.hierachyTree);
-    console.log(testContourProcessor.shapeTree);
+    // const testContourProcessor = new ContourProcessor(src);
+    // console.log(testContourProcessor.hierachyTree);
+    // console.log(testContourProcessor.shapeTree);
 
-    // let domGenerator = new DomGenerator([tree]);
+    // let domGenerator = new DomGenerator([testContourProcessor.shapeTree]);
     // domGenerator.generate();
-    // // console.log(domGenerator.getDom())
+    // console.log(domGenerator.getDom())
 
     // var doc = new DOMParser().parseFromString(domGenerator.getDom(), "text/html");
     // console.log(doc);

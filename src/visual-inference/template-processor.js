@@ -1,6 +1,6 @@
 import * as cv from "../../vendor/opencv.js";
 import TemplateMatcher from "./template-matcher";
-import PreProcessor from "./preprocessor.js";
+import PreProcessor from "./pre-processor.js";
 
 export default class TemplateProcessor {
 

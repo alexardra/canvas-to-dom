@@ -19,6 +19,7 @@ export default class Shape {
     _process() {
         this._moments = this._createMoments();
         this._approxPoly = this._createApproxPoly();
+        this._rotatedRect = this._createRotatedRect();
         this._vertices = this._createVertices();
         this._shape = this._createShape();
 
@@ -44,29 +45,41 @@ export default class Shape {
         return vertices;
     }
 
+    _createRotatedRect() {
+        return cv.minAreaRect(this._contour);
+    }
+
     _createShape() {
         let shape = null;
-        if (this._vertices.length === 3) {
+
+        if (this._vertices.length == 2) {
+            shape = "line";
+        } else if (this._vertices.length === 3) {
             shape = "triangle";
         } else if (this._vertices.length === 4) {
-            const { x, y, width, height } = cv.boundingRect(this._approxPoly);
-            const aspectRatio = width / height;
+            let cxDelta = Math.abs(this.center.cx - this._rotatedRect.center.x);
+            let cyDelta = Math.abs(this.center.cy - this._rotatedRect.center.y);
+            let centersClose = cxDelta < 2 && cyDelta < 2;
 
-            if (aspectRatio >= 0.95 && aspectRatio <= 1.05)
-                shape = "square";
-            else
-                shape = "rectangle";
+            if (centersClose) {
+                const { x, y, width, height } = cv.boundingRect(this._approxPoly);
+                const aspectRatio = width / height;
+
+                shape = (aspectRatio >= 0.95 && aspectRatio <= 1.05) ? "square" : "rectangle";
+            } else {
+                shape = "polygon";
+            }
         } else if (this._vertices.length == 5) {
             shape = "pentagon";
         } else {
-            // assume circle - TODO
-            shape = "circle";
+            if (cv.isContourConvex(this._approxPoly)) {
+                shape = "circle";
+            } else {
+                shape = "polygon";
+            }
         }
+        console.log(this._vertices);
         return shape;
-    }
-
-    _createRotatedRect() {
-        this._rotatedRect = cv.minAreaRect(this._contour);
     }
 
     get center() {
@@ -99,7 +112,7 @@ export default class Shape {
         } else {
             angle = angle + 90;
         }
-        return angle;
+        return Math.round((angle + Number.EPSILON) * 100) / 100;
     }
 
     get vertices() {
@@ -126,8 +139,11 @@ export default class Shape {
         fullShapeInfo.identity = this.identity;
         fullShapeInfo.center = this.center;
         fullShapeInfo.orientation = this.orientation;
-        fullShapeInfo.children = [];
 
+        if (fullShapeInfo.identity == "polygon" || fullShapeInfo.identity == "triangle") {
+            fullShapeInfo.points = Array.from(this._vertices, (vertice) => ({ cx: vertice[0], cy: vertice[1] }));
+        }
+        fullShapeInfo.children = [];
         return fullShapeInfo;
     }
 

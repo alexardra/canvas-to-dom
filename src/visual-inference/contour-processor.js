@@ -136,4 +136,8 @@ export default class ContourProcessor {
         }
         return this._shapeTree;
     }
+
+    get shapes() { // TEMP for testing
+        return this._shapes;
+    }
 }

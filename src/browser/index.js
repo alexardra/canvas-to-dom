@@ -46,9 +46,10 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
     // erode_boundaries(src);
     // cv.imshow('erode', src);
 
-    // const testContourProcessor = new ContourProcessor(src);
+    const testContourProcessor = new ContourProcessor(src);
+
     // console.log(testContourProcessor.hierachyTree);
-    // console.log(testContourProcessor.shapeTree);
+    console.log(testContourProcessor.shapeTree);
 
     // let domGenerator = new DomGenerator([testContourProcessor.shapeTree]);
     // domGenerator.generate();

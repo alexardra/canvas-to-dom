@@ -10,6 +10,7 @@ export default class Shape {
         this._shape = null;
         this._fullShapeInfo = null;
         this._vertices = null;
+        this._rotatedRect = null;
         this._zOrder = null;
 
         this._process();
@@ -64,6 +65,10 @@ export default class Shape {
         return shape;
     }
 
+    _createRotatedRect() {
+        this._rotatedRect = cv.minAreaRect(this._contour);
+    }
+
     get center() {
         const cx = Math.round(((this._moments.m10 / this._moments.m00) + Number.EPSILON) * 100) / 100;
         const cy = Math.round(((this._moments.m01 / this._moments.m00) + Number.EPSILON) * 100) / 100;
@@ -80,7 +85,21 @@ export default class Shape {
     }
 
     get orientation() {
-        // TODO
+        if (this._rotatedRect == null) {
+            this._createRotatedRect();
+        }
+
+        if (this._shape == "circle") {
+            return 0;
+        }
+
+        let angle = this._rotatedRect.angle;
+        if (this._rotatedRect.size.width < this._rotatedRect.size.height) {
+            angle = angle + 180;
+        } else {
+            angle = angle + 90;
+        }
+        return angle;
     }
 
     get vertices() {
@@ -106,6 +125,7 @@ export default class Shape {
         let fullShapeInfo = {};
         fullShapeInfo.identity = this.identity;
         fullShapeInfo.center = this.center;
+        fullShapeInfo.orientation = this.orientation;
         fullShapeInfo.children = [];
 
         return fullShapeInfo;

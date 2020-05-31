@@ -7,6 +7,7 @@ import DomGenerator from "../dom-generation/dom-generator";
 
 import * as infoInstance from "../../tests/simple-info-hierarchy.json";
 import ContourProcessor from "../visual-inference/contour-processor.js";
+import ColorExtractor from "../visual-inference/color-extractor.js";
 
 const loadDOM = () => {
     return new Promise(resolve => {
@@ -36,8 +37,11 @@ const sampleOptions = {
 
 const canvasToDom = async (canvasEl, options = sampleOptions) => {
     let src = cv.imread(canvasEl);
+    let dst = src.clone();
 
-    const srcPreProcessor = new PreProcessor(src);
+    const colorExtractor = new ColorExtractor(src);
+    const srcPreProcessor = new PreProcessor(dst);
+
 
     // const testTemplateProcessor = new TemplateProcessor(src);
     // await testTemplateProcessor.process()
@@ -46,10 +50,10 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
     // erode_boundaries(src);
     // cv.imshow('erode', src);
 
-    const testContourProcessor = new ContourProcessor(src);
+    const testContourProcessor = new ContourProcessor(dst, colorExtractor);
 
     // console.log(testContourProcessor.hierachyTree);
-    console.log(testContourProcessor.shapeTree);
+    // console.log(testContourProcessor.shapeTree);
 
     // let domGenerator = new DomGenerator([testContourProcessor.shapeTree]);
     // domGenerator.generate();
@@ -58,7 +62,7 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
     // var doc = new DOMParser().parseFromString(domGenerator.getDom(), "text/html");
     // console.log(doc);
 
-    cv.imshow('dst', src);
+    // cv.imshow('dst', dst);
 }
 
 const erode_boundaries = (mat) => {

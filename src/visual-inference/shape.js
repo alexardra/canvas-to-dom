@@ -78,7 +78,6 @@ export default class Shape {
                 shape = "polygon";
             }
         }
-        console.log(this._vertices);
         return shape;
     }
 

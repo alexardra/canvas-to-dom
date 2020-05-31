@@ -3,8 +3,9 @@ import Shape from "./shape.js";
 
 export default class ContourProcessor {
 
-    constructor(mat) {
+    constructor(mat, colorExtractor) {
         this._mat = mat;
+        this._colorExtractor = colorExtractor;
 
         this._tree = null;
         this._contours = null;
@@ -19,6 +20,8 @@ export default class ContourProcessor {
         [this._contours, this._hierarchy] = this._createContours();
         this._shapes = this._createShapes();
         this._duplicateContourIndicesMap = this._createDuplicateContourIndicesMap();
+
+        this._createColor();
     }
 
     _createContours() {
@@ -34,6 +37,19 @@ export default class ContourProcessor {
             shapes.push(new Shape(this._contours.get(i)));
         }
         return shapes;
+    }
+
+    _createColor() {
+        let shape = this._shapes[0];
+        console.log(this._contours.size())
+        let contour = this._contours.get(4);
+        console.log(contour);
+        // let myMean = new cv.Mat(1, 4, cv.CV_64F);
+        // let myStddev = new cv.Mat(1, 4, cv.CV_64F);
+        // cv.meanStdDev(img, myMean, myStddev);
+        // console.log(myMean.doubleAt(0, 0))
+
+        this._colorExtractor.createColorFromShape(contour);
     }
 
     _createDuplicateContourIndicesMap() {

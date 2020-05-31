@@ -1,12 +1,6 @@
 import TagGenerator from "./tag-generator";
+import { TagProperties } from "../supportedFeatures";
 
-const tagProperties = [
-    "center",
-    "width", "height", "diameter", "points",
-    "color",
-    "zOrder",
-    "orientation"
-]
 
 export default class DomGenerator {
 
@@ -24,7 +18,7 @@ export default class DomGenerator {
         let dom = "";
         for (let tagInfo of domInfo) {
             let tagGenerator = new TagGenerator(tagInfo.identity);
-            for (let property of tagProperties) {
+            for (let property of TagProperties) {
                 if (tagInfo.hasOwnProperty(property)) {
                     this.addTagProperty(tagGenerator, property, tagInfo[property]);
                 }
@@ -46,7 +40,7 @@ export default class DomGenerator {
     }
 
     getDom() {
-        return this.dom;
+        return `<canvas>${this.dom}</canvas>`;
     }
 
     addTagProperty(tagGenerator, property, value) {

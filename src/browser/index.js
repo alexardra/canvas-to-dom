@@ -3,10 +3,11 @@ import PreProcessor from "../visual-inference/pre-processor";
 import TemplateProcessor from "../visual-inference/template-processor";
 import TemplateMatcher from "../visual-inference/template-matcher";
 import Shape from "../visual-inference/shape";
-import DomGenerator from "../dom-generation/dom-generator";
+import DomGenerator from "../dom/generation/dom-generator";
 
 import * as infoInstance from "../../tests/simple-info-hierarchy.json";
 import ContourProcessor from "../visual-inference/contour-processor.js";
+import TreeValidator from "../dom/validation/tree-validator.js";
 
 const loadDOM = () => {
     return new Promise(resolve => {
@@ -46,16 +47,19 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
     // erode_boundaries(src);
     // cv.imshow('erode', src);
 
-    // const testContourProcessor = new ContourProcessor(src);
+    const testContourProcessor = new ContourProcessor(src);
     // console.log(testContourProcessor.hierachyTree);
-    // console.log(testContourProcessor.shapeTree);
+    console.log(testContourProcessor.shapeTree);
 
-    // let domGenerator = new DomGenerator([testContourProcessor.shapeTree]);
-    // domGenerator.generate();
+    let domGenerator = new DomGenerator([testContourProcessor.shapeTree]);
+    domGenerator.generate();
     // console.log(domGenerator.getDom())
 
-    // var doc = new DOMParser().parseFromString(domGenerator.getDom(), "text/html");
-    // console.log(doc);
+    var doc = new DOMParser().parseFromString(domGenerator.getDom(), "text/html");
+    console.log(doc);
+
+    var treeValidator = new TreeValidator(doc);
+    treeValidator.checkValidity();
 
     cv.imshow('dst', src);
 }

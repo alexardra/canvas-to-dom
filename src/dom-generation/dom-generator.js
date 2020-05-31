@@ -56,9 +56,7 @@ export default class DomGenerator {
         } else if (property === "width" || property === "height" || property === "diameter") {
             tagGenerator.addAttribute(property, value);
         } else if (property === "points") {
-            tagGenerator.addAttribute("point-a", `(${value[0].cx},${value[0].cy})`);
-            tagGenerator.addAttribute("point-b", `(${value[1].cx},${value[1].cy})`);
-            tagGenerator.addAttribute("point-c", `(${value[2].cx},${value[2].cy})`);
+            value.map((point, index) => { tagGenerator.addAttribute(`point-${index}`, `(${value[0].cx},${value[0].cy})`); });
         } else if (property === "zOrder") {
             tagGenerator.addAttribute("z-order", value);
         }

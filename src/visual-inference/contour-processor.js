@@ -40,16 +40,7 @@ export default class ContourProcessor {
     }
 
     _createColor() {
-        let shape = this._shapes[0];
-        console.log(this._contours.size())
-        let contour = this._contours.get(4);
-        console.log(contour);
-        // let myMean = new cv.Mat(1, 4, cv.CV_64F);
-        // let myStddev = new cv.Mat(1, 4, cv.CV_64F);
-        // cv.meanStdDev(img, myMean, myStddev);
-        // console.log(myMean.doubleAt(0, 0))
-
-        this._colorExtractor.createColorFromShape(contour);
+        // this._colorExtractor.createColorFromShape(contour);
     }
 
     _createDuplicateContourIndicesMap() {

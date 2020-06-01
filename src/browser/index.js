@@ -21,7 +21,7 @@ const loadOpenCV = () => {
     });
 }
 
-(async () => {
+(async() => {
     await loadDOM();
     await loadOpenCV();
     console.log("opencv loaded");
@@ -35,7 +35,7 @@ const sampleOptions = {
     colorSpace: "YCbCr"
 };
 
-const canvasToDom = async (canvasEl, options = sampleOptions) => {
+const canvasToDom = async(canvasEl, options = sampleOptions) => {
     let src = cv.imread(canvasEl);
 
     const srcPreProcessor = new PreProcessor(src);
@@ -49,14 +49,14 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
 
     const testContourProcessor = new ContourProcessor(src);
     // console.log(testContourProcessor.hierachyTree);
-    console.log(testContourProcessor.shapeTree);
+    // console.log(testContourProcessor.shapeTree);
 
     let domGenerator = new DomGenerator([testContourProcessor.shapeTree]);
     domGenerator.generate();
     // console.log(domGenerator.getDom())
 
     var doc = new DOMParser().parseFromString(domGenerator.getDom(), "text/html");
-    console.log(doc);
+    // console.log(doc);
 
     var treeValidator = new TreeValidator(doc);
     treeValidator.checkValidity();
@@ -74,5 +74,3 @@ const erode_boundaries = (mat) => {
     kernel.delete();
     //anchor.delete();
 }
-
-

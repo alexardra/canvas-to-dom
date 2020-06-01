@@ -23,14 +23,12 @@ export default class TreeValidator {
     }
 
     _createShapeTree(canvas) {
-
-        // console.log(canvas);
-
         const tagIndices = Array.from(Tags.map(tag => canvas.indexOf(tag))).filter(index => index != -1);
         const nextTagIndex = Math.min.apply(Math, tagIndices);
 
         canvas = canvas.substring(nextTagIndex);
         let tagParser = new TagParser(canvas);
+        console.log(tagParser.fullShapeInfo)
     }
 
 }

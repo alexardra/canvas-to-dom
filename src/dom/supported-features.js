@@ -11,7 +11,8 @@ export const TagPatterns = {
     "width": /(\d+(\.\d{1,2})?)/,
     "height": /(\d+(\.\d{1,2})?)/,
     "diameter": /(\d+(\.\d{1,2})?)/,
-    "z-order": /(\d+)/
+    "z-order": /(\d+)/,
+    "point": /(\"\((-?\d+(\.\d{1,2})?)\s?\,\s?(-?\d+(\.\d{1,2})?)\)\")/
 }
 
 export const Tags = [

@@ -2,41 +2,46 @@ import { TagPatterns } from "../supported-features"
 
 export default class TagParser {
 
-    constructor(tag) {
-        this._fullShapeInfo = this._createFullShapeInfo(tag);
+    constructor(element, shapeTree) {
+        this._fullShapeInfo = this._createFullShapeInfo(element, shapeTree);
     }
 
-    _createFullShapeInfo(tag) {
-        tag = tag.substring(0, tag.indexOf(">"))
-        let tokens = tag.split(" ");
-
-        let fullShapeInfo = { identity: tokens[0] };
+    _createFullShapeInfo(element) {
+        let shapeTree = {};
+        shapeTree.identity = element.nodeName.toLowerCase();
         const tagProperties = Object.keys(TagPatterns);
-        tokens.slice(1).forEach(property => {
-            let [key, value] = property.split("=");
 
-            if (new RegExp(/(point-\d+)/).test(key)) key = "point";
+        if (element.attributes && element.attributes.length) {
+            const attributes = Array.from(element.attributes);
 
-            if (!tagProperties.includes(key)) {
-                throw new Error(`Invalid property '${key}' in tag '<${tag}>'.`);
-            }
+            attributes.forEach((attribute) => {
+                const key = attribute.nodeName;
+                const value = attribute.nodeValue;
 
-            let isMatch = new RegExp(TagPatterns[key]).test(value);
-            if (!isMatch) {
-                throw new Error(`Invalid value ${value} in property 'key'`);
-            }
+                if (new RegExp(/(point-\d+)/).test(key)) key = "point";
 
-            if (key == "point") {
-                if (fullShapeInfo.hasOwnProperty("points")) {
-                    fullShapeInfo.points.push(this._createParsedPropertyValue(key, value));
-                } else {
-                    fullShapeInfo.points = [this._createParsedPropertyValue(key, value)];
+                if (!tagProperties.includes(key)) {
+                    throw new Error(`Invalid property '${key}' in tag '<${tag}>'.`);
                 }
-            }
+                let isMatch = new RegExp(TagPatterns[key]).test(value);
+                if (!isMatch) {
+                    throw new Error(`Invalid value ${value} in property ${key}`);
+                }
 
-            fullShapeInfo[key] = this._createParsedPropertyValue(key, value);
-        });
-        return fullShapeInfo;
+                if (key == "point") {
+                    if (shapeTree.hasOwnProperty("points")) {
+                        shapeTree.points.push(this._createParsedPropertyValue(key, value));
+                    } else {
+                        shapeTree.points = [this._createParsedPropertyValue(key, value)];
+                    }
+                } else {
+                    shapeTree[key] = this._createParsedPropertyValue(key, value);
+                }
+            });
+        }
+
+        shapeTree.children = [];
+        return shapeTree;
     }
 
     _createParsedPropertyValue(key, value) {

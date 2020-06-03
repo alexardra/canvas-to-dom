@@ -1,5 +1,4 @@
-import { Tags } from "../supported-features"
-import TagParser from "./tag-parser";
+import TreeParser from "./tree-parser";
 
 export default class TreeValidator {
 
@@ -14,21 +13,17 @@ export default class TreeValidator {
 
     checkValidity() {
         try {
-            let inner = this._tree.getElementsByTagName("canvas")[0].innerHTML;
-            this._createShapeTree(`<canvas>${inner}</canvas>`);
-
+            this._createShapeTree(this._tree.getElementsByTagName("canvas")[0])
         } catch (e) {
             console.log(e);
         }
     }
 
     _createShapeTree(canvas) {
-        const tagIndices = Array.from(Tags.map(tag => canvas.indexOf(tag))).filter(index => index != -1);
-        const nextTagIndex = Math.min.apply(Math, tagIndices);
+        let treeParser = new TreeParser(canvas);
+        console.log(treeParser.shapeTree);
 
-        canvas = canvas.substring(nextTagIndex);
-        let tagParser = new TagParser(canvas);
-        console.log(tagParser.fullShapeInfo)
+
     }
 
 }

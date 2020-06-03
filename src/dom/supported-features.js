@@ -7,12 +7,12 @@ export const TagProperties = [
 ];
 
 export const TagPatterns = {
-    "center": /(\"\((-?\d+(\.\d{1,2})?)\s?\,\s?(-?\d+(\.\d{1,2})?)\)\")/,
+    "center": /(\((-?\d+(\.\d{1,2})?)\s?\,\s?(-?\d+(\.\d{1,2})?)\))/,
     "width": /(\d+(\.\d{1,2})?)/,
     "height": /(\d+(\.\d{1,2})?)/,
     "diameter": /(\d+(\.\d{1,2})?)/,
     "z-order": /(\d+)/,
-    "point": /(\"\((-?\d+(\.\d{1,2})?)\s?\,\s?(-?\d+(\.\d{1,2})?)\)\")/
+    "point": /(\((-?\d+(\.\d{1,2})?)\s?\,\s?(-?\d+(\.\d{1,2})?)\))/
 }
 
 export const Tags = [

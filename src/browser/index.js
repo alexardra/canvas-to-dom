@@ -21,7 +21,7 @@ const loadOpenCV = () => {
     });
 }
 
-(async() => {
+(async () => {
     await loadDOM();
     await loadOpenCV();
     console.log("opencv loaded");
@@ -35,31 +35,24 @@ const sampleOptions = {
     colorSpace: "YCbCr"
 };
 
-const canvasToDom = async(canvasEl, options = sampleOptions) => {
+const canvasToDom = async (canvasEl, options = sampleOptions) => {
     let src = cv.imread(canvasEl);
 
     const srcPreProcessor = new PreProcessor(src);
 
-    // const testTemplateProcessor = new TemplateProcessor(src);
-    // await testTemplateProcessor.process()
-    // testTemplateProcessor.removeTemplates()
-
-    // erode_boundaries(src);
-    // cv.imshow('erode', src);
-
     const testContourProcessor = new ContourProcessor(src);
-    // console.log(testContourProcessor.hierachyTree);
-    // console.log(testContourProcessor.shapeTree);
 
     let domGenerator = new DomGenerator([testContourProcessor.shapeTree]);
     domGenerator.generate();
-    // console.log(domGenerator.getDom())
 
-    var doc = new DOMParser().parseFromString(domGenerator.getDom(), "text/html");
-    // console.log(doc);
+    const doc = new DOMParser().parseFromString(domGenerator.getDom(), "text/html");
+    const treeValidator = new TreeValidator(doc);
 
-    var treeValidator = new TreeValidator(doc);
-    treeValidator.checkValidity();
+    if (treeValidator.isValid) {
+        console.log(treeValidator.shapeTree);
+    } else {
+        console.log(treeValidator.error);
+    }
 
     cv.imshow('dst', src);
 }

@@ -3,10 +3,11 @@ import PreProcessor from "../visual-inference/pre-processor";
 import TemplateProcessor from "../visual-inference/template-processor";
 import TemplateMatcher from "../visual-inference/template-matcher";
 import Shape from "../visual-inference/shape";
-import DomGenerator from "../dom-generation/dom-generator";
+import DomGenerator from "../dom/generation/dom-generator";
 
 import * as infoInstance from "../../tests/simple-info-hierarchy.json";
 import ContourProcessor from "../visual-inference/contour-processor.js";
+import TreeValidator from "../dom/validation/tree-validator.js";
 
 const loadDOM = () => {
     return new Promise(resolve => {
@@ -39,23 +40,19 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
 
     const srcPreProcessor = new PreProcessor(src);
 
-    // const testTemplateProcessor = new TemplateProcessor(src);
-    // await testTemplateProcessor.process()
-    // testTemplateProcessor.removeTemplates()
+    const testContourProcessor = new ContourProcessor(src);
 
-    // erode_boundaries(src);
-    // cv.imshow('erode', src);
+    let domGenerator = new DomGenerator([testContourProcessor.shapeTree]);
+    domGenerator.generate();
 
-    // const testContourProcessor = new ContourProcessor(src);
-    // console.log(testContourProcessor.hierachyTree);
-    // console.log(testContourProcessor.shapeTree);
+    const doc = new DOMParser().parseFromString(domGenerator.getDom(), "text/html");
+    const treeValidator = new TreeValidator(doc);
 
-    // let domGenerator = new DomGenerator([testContourProcessor.shapeTree]);
-    // domGenerator.generate();
-    // console.log(domGenerator.getDom())
-
-    // var doc = new DOMParser().parseFromString(domGenerator.getDom(), "text/html");
-    // console.log(doc);
+    if (treeValidator.isValid) {
+        console.log(treeValidator.shapeTree);
+    } else {
+        console.log(treeValidator.error);
+    }
 
     cv.imshow('dst', src);
 }
@@ -70,5 +67,3 @@ const erode_boundaries = (mat) => {
     kernel.delete();
     //anchor.delete();
 }
-
-

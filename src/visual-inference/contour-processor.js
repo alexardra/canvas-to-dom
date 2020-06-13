@@ -20,8 +20,6 @@ export default class ContourProcessor {
         [this._contours, this._hierarchy] = this._createContours();
         this._shapes = this._createShapes();
         this._duplicateContourIndicesMap = this._createDuplicateContourIndicesMap();
-
-        this._createColor();
     }
 
     _createContours() {
@@ -39,9 +37,6 @@ export default class ContourProcessor {
         return shapes;
     }
 
-    _createColor() {
-        // this._colorExtractor.createColorFromShape(contour);
-    }
 
     _createDuplicateContourIndicesMap() {
         let duplicateContourIndicesMap = {};
@@ -111,6 +106,7 @@ export default class ContourProcessor {
         let shapeEntryInfos = Array(this._shapes.length).fill(null);
         for (let i = 0; i < this._shapes.length; i++) {
             if (i in this._duplicateContourIndicesMap) {
+                this._shapes[i].color = this._colorExtractor.createColorFromShape(this._contours.get(i));
                 shapeEntryInfos[i] = this._shapes[i].fullShapeEntry;
             }
         }

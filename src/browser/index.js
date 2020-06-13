@@ -53,7 +53,7 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
     const testContourProcessor = new ContourProcessor(dst, colorExtractor);
 
     // console.log(testContourProcessor.hierachyTree);
-    // console.log(testContourProcessor.shapeTree);
+    console.log(testContourProcessor.shapeTree);
 
     // let domGenerator = new DomGenerator([testContourProcessor.shapeTree]);
     // domGenerator.generate();

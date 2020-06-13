@@ -129,8 +129,16 @@ export default class Shape {
         return this._fullShapeInfo;
     }
 
+    get color() {
+        return this._color;
+    }
+
     set zOrder(zOrder) {
         this._zOrder = zOrder;
+    }
+
+    set color(color) {
+        this._color = color;
     }
 
     _createFullShapeEntry() {
@@ -142,6 +150,8 @@ export default class Shape {
         if (fullShapeInfo.identity == "polygon" || fullShapeInfo.identity == "triangle") {
             fullShapeInfo.points = Array.from(this._vertices, (vertice) => ({ cx: vertice[0], cy: vertice[1] }));
         }
+
+        fullShapeInfo.color = this.color;
         fullShapeInfo.children = [];
         return fullShapeInfo;
     }

@@ -2,13 +2,13 @@ import * as cv from "../../vendor/opencv.js";
 import PreProcessor from "../visual-inference/pre-processor";
 import TemplateProcessor from "../visual-inference/template-processor";
 import TemplateMatcher from "../visual-inference/template-matcher";
-import Shape from "../visual-inference/shape";
 import DomGenerator from "../dom/generation/dom-generator";
-
-import * as infoInstance from "../../tests/simple-info-hierarchy.json";
 import ContourProcessor from "../visual-inference/contour-processor.js";
 import ColorExtractor from "../visual-inference/color-extractor.js";
 import TreeValidator from "../dom/validation/tree-validator.js";
+
+import infoInstance from "../../tests/mocks/simple-info-hierarchy.json";
+
 
 const loadDOM = () => {
     return new Promise(resolve => {
@@ -43,22 +43,22 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
     const colorExtractor = new ColorExtractor(src);
     const srcPreProcessor = new PreProcessor(dst);
 
-
-    const testContourProcessor = new ContourProcessor(src);
-
-    let domGenerator = new DomGenerator([testContourProcessor.shapeTree]);
+    const testContourProcessor = new ContourProcessor(dst, colorExtractor);
+    // console.log([testContourProcessor.shapeTree]);
+    // console.log(infoInstance);
+    let domGenerator = new DomGenerator(infoInstance.canvas);
     domGenerator.generate();
 
-    const testContourProcessor = new ContourProcessor(dst, colorExtractor);
+    console.log(domGenerator.getDom());
 
-    const doc = new DOMParser().parseFromString(domGenerator.getDom(), "text/html");
-    const treeValidator = new TreeValidator(doc);
+    // const doc = new DOMParser().parseFromString(domGenerator.getDom(), "text/html");
+    // const treeValidator = new TreeValidator(doc);
 
-    if (treeValidator.isValid) {
-        console.log(treeValidator.shapeTree);
-    } else {
-        console.log(treeValidator.error);
-    }
+    // if (treeValidator.isValid) {
+    //     console.log(treeValidator.shapeTree);
+    // } else {
+    //     console.log(treeValidator.error);
+    // }
 
     // cv.imshow('dst', dst);
 }

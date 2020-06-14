@@ -3,8 +3,9 @@ import Shape from "./shape.js";
 
 export default class ContourProcessor {
 
-    constructor(mat) {
+    constructor(mat, colorExtractor) {
         this._mat = mat;
+        this._colorExtractor = colorExtractor;
 
         this._tree = null;
         this._contours = null;
@@ -35,6 +36,7 @@ export default class ContourProcessor {
         }
         return shapes;
     }
+
 
     _createDuplicateContourIndicesMap() {
         let duplicateContourIndicesMap = {};
@@ -104,6 +106,7 @@ export default class ContourProcessor {
         let shapeEntryInfos = Array(this._shapes.length).fill(null);
         for (let i = 0; i < this._shapes.length; i++) {
             if (i in this._duplicateContourIndicesMap) {
+                this._shapes[i].color = this._colorExtractor.createColorFromShape(this._contours.get(i));
                 shapeEntryInfos[i] = this._shapes[i].fullShapeEntry;
             }
         }
@@ -135,5 +138,9 @@ export default class ContourProcessor {
             this._shapeTree = this._createShapeTree();
         }
         return this._shapeTree;
+    }
+
+    get shapes() { // TEMP for testing
+        return this._shapes;
     }
 }

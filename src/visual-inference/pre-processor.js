@@ -11,7 +11,6 @@ export default class PreProcessor {
     _process() {
         // convert to greyscale
         cv.cvtColor(this._mat, this._mat, cv.COLOR_RGBA2GRAY, 0);
-        cv.imshow('temp', this._mat);
         // blur - reduce noise
         let ksize = new cv.Size(5, 5);
         cv.GaussianBlur(this._mat, this._mat, ksize, 0, 0, cv.BORDER_DEFAULT);

@@ -10,6 +10,7 @@ export default class Shape {
         this._shape = null;
         this._fullShapeInfo = null;
         this._vertices = null;
+        this._rotatedRect = null;
         this._zOrder = null;
 
         this._process();
@@ -18,6 +19,7 @@ export default class Shape {
     _process() {
         this._moments = this._createMoments();
         this._approxPoly = this._createApproxPoly();
+        this._rotatedRect = this._createRotatedRect();
         this._vertices = this._createVertices();
         this._shape = this._createShape();
 
@@ -43,23 +45,41 @@ export default class Shape {
         return vertices;
     }
 
+    _createRotatedRect() {
+        return cv.minAreaRect(this._contour);
+    }
+
     _createShape() {
         let shape = null;
-        if (this._vertices.length === 3) {
+
+        if (this._vertices.length == 2) {
+            shape = "line";
+        } else if (this._vertices.length === 3) {
             shape = "triangle";
         } else if (this._vertices.length === 4) {
-            const { x, y, width, height } = cv.boundingRect(this._approxPoly);
-            const aspectRatio = width / height;
+            let cxDelta = Math.abs(this.center.cx - this._rotatedRect.center.x);
+            let cyDelta = Math.abs(this.center.cy - this._rotatedRect.center.y);
+            let centersClose = cxDelta < 2 && cyDelta < 2;
 
-            if (aspectRatio >= 0.95 && aspectRatio <= 1.05)
-                shape = "square";
-            else
-                shape = "rectangle";
+            if (centersClose) {
+                const { x, y, width, height } = cv.boundingRect(this._approxPoly);
+                const aspectRatio = width / height;
+                shape = (aspectRatio >= 0.95 && aspectRatio <= 1.05) ? "square" : "rectangle";
+                this._width = width, this._height = height;
+            } else {
+                shape = "polygon";
+            }
         } else if (this._vertices.length == 5) {
             shape = "pentagon";
         } else {
-            // assume circle - TODO
-            shape = "circle";
+            if (cv.isContourConvex(this._approxPoly)) {
+                shape = "circle";
+
+                let circle = cv.minEnclosingCircle(this._contour); // TODO: make more precise
+                this._diameter = 2 * Math.round(Math.sqrt(this.area / Math.PI));
+            } else {
+                shape = "polygon";
+            }
         }
         return shape;
     }
@@ -80,7 +100,21 @@ export default class Shape {
     }
 
     get orientation() {
-        // TODO
+        if (this._rotatedRect == null) {
+            this._createRotatedRect();
+        }
+
+        if (this._shape == "circle") {
+            return 0;
+        }
+
+        let angle = this._rotatedRect.angle;
+        if (this._rotatedRect.size.width < this._rotatedRect.size.height) {
+            angle = angle + 180;
+        } else {
+            angle = angle + 90;
+        }
+        return Math.round((angle + Number.EPSILON) * 100) / 100;
     }
 
     get vertices() {
@@ -98,16 +132,46 @@ export default class Shape {
         return this._fullShapeInfo;
     }
 
+    get color() {
+        return this._color;
+    }
+
     set zOrder(zOrder) {
         this._zOrder = zOrder;
+    }
+
+    set color(color) {
+        this._color = color;
+    }
+
+    get size() {
+        if (this.identity == "square" || this.identity == "rectangle") {
+            return {
+                width: this._width,
+                height: this._height
+            }
+        } else if (this.identity == "circle") {
+            return this._diameter;
+        }
     }
 
     _createFullShapeEntry() {
         let fullShapeInfo = {};
         fullShapeInfo.identity = this.identity;
         fullShapeInfo.center = this.center;
-        fullShapeInfo.children = [];
+        fullShapeInfo.orientation = this.orientation;
 
+        if (fullShapeInfo.identity == "polygon" || fullShapeInfo.identity == "triangle" || fullShapeInfo.identity == "line") {
+            fullShapeInfo.points = Array.from(this._vertices, (vertice) => ({ cx: vertice[0], cy: vertice[1] }));
+        } else if (fullShapeInfo.identity == "square" || fullShapeInfo.identity == "rectangle") {
+            const size = this.size;
+            fullShapeInfo.width = size.width, fullShapeInfo.height = size.height;
+        } else if (fullShapeInfo.identity == "circle") {
+            fullShapeInfo.diameter = this.size;
+        }
+
+        fullShapeInfo.color = this.color;
+        fullShapeInfo.children = [];
         return fullShapeInfo;
     }
 

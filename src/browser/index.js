@@ -7,6 +7,7 @@ import DomGenerator from "../dom/generation/dom-generator";
 
 import * as infoInstance from "../../tests/simple-info-hierarchy.json";
 import ContourProcessor from "../visual-inference/contour-processor.js";
+import ColorExtractor from "../visual-inference/color-extractor.js";
 import TreeValidator from "../dom/validation/tree-validator.js";
 
 const loadDOM = () => {
@@ -37,13 +38,18 @@ const sampleOptions = {
 
 const canvasToDom = async (canvasEl, options = sampleOptions) => {
     let src = cv.imread(canvasEl);
+    let dst = src.clone();
 
-    const srcPreProcessor = new PreProcessor(src);
+    const colorExtractor = new ColorExtractor(src);
+    const srcPreProcessor = new PreProcessor(dst);
+
 
     const testContourProcessor = new ContourProcessor(src);
 
     let domGenerator = new DomGenerator([testContourProcessor.shapeTree]);
     domGenerator.generate();
+
+    const testContourProcessor = new ContourProcessor(dst, colorExtractor);
 
     const doc = new DOMParser().parseFromString(domGenerator.getDom(), "text/html");
     const treeValidator = new TreeValidator(doc);
@@ -54,7 +60,7 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
         console.log(treeValidator.error);
     }
 
-    cv.imshow('dst', src);
+    // cv.imshow('dst', dst);
 }
 
 const erode_boundaries = (mat) => {

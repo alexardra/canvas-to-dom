@@ -64,8 +64,8 @@ export default class Shape {
             if (centersClose) {
                 const { x, y, width, height } = cv.boundingRect(this._approxPoly);
                 const aspectRatio = width / height;
-
                 shape = (aspectRatio >= 0.95 && aspectRatio <= 1.05) ? "square" : "rectangle";
+                this._width = width, this._height = height;
             } else {
                 shape = "polygon";
             }
@@ -74,6 +74,9 @@ export default class Shape {
         } else {
             if (cv.isContourConvex(this._approxPoly)) {
                 shape = "circle";
+
+                let circle = cv.minEnclosingCircle(this._contour); // TODO: make more precise
+                this._diameter = 2 * Math.round(Math.sqrt(this.area / Math.PI));
             } else {
                 shape = "polygon";
             }
@@ -141,14 +144,30 @@ export default class Shape {
         this._color = color;
     }
 
+    get size() {
+        if (this.identity == "square" || this.identity == "rectangle") {
+            return {
+                width: this._width,
+                height: this._height
+            }
+        } else if (this.identity == "circle") {
+            return this._diameter;
+        }
+    }
+
     _createFullShapeEntry() {
         let fullShapeInfo = {};
         fullShapeInfo.identity = this.identity;
         fullShapeInfo.center = this.center;
         fullShapeInfo.orientation = this.orientation;
 
-        if (fullShapeInfo.identity == "polygon" || fullShapeInfo.identity == "triangle") {
+        if (fullShapeInfo.identity == "polygon" || fullShapeInfo.identity == "triangle" || fullShapeInfo.identity == "line") {
             fullShapeInfo.points = Array.from(this._vertices, (vertice) => ({ cx: vertice[0], cy: vertice[1] }));
+        } else if (fullShapeInfo.identity == "square" || fullShapeInfo.identity == "rectangle") {
+            const size = this.size;
+            fullShapeInfo.width = size.width, fullShapeInfo.height = size.height;
+        } else if (fullShapeInfo.identity == "circle") {
+            fullShapeInfo.diameter = this.size;
         }
 
         fullShapeInfo.color = this.color;

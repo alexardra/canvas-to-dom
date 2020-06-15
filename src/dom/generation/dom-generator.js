@@ -6,15 +6,11 @@ export default class DomGenerator {
 
 
     constructor(domInfo) {
-        this.domInfo = domInfo;
-        this.dom = "";
+        this._domInfo = domInfo.children;
+        this._dom = null;
     }
 
-    generate() {
-        this.dom = this.generateDomFromInfo(this.domInfo);
-    }
-
-    generateDomFromInfo(domInfo) {
+    _generateDomFromInfo(domInfo) {
         let dom = "";
         for (let tagInfo of domInfo) {
             let tagGenerator = new TagGenerator(tagInfo.identity);
@@ -24,23 +20,23 @@ export default class DomGenerator {
                 }
             }
             dom += tagGenerator.tag;
-
             if (tagInfo.hasOwnProperty("children") &&
                 Array.isArray(tagInfo.children) &&
                 tagInfo.children.length > 0) {
 
-                dom += this.generateDomFromInfo(tagInfo.children);
+                dom += this._generateDomFromInfo(tagInfo.children);
             }
             tagGenerator.endTag();
             dom += tagGenerator.endingTag;
-
         }
-
         return dom;
     }
 
-    getDom() {
-        return `<canvas>${this.dom}</canvas>`;
+    get dom() {
+        if (this._dom == null) {
+            this._dom = this._generateDomFromInfo(this._domInfo);
+        }
+        return `<canvas>${this._dom}</canvas>`;
     }
 
     addTagProperty(tagGenerator, property, value) {

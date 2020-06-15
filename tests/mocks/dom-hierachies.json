@@ -1,0 +1,71 @@
+{
+    "simple correct structure": [
+        {
+            "identity": "canvas",
+            "children": []
+        },
+        {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "square"
+                },
+                {
+                    "identity": "square"
+                },
+                {
+                    "identity": "square"
+                },
+                {
+                    "identity": "square"
+                }
+            ]
+        },
+        {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "square"
+                },
+                {
+                    "identity": "circle"
+                },
+                {
+                    "identity": "rectangle"
+                },
+                {
+                    "identity": "line"
+                }
+            ]
+        },
+        {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "polygon"
+                }
+            ]
+        },
+        {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "polygon",
+                    "children": [
+                        {
+                            "identity": "line"
+                        }
+                    ]
+                },
+                {
+                    "identity": "triangle",
+                    "children": [
+                        {
+                            "identity": "circle"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+{
+    "simple correct structure": [
+        "<canvas></canvas>",
+        "<canvas><square></square><square></square><square></square><square></square></canvas>",
+        "<canvas><square></square><circle></circle><rectangle></rectangle><line></line></canvas>",
+        "<canvas><polygon></polygon></canvas>",
+        "<canvas><polygon><line></line></polygon><triangle><circle></circle></triangle></canvas>"
+    ]
+}

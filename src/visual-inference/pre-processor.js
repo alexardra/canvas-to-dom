@@ -4,11 +4,9 @@ export default class PreProcessor {
 
     constructor(mat) {
         this._mat = mat;
-
-        this._process()
     }
 
-    _process() {
+    binarize() {
         // convert to greyscale
         cv.cvtColor(this._mat, this._mat, cv.COLOR_RGBA2GRAY, 0);
         // blur - reduce noise
@@ -18,4 +16,14 @@ export default class PreProcessor {
         //threshold - binarization
         cv.adaptiveThreshold(this._mat, this._mat, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, 5, 2);
     }
+
+    _erode_boundaries() { // TODO
+        let kernel = cv.Mat.ones(2, 2, cv.CV_8U);
+        let anchor = new cv.Point(-1, -1);
+
+        cv.erode(this._mat, this._mat, kernel, anchor, 1, cv.BORDER_CONSTANT, cv.morphologyDefaultBorderValue());
+        kernel.delete();
+        anchor.delete();
+    }
+
 }

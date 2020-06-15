@@ -7,8 +7,6 @@ import ContourProcessor from "../visual-inference/contour-processor.js";
 import ColorExtractor from "../visual-inference/color-extractor.js";
 import TreeValidator from "../dom/validation/tree-validator.js";
 
-import infoInstance from "../../tests/mocks/simple-info-hierarchy.json";
-
 
 const loadDOM = () => {
     return new Promise(resolve => {
@@ -30,10 +28,7 @@ const loadOpenCV = () => {
 })();
 
 
-
-// // nothing yet, will be added when neccessary
 const sampleOptions = {
-    colorSpace: "YCbCr"
 };
 
 const canvasToDom = async (canvasEl, options = sampleOptions) => {
@@ -42,34 +37,18 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
 
     const colorExtractor = new ColorExtractor(src);
     const srcPreProcessor = new PreProcessor(dst);
+    srcPreProcessor.binarize();
 
-    const testContourProcessor = new ContourProcessor(dst, colorExtractor);
-    // console.log([testContourProcessor.shapeTree]);
-    // console.log(infoInstance);
-    let domGenerator = new DomGenerator(infoInstance.canvas);
-    domGenerator.generate();
-
-    console.log(domGenerator.getDom());
-
-    // const doc = new DOMParser().parseFromString(domGenerator.getDom(), "text/html");
-    // const treeValidator = new TreeValidator(doc);
-
-    // if (treeValidator.isValid) {
-    //     console.log(treeValidator.shapeTree);
-    // } else {
-    //     console.log(treeValidator.error);
-    // }
-
-    // cv.imshow('dst', dst);
-}
-
-const erode_boundaries = (mat) => {
-    // let src = cv.imread('canvasInput');
-    // let dst = new cv.Mat();
-    let kernel = cv.Mat.ones(2, 2, cv.CV_8U);
-    let anchor = new cv.Point(-1, -1);
-
-    cv.erode(mat, mat, kernel, anchor, 1, cv.BORDER_CONSTANT, cv.morphologyDefaultBorderValue());
-    kernel.delete();
-    //anchor.delete();
+    const contourProcessor = new ContourProcessor(dst, colorExtractor);
+    const domGenerator = new DomGenerator({
+        "identity": "canvas",
+        "children": [contourProcessor.shapeTree]
+    });
+    const document = new DOMParser().parseFromString(domGenerator.dom, "text/html");
+    const treeValidator = new TreeValidator(document);
+    if (treeValidator.isValid) {
+        console.log(treeValidator.shapeTree);
+    } else {
+        console.log(treeValidator.error);
+    }
 }

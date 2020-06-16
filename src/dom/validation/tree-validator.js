@@ -5,6 +5,7 @@ export default class TreeValidator {
     constructor(tree) {
         this._tree = tree;
 
+        this._treeParser = null;
         this._shapeTree = null;
         this._isValid = null;
         this._invalidError = null;
@@ -36,8 +37,19 @@ export default class TreeValidator {
         return this._invalidError;
     }
 
+    get containsAllProperties() {
+        return this.isValid ? Object.keys(this._treeParser.tagsWithMissingProperties).length === 0 : false;
+    }
+
+    get tagsWithMissingProperties() {
+        if (this._treeParser == null) {
+            this.isValid; // TODO: refactor
+        }
+        return this._treeParser.tagsWithMissingProperties;
+    }
+
     _createShapeTree(canvas) {
-        let treeParser = new TreeParser(canvas);
-        return treeParser.shapeTree;
+        this._treeParser = new TreeParser(canvas);
+        return this._treeParser.shapeTree;
     }
 }

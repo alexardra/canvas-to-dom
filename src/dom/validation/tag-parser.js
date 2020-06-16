@@ -3,6 +3,7 @@ import { TagPatterns } from "../supported-features"
 export default class TagParser {
 
     constructor(element, shapeTree) {
+        this._missingProperties = [];
         this._fullShapeInfo = this._createFullShapeInfo(element, shapeTree);
     }
 
@@ -11,9 +12,10 @@ export default class TagParser {
         shapeTree.identity = element.nodeName.toLowerCase();
         const tagProperties = Object.keys(TagPatterns);
 
-        if (element.attributes && element.attributes.length) {
-            const attributes = Array.from(element.attributes);
+        const attributes = Array.from(element.attributes);
+        this._missingProperties = tagProperties.filter(property => !attributes.includes(property));
 
+        if (element.attributes && element.attributes.length) {
             attributes.forEach((attribute) => {
                 const key = attribute.nodeName;
                 const value = attribute.nodeValue;
@@ -55,5 +57,9 @@ export default class TagParser {
 
     get fullShapeInfo() {
         return this._fullShapeInfo;
+    }
+
+    get missingProperties() {
+        return this._missingProperties;
     }
 }

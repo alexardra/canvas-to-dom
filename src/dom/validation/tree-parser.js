@@ -10,6 +10,7 @@ export default class TreeParser {
     _createShapeTree() {
         let shapeTree = {}
         this._createShapeTreeFromDom(this._dom_tree, shapeTree);
+        shapeTree.identity = "canvas";
         return shapeTree;
     }
 

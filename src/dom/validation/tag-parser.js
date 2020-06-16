@@ -46,9 +46,9 @@ export default class TagParser {
 
     _createParsedPropertyValue(key, value) {
         if (["width", "height", "diameter", "z-order", "orientation", "color"].includes(key)) {
-            return Number(value.substring(1, value.length - 1))
+            return value;
         } else if (key == "center" || key == "point") {
-            const [cx, cy] = value.replace(/\s/g, "").substring(2, value.length - 2).split(',').map(Number);
+            const [cx, cy] = value.replace(/\s/g, "").substring(1, value.length - 1).split(',').map(Number);
             return { cx, cy };
         }
     }

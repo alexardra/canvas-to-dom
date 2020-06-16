@@ -24,20 +24,20 @@ const loadOpenCV = () => {
     await loadDOM();
     await loadOpenCV();
     console.log("opencv loaded");
-    await canvasToDom("app");
+    canvasToDom("app");
 })();
 
 
 const sampleOptions = {
 };
 
-const canvasToDom = async (canvasEl, options = sampleOptions) => {
+const canvasToDom = (canvasEl, options = sampleOptions) => {
     let src = cv.imread(canvasEl);
     let dst = src.clone();
 
     const colorExtractor = new ColorExtractor(src);
-    const srcPreProcessor = new PreProcessor(dst);
-    srcPreProcessor.binarize();
+    const preProcessor = new PreProcessor(dst);
+    preProcessor.binarize();
 
     const contourProcessor = new ContourProcessor(dst, colorExtractor);
     const domGenerator = new DomGenerator({
@@ -52,3 +52,4 @@ const canvasToDom = async (canvasEl, options = sampleOptions) => {
         console.log(treeValidator.error);
     }
 }
+

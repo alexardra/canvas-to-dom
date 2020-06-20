@@ -6,7 +6,7 @@ import DomGenerator from "../dom/generation/dom-generator";
 import ContourProcessor from "../visual-inference/contour-processor.js";
 import ColorExtractor from "../visual-inference/color-extractor.js";
 import TreeValidator from "../dom/validation/tree-validator.js";
-
+import { SupportedOptions } from "../dom/supported-features";
 
 const loadDOM = () => {
     return new Promise(resolve => {
@@ -24,15 +24,32 @@ const loadOpenCV = () => {
     await loadDOM();
     await loadOpenCV();
     console.log("opencv loaded");
-    canvasToDom("app");
+    let dom = canvasToDOM("app");
+    console.log(dom);
 })();
 
+const getValidOptions = (options = {}) => {
+    for (const option in SupportedOptions) {
+        if (option in options) {
+            if (!SupportedOptions[option].supported.includes(options[option].toLowerCase())) {
+                throw new Error(`Unsupported value '${options[option]}' for option '${option}'`);
+            }
+        } else {
+            options[option] = SupportedOptions[option].default;
+        }
+    }
+    return options;
+}
 
-const sampleOptions = {
-};
-
-const canvasToDom = (canvasEl, options = sampleOptions) => {
-    let src = cv.imread(canvasEl);
+const canvasToDOM = (canvasEl, options) => {
+    options = getValidOptions(options);
+    console.log(options);
+    let src;
+    try {
+        src = cv.imread(canvasEl);
+    } catch (e) {
+        throw new Error(`Given canvas element is invald, ${e.message}`);
+    }
     let dst = src.clone();
 
     const colorExtractor = new ColorExtractor(src);
@@ -40,16 +57,12 @@ const canvasToDom = (canvasEl, options = sampleOptions) => {
     preProcessor.binarize();
 
     const contourProcessor = new ContourProcessor(dst, colorExtractor);
-    const domGenerator = new DomGenerator({
-        "identity": "canvas",
-        "children": [contourProcessor.shapeTree]
-    });
-    const document = new DOMParser().parseFromString(domGenerator.dom, "text/html");
-    const treeValidator = new TreeValidator(document);
-    if (treeValidator.isValid) {
-        console.log(treeValidator.shapeTree);
-    } else {
-        console.log(treeValidator.error);
-    }
-}
 
+    if (options.type == "json") return contourProcessor.shapeTree;
+
+    const domGenerator = new DomGenerator(contourProcessor.shapeTree);
+
+    if (options.type == "text/html") return domGenerator.dom;
+
+    return new DOMParser().parseFromString(domGenerator.dom, "text/html");
+}

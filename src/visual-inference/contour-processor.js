@@ -112,6 +112,7 @@ export default class ContourProcessor {
         }
         let shapeTree = [];
         this._translateContourIndicesToShapes(shapeTree, [this.hierachyTree], shapeEntryInfos, 0);
+        shapeTree[0].identity = "canvas"; // TODO: should always be square - ensure with bounding box
         return shapeTree[0];
     }
 

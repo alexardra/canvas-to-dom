@@ -27,3 +27,10 @@ export const Tags = [
     "polygon",
     "circle"
 ]
+
+export const SupportedOptions = {
+    "type": {
+        "default": "document",
+        "supported": ["text/html", "json", "document"]
+    }
+}

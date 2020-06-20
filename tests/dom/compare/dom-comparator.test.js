@@ -13,3 +13,4 @@ test("simple exact match", () => {
         expect(domComparator.areEqual()).toBeTruthy();
     }
 });
+

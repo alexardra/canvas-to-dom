@@ -99,6 +99,139 @@
                     ]
                 }
             ]
+        },
+        {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "square",
+                    "center": {
+                        "cx": 12,
+                        "cy": 23
+                    },
+                    "width": 5,
+                    "height": 5,
+                    "color": "#fffff",
+                    "orientation": 90,
+                    "zOrder": 1,
+                    "children": [
+                        {
+                            "identity": "rectangle",
+                            "center": {
+                                "cx": 45,
+                                "cy": 91
+                            },
+                            "width": 8,
+                            "height": 6,
+                            "color": "#fefefefe",
+                            "orientation": 180,
+                            "zOrder": 2
+                        },
+                        {
+                            "identity": "rectangle",
+                            "center": {
+                                "cx": 90,
+                                "cy": 40
+                            },
+                            "width": 8,
+                            "height": 6,
+                            "color": "#fefefefe",
+                            "orientation": 180,
+                            "zOrder": 2,
+                            "children": [
+                                {
+                                    "identity": "circle",
+                                    "center": {
+                                        "cx": 100,
+                                        "cy": 100
+                                    },
+                                    "diameter": "3",
+                                    "color": "#fefefefe",
+                                    "orientation": 180,
+                                    "zOrder": 3
+                                },
+                                {
+                                    "identity": "circle",
+                                    "center": {
+                                        "cx": 150,
+                                        "cy": 250
+                                    },
+                                    "diameter": "3",
+                                    "color": "#fefefefe",
+                                    "orientation": 180,
+                                    "zOrder": 3
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "identity": "triangle",
+                    "center": {
+                        "cx": 12,
+                        "cy": 23
+                    },
+                    "points": [
+                        {
+                            "cx": 22,
+                            "cy": 12
+                        },
+                        {
+                            "cx": 22,
+                            "cy": 12
+                        },
+                        {
+                            "cx": 22,
+                            "cy": 12
+                        }
+                    ],
+                    "color": "#fffff",
+                    "orientation": 90,
+                    "zOrder": 1,
+                    "children": []
+                }
+            ]
+        },
+        {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "square",
+                    "center": {
+                        "cx": 12,
+                        "cy": 23
+                    },
+                    "width": 5,
+                    "height": 5,
+                    "color": "#fffff",
+                    "orientation": 90,
+                    "zOrder": 11
+                },
+                {
+                    "identity": "triangle",
+                    "center": {
+                        "cx": 12,
+                        "cy": 23
+                    },
+                    "points": [
+                        {
+                            "cx": 22,
+                            "cy": 12
+                        },
+                        {
+                            "cx": 22,
+                            "cy": 12
+                        },
+                        {
+                            "cx": 22,
+                            "cy": 12
+                        }
+                    ],
+                    "color": "#fffff",
+                    "orientation": 90,
+                    "zOrder": 1
+                }
+            ]
         }
     ]
 }

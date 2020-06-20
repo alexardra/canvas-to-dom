@@ -17,8 +17,8 @@ export default class TagParser {
 
         if (element.attributes && element.attributes.length) {
             attributes.forEach((attribute) => {
-                const key = attribute.nodeName;
-                const value = attribute.nodeValue;
+                let key = attribute.nodeName;
+                let value = attribute.nodeValue;
 
                 if (new RegExp(/(point-\d+)/).test(key)) key = "point";
 

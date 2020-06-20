@@ -10,7 +10,6 @@ import { SupportedOptions } from "../dom/supported-features";
 import { getValidShapeTreeFromElement } from "./helpers";
 import DomComparator from "../dom/compare/dom-comparator"
 
-
 const loadDOM = () => {
     return new Promise(resolve => {
         window.onload = resolve;

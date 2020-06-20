@@ -14,7 +14,7 @@ export const TagPatterns = {
     "z-order": /(\d+)/,
     "point": /(\((-?\d+(\.\d{1,2})?)\s?\,\s?(-?\d+(\.\d{1,2})?)\))/,
     "orientation": /(\b([1-2]?[0-9]?[0-9]|3[0-5][0-9]|360)\b)/,
-    "color": /(#[0-9a-f]{8})/
+    "color": /(#[0-9a-f])/
 }
 
 export const Tags = [

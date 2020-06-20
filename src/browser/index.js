@@ -7,6 +7,8 @@ import ContourProcessor from "../visual-inference/contour-processor.js";
 import ColorExtractor from "../visual-inference/color-extractor.js";
 import TreeValidator from "../dom/validation/tree-validator.js";
 import { SupportedOptions } from "../dom/supported-features";
+import DomComparator from "../dom/compare/dom-comparator"
+
 
 const loadDOM = () => {
     return new Promise(resolve => {
@@ -24,8 +26,7 @@ const loadOpenCV = () => {
     await loadDOM();
     await loadOpenCV();
     console.log("opencv loaded");
-    let dom = canvasToDOM("app");
-    console.log(dom);
+    canvasToDOM("app");
 })();
 
 const getValidOptions = (options = {}) => {
@@ -43,7 +44,7 @@ const getValidOptions = (options = {}) => {
 
 const canvasToDOM = (canvasEl, options) => {
     options = getValidOptions(options);
-    console.log(options);
+
     let src;
     try {
         src = cv.imread(canvasEl);
@@ -66,3 +67,35 @@ const canvasToDOM = (canvasEl, options) => {
 
     return new DOMParser().parseFromString(domGenerator.dom, "text/html");
 }
+
+
+const getValidShapeTreeFromElement = (element) => {
+    if (element.constructor != String &&
+        element.constructor != Object &&
+        element.constructor != HTMLDocument) {
+        throw new Error(`Given element argument has wrong format`);
+    }
+    if (element.constructor == Object) {
+        try {
+            const domGenerator = new DomGenerator(element);
+            element = domGenerator.dom;
+        } catch (e) {
+            throw new Error(`Could not generate dom from given element, ${e.message}`);
+        }
+    }
+    if (element.constructor == String) {
+        element = new DOMParser().parseFromString(element, "text/html");
+    }
+    const treeValidator = new TreeValidator(element);
+    if (!treeValidator.isValid) {
+        throw new Error(treeValidator.error);
+    }
+    return element;
+}
+
+const canvasDOMCompare = (firstEl, secondEl) => {
+    //TODO: compare two Documents
+    const domComparator = new DomComparator(getValidShapeTreeFromElement(firstEl), getValidShapeTreeFromElement(secondEl));
+    return domComparator.areEqual(); // TODO: implement options
+}
+

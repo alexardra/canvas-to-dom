@@ -22,7 +22,6 @@ export default class TreeParser {
         for (let property in tagParser.fullShapeInfo) {
             shapeTree[property] = tagParser.fullShapeInfo[property];
         }
-
         if (tagParser.missingProperties.length > 0) {
             this._tagsWithMissingProperties[element] = tagParser.missingProperties;
         }

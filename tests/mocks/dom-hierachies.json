@@ -67,5 +67,38 @@
                 }
             ]
         }
+    ],
+    "simple full structure": [
+        {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "square",
+                    "center": {
+                        "cx": 12,
+                        "cy": 23
+                    },
+                    "width": 5,
+                    "height": 5,
+                    "color": "#fefefe",
+                    "orientation": 90,
+                    "zOrder": 1,
+                    "children": [
+                        {
+                            "identity": "rectangle",
+                            "center": {
+                                "cx": 45,
+                                "cy": 91
+                            },
+                            "width": 8,
+                            "height": 6,
+                            "color": "#fefefefe",
+                            "orientation": 180,
+                            "zOrder": 2
+                        }
+                    ]
+                }
+            ]
+        }
     ]
 }

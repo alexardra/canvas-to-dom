@@ -18,7 +18,6 @@ export default class DomComparator {
                     node.getAttribute("z-order") == nodeToCompare.getAttribute("z-order") &&
                     node.getAttribute("center") == nodeToCompare.getAttribute("center") &&
                     node.getAttribute("orientation") == nodeToCompare.getAttribute("orientation");
-
             });
             if (foundNodes.length != 1) return false;
         }

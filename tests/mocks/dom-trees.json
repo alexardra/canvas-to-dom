@@ -5,5 +5,8 @@
         "<canvas><square></square><circle></circle><rectangle></rectangle><line></line></canvas>",
         "<canvas><polygon></polygon></canvas>",
         "<canvas><polygon><line></line></polygon><triangle><circle></circle></triangle></canvas>"
+    ],
+    "simple full structure": [
+        "<canvas><square center=\"(12,23)\" width=\"5\" height=\"5\" color=\"#fefefe\" orientation=\"90\" z-order=\"1\"><rectangle center=\"(45,91)\" width=\"8\" height=\"6\" color=\"#fefefefe\" orientation=\"180\" z-order=\"2\"></rectangle></square></canvas>"
     ]
 }

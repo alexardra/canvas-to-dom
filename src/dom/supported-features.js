@@ -31,6 +31,11 @@ export const Tags = [
 export const SupportedOptions = {
     "type": {
         "default": "document",
-        "supported": ["text/html", "json", "document"]
+        "supported": ["text/html", "json", "document"],
+    },
+    "fragment": {
+        "default": { "x": "", "y": "", "width": "", "height": "" },
+        "supportedProperties": ["x", "y", "width", "height"],
+        "requiredProperties": ["x", "y", "width", "height"]
     }
 }

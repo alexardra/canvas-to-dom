@@ -1,11 +1,8 @@
 import * as cv from "../../vendor/opencv.js";
 import PreProcessor from "../visual-inference/pre-processor";
-import TemplateProcessor from "../visual-inference/template-processor";
-import TemplateMatcher from "../visual-inference/template-matcher";
 import DomGenerator from "../dom/generation/dom-generator";
 import ContourProcessor from "../visual-inference/contour-processor.js";
 import ColorExtractor from "../visual-inference/color-extractor.js";
-import TreeValidator from "../dom/validation/tree-validator.js";
 import { SupportedOptions } from "../dom/supported-features";
 import { getValidShapeTreeFromElement } from "./helpers";
 import DomComparator from "../dom/compare/dom-comparator"
@@ -32,11 +29,26 @@ const loadOpenCV = () => {
 const getValidOptions = (options = {}) => {
     for (const option in SupportedOptions) {
         if (option in options) {
-            if (!SupportedOptions[option].supported.includes(options[option].toLowerCase())) {
-                throw new Error(`Unsupported value '${options[option]}' for option '${option}'`);
+            if ("supported" in SupportedOptions[option]) {
+                if (!SupportedOptions[option].supported.includes(options[option])) {
+                    throw new Error(`Unsupported value '${options[option]}' for option '${option}'`);
+                }
+            } else {
+                for (let givenProperty in options[option]) {
+                    if (!SupportedOptions[option].supportedProperties.includes(givenProperty)) {
+                        throw new Error(`Unsupported property '${givenProperty}' for option '${option}'`);
+                    }
+                }
+                for (let requiredProperty of SupportedOptions[option].requiredProperties) {
+                    if (!(requiredProperty in options[option])) {
+                        throw new Error(`Property '${requiredProperty}' is required for option '${option}'`);
+                    }
+                }
             }
         } else {
-            options[option] = SupportedOptions[option].default;
+            options[option] = typeof (SupportedOptions[option].default) == "object" ?
+                Object.assign({}, SupportedOptions[option].default) :
+                SupportedOptions[option].default;
         }
     }
     return options;
@@ -47,9 +59,17 @@ const canvasToDOM = (canvasEl, options) => {
 
     let src;
     try {
-        src = cv.imread(canvasEl);
+        const canvas = typeof (canvasEl) == "string" ? document.getElementById(canvasEl) : canvasEl;
+        const context = canvas.getContext("2d");
+        const imgData = context.getImageData(
+            options.fragment.x ? options.fragment.x : 0,
+            options.fragment.y ? options.fragment.y : 0,
+            options.fragment.width ? options.fragment.width : canvas.width,
+            options.fragment.height ? options.fragment.height : canvas.height,
+        );
+        src = cv.matFromImageData(imgData);
     } catch (e) {
-        throw new Error(`Given canvas element is invald, ${e.message}`);
+        throw new Error(`Cannot process given canvas, ${e.message}`);
     }
     let dst = src.clone();
 

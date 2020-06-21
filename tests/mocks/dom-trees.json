@@ -3,12 +3,26 @@
         "<canvas></canvas>",
         "<canvas><square></square><square></square><square></square><square></square></canvas>",
         "<canvas><square></square><circle></circle><rectangle></rectangle><line></line></canvas>",
-        "<canvas><polygon></polygon></canvas>",
-        "<canvas><polygon><line></line></polygon><triangle><circle></circle></triangle></canvas>"
+        "<canvas><circle></circle></canvas>",
+        "<canvas><rectangle><line></line></rectangle><triangle><circle></circle></triangle></canvas>"
     ],
     "simple full structure": [
         "<canvas><square center=\"(12,23)\" width=\"5\" height=\"5\" color=\"#fefefe\" orientation=\"90\" z-order=\"1\"><rectangle center=\"(45,91)\" width=\"8\" height=\"6\" color=\"#fefefefe\" orientation=\"180\" z-order=\"2\"></rectangle></square></canvas>",
         "<canvas><square center=\"(12,23)\" width=\"5\" height=\"5\" color=\"#fffff\" z-order=\"1\" orientation=\"90\"><rectangle center=\"(45,91)\" width=\"8\" height=\"6\" color=\"#fefefefe\" z-order=\"2\" orientation=\"180\"></rectangle><rectangle center=\"(90,40)\" width=\"8\" height=\"6\" color=\"#fefefefe\" z-order=\"2\" orientation=\"180\"><circle center=\"(100,100)\" diameter=\"3\" color=\"#fefefefe\" z-order=\"3\" orientation=\"180\"></circle><circle center=\"(150,250)\" diameter=\"3\" color=\"#fefefefe\" z-order=\"3\" orientation=\"180\"></circle></rectangle></square><triangle center=\"(12,23)\" point-0=\"(22,12)\" point-1=\"(22,12)\" point-2=\"(22,12)\" color=\"#fffff\" z-order=\"1\" orientation=\"90\"></triangle></canvas>",
         "<canvas><square center=\"(12,23)\" width=\"5\" height=\"5\" color=\"#fffff\" z-order=\"11\" orientation=\"90\"></square><triangle center=\"(12,23)\" point-0=\"(22,12)\" point-1=\"(22,12)\" point-2=\"(22,12)\" color=\"#fffff\" z-order=\"1\" orientation=\"90\"></triangle></canvas>"
-    ]
+    ],
+    "line": {
+        "no missing properties": "<canvas><line center=\"(149.5,149.5)\" point-0=\"(128,129)\" point-1=\"(128,129)\" color=\"#fefefe\" z-order=\"1\" orientation=\"43.23\"></line></canvas>",
+        "missing points property": "<canvas><line center=\"(149.5,149.5)\" color=\"#fefefe\" z-order=\"1\" orientation=\"43.23\"></line></canvas>",
+        "missing one point property": "<canvas><line center=\"(149.5,149.5)\" point-0=\"(128,129)\" color=\"#fefefe\" z-order=\"1\" orientation=\"45\"></line></canvas>",
+        "missing center property": "<canvas><line point-0=\"(128,129)\" point-1=\"(128,129)\" color=\"#fefefe\" z-order=\"1\" orientation=\"43.23\"></line></canvas>",
+        "missing z-order property": "<canvas><line center=\"(149.5,149.5)\" point-0=\"(128,129)\" point-1=\"(128,129)\" color=\"#fefefe\" orientation=\"43.23\"></line></canvas>",
+        "missing orientation property": "<canvas><line center=\"(149.5,149.5)\" point-0=\"(128,129)\" point-1=\"(128,129)\" color=\"#fefefe\" z-order=\"1\"></line></canvas>",
+        "missing color property": "<canvas><line center=\"(149.5,149.5)\" point-0=\"(128,129)\" point-1=\"(128,129)\" z-order=\"1\" orientation=\"43.23\"></line></canvas>",
+        "invalid center coordinates": "<canvas><line center=\"(100,100.1232)\" point-0=\"(128,129)\" point-1=\"(128,129)\" color=\"#fefefe\" z-order=\"1\" orientation=\"43.23\"></line></canvas>",
+        "invalid z-order property value": "<canvas><line center=\"(100,200)\" point-0=\"(128,129)\" point-1=\"(128,129)\" color=\"#fefefe\" z-order=\"2.23\" orientation=\"43.23\"></line></canvas>",
+        "invalid points property": "",
+        "invalid color format": "<canvas><line center=\"(100,200)\" point-0=\"(128,129)\" point-1=\"(128,129)\" color=\"rgba(100, 100, 100, 100)\" z-order=\"1\" orientation=\"43.23\"></line></canvas>",
+        "invalid property": "<canvas><line center=\"(149.5,149.5)\" point-0=\"(128,129)\" point-1=\"(128,129)\" color=\"#fefefe\" z-order=\"1\" orientation=\"43.23\" width=\"12\"></line></canvas>"
+    }
 }

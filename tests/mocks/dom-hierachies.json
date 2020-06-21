@@ -42,7 +42,7 @@
             "identity": "canvas",
             "children": [
                 {
-                    "identity": "polygon"
+                    "identity": "circle"
                 }
             ]
         },
@@ -50,7 +50,7 @@
             "identity": "canvas",
             "children": [
                 {
-                    "identity": "polygon",
+                    "identity": "rectangle",
                     "children": [
                         {
                             "identity": "line"
@@ -233,5 +233,281 @@
                 }
             ]
         }
-    ]
+    ],
+    "line": {
+        "no missing properties": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "line",
+                    "points": [
+                        {
+                            "cx": 128,
+                            "cy": 129
+                        },
+                        {
+                            "cx": 171,
+                            "cy": 170
+                        }
+                    ],
+                    "center": {
+                        "cx": 149.5,
+                        "cy": 149.5
+                    },
+                    "zOrder": 1,
+                    "orientation": "43.23",
+                    "color": "#fefefe"
+                }
+            ]
+        },
+        "missing points property": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "line",
+                    "center": {
+                        "cx": 149.5,
+                        "cy": 149.5
+                    },
+                    "zOrder": 1,
+                    "orientation": "43.23",
+                    "color": "#fefefe"
+                }
+            ]
+        },
+        "missing one point property": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "line",
+                    "center": {
+                        "cx": 149.5,
+                        "cy": 149.5
+                    },
+                    "points": [
+                        {
+                            "cx": 128,
+                            "cy": 129
+                        }
+                    ],
+                    "zOrder": 1,
+                    "orientation": 45,
+                    "color": "#fefefe"
+                }
+            ]
+        },
+        "missing center property": {
+            "children": [
+                {
+                    "identity": "line",
+                    "points": [
+                        {
+                            "cx": 128,
+                            "cy": 129
+                        },
+                        {
+                            "cx": 171,
+                            "cy": 170
+                        }
+                    ],
+                    "zOrder": 1,
+                    "orientation": "43.23",
+                    "color": "#fefefe"
+                }
+            ]
+        },
+        "missing center property coordinate": {
+            "children": [
+                {
+                    "identity": "line",
+                    "points": [
+                        {
+                            "cx": 128,
+                            "cy": 129
+                        },
+                        {
+                            "cx": 171,
+                            "cy": 170
+                        }
+                    ],
+                    "center": {
+                        "cx": 149.5
+                    },
+                    "zOrder": 1,
+                    "orientation": "43.23",
+                    "color": "#fefefe"
+                }
+            ]
+        },
+        "missing z-order property": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "line",
+                    "points": [
+                        {
+                            "cx": 128,
+                            "cy": 129
+                        },
+                        {
+                            "cx": 171,
+                            "cy": 170
+                        }
+                    ],
+                    "center": {
+                        "cx": 149.5,
+                        "cy": 149.5
+                    },
+                    "orientation": "43.23",
+                    "color": "#fefefe"
+                }
+            ]
+        },
+        "missing orientation property": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "line",
+                    "points": [
+                        {
+                            "cx": 128,
+                            "cy": 129
+                        },
+                        {
+                            "cx": 171,
+                            "cy": 170
+                        }
+                    ],
+                    "center": {
+                        "cx": 149.5,
+                        "cy": 149.5
+                    },
+                    "zOrder": 1,
+                    "color": "#fefefe"
+                }
+            ]
+        },
+        "missing color property": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "line",
+                    "points": [
+                        {
+                            "cx": 128,
+                            "cy": 129
+                        },
+                        {
+                            "cx": 171,
+                            "cy": 170
+                        }
+                    ],
+                    "center": {
+                        "cx": 149.5,
+                        "cy": 149.5
+                    },
+                    "zOrder": 1,
+                    "orientation": "43.23"
+                }
+            ]
+        },
+        "incorrect center coordinates": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "line",
+                    "points": [
+                        {
+                            "cx": 128,
+                            "cy": 129
+                        },
+                        {
+                            "cx": 171,
+                            "cy": 170
+                        }
+                    ],
+                    "center": {
+                        "cx": 100,
+                        "cy": 100
+                    },
+                    "zOrder": 1,
+                    "orientation": "43.23",
+                    "color": "#fefefe"
+                }
+            ]
+        },
+        "incorrect z-order property value": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "line",
+                    "points": [
+                        {
+                            "cx": 128,
+                            "cy": 129
+                        },
+                        {
+                            "cx": 171,
+                            "cy": 170
+                        }
+                    ],
+                    "center": {
+                        "cx": "100",
+                        "cy": "200"
+                    },
+                    "zOrder": 2,
+                    "orientation": "43.23",
+                    "color": "#fefefe"
+                }
+            ]
+        },
+        "incorrect color format": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "line",
+                    "points": [
+                        {
+                            "cx": 128,
+                            "cy": 129
+                        },
+                        {
+                            "cx": 171,
+                            "cy": 170
+                        }
+                    ],
+                    "center": {
+                        "cx": "100",
+                        "cy": "200"
+                    },
+                    "zOrder": 1,
+                    "orientation": "43.23",
+                    "color": "rgba(100, 100, 100, 100)"
+                }
+            ]
+        },
+        "incorrect points property": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "line",
+                    "points": [
+                        {
+                            "cx": 128
+                        },
+                        {
+                            "cy": 170
+                        }
+                    ],
+                    "center": {
+                        "cx": 149.5,
+                        "cy": 149.5
+                    },
+                    "zOrder": 1,
+                    "orientation": 0,
+                    "color": "#fefefe"
+                }
+            ]
+        }
+    }
 }

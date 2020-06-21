@@ -1,4 +1,4 @@
-import { TagPatterns } from "../supported-features"
+import { TagPropertyMap, TagPatterns } from "../supported-features"
 
 export default class TagParser {
 
@@ -10,20 +10,17 @@ export default class TagParser {
     _createFullShapeInfo(element) {
         let shapeTree = {};
         shapeTree.identity = element.nodeName.toLowerCase();
-        const tagProperties = Object.keys(TagPatterns);
+        const tagProperties = TagPropertyMap[shapeTree.identity];
 
-        const attributes = Array.from(element.attributes);
+        const attributes = Array.from(element.attributes).map(attribute => attribute.nodeName);
         this._missingProperties = tagProperties.filter(property => !attributes.includes(property));
-
         if (element.attributes && element.attributes.length) {
-            attributes.forEach((attribute) => {
+            Array.from(element.attributes).forEach((attribute) => {
                 let key = attribute.nodeName;
                 let value = attribute.nodeValue;
 
-                if (new RegExp(/(point-\d+)/).test(key)) key = "point";
-
                 if (!tagProperties.includes(key)) {
-                    throw new Error(`Invalid property '${key}' in tag '<${tag}>'.`);
+                    throw new Error(`Invalid property '${key}' in tag '<${shapeTree.identity}>'.`);
                 }
                 let isMatch = new RegExp(TagPatterns[key]).test(value);
                 if (!isMatch) {

@@ -3,9 +3,10 @@ import Shape from "./shape.js";
 
 export default class ContourProcessor {
 
-    constructor(mat, colorExtractor) {
+    constructor(mat, colorExtractor, complexShapesProcessor) {
         this._mat = mat;
         this._colorExtractor = colorExtractor;
+        this._complexShapesProcessor = complexShapesProcessor;
 
         this._tree = null;
         this._contours = null;
@@ -32,7 +33,7 @@ export default class ContourProcessor {
     _createShapes() {
         let shapes = [];
         for (let i = 0; i < this._contours.size(); i++) {
-            shapes.push(new Shape(this._contours.get(i)));
+            shapes.push(new Shape(this._mat, this._contours.get(i)));
         }
         return shapes;
     }
@@ -106,14 +107,30 @@ export default class ContourProcessor {
         let shapeEntryInfos = Array(this._shapes.length).fill(null);
         for (let i = 0; i < this._shapes.length; i++) {
             if (i in this._duplicateContourIndicesMap) {
+                // if shape is complex - process shape 
+                if (this._shapes[i].isComplex) {
+                    this._complexShapesProcessor.process(this._shapes[i]);
+                }
+
                 this._shapes[i].color = this._colorExtractor.createColorFromShape(this._contours.get(i));
                 shapeEntryInfos[i] = this._shapes[i].fullShapeEntry;
             }
         }
+        // this._draw(this._contours.get(2));
         let shapeTree = [];
         this._translateContourIndicesToShapes(shapeTree, [this.hierachyTree], shapeEntryInfos, 0);
         shapeTree[0].identity = "canvas"; // TODO: should always be square - ensure with bounding box
         return shapeTree[0];
+    }
+
+    _draw(contour) {
+        let mask = cv.Mat.zeros(this._mat.cols, this._mat.rows, this._mat.type());
+        let color = new cv.Scalar(255, 255, 255, 255);
+
+        let contours = new cv.MatVector();
+        contours.push_back(contour);
+        cv.drawContours(mask, contours, 0, color, -1, cv.LINE_8);
+        cv.imshow("temp", mask);
     }
 
     _translateContourIndicesToShapes(shapeTree, hierarchies, shapes, depth) {

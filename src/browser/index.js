@@ -6,6 +6,7 @@ import ColorExtractor from "../visual-inference/color-extractor.js";
 import { SupportedOptions } from "../dom/supported-features";
 import { getValidShapeTreeFromElement } from "./helpers";
 import DomComparator from "../dom/compare/dom-comparator"
+import ComplexShapesProcessor from "../visual-inference/complex-shapes-processor.js";
 
 const loadDOM = () => {
     return new Promise(resolve => {
@@ -76,8 +77,12 @@ const canvasToDOM = (canvasEl, options) => {
     const colorExtractor = new ColorExtractor(src);
     const preProcessor = new PreProcessor(dst);
     preProcessor.binarize();
+    let x = src.clone();
+    const complexShapesProcessor = new ComplexShapesProcessor(x);
 
-    const contourProcessor = new ContourProcessor(dst, colorExtractor);
+    const contourProcessor = new ContourProcessor(dst, colorExtractor, complexShapesProcessor);
+
+    console.log(contourProcessor.shapeTree);
 
     if (options.type == "json") return contourProcessor.shapeTree;
 

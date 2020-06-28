@@ -2,7 +2,7 @@ import * as cv from "../../vendor/opencv.js";
 
 export default class Shape {
 
-    constructor(contour) {
+    constructor(mat, contour) {
         this._contour = contour;
 
         this._moments = null;
@@ -12,6 +12,9 @@ export default class Shape {
         this._vertices = null;
         this._rotatedRect = null;
         this._zOrder = null;
+
+        this._isComplex = null;
+        this._mat = mat;
 
         this._process();
     }
@@ -23,7 +26,7 @@ export default class Shape {
         this._vertices = this._createVertices();
         this._shape = this._createShape();
 
-        this._approxPoly.delete();
+        // this._approxPoly.delete();
     }
 
     _createMoments() {
@@ -76,10 +79,13 @@ export default class Shape {
                 shape = "circle";
 
                 let circle = cv.minEnclosingCircle(this._contour); // TODO: make more precise
+                // console.log(circle);
                 this._diameter = 2 * Math.round(Math.sqrt(this.area / Math.PI));
             } else {
                 shape = "polygon";
+                this._isComplex = true;
             }
+
         }
         return shape;
     }
@@ -153,6 +159,21 @@ export default class Shape {
         } else if (this.identity == "circle") {
             return this._diameter;
         }
+    }
+
+    get isComplex() {
+        if (this._isComplex == null) {
+            this._isComplex = false;
+        }
+        return this._isComplex;
+    }
+
+    get approxPoly() {
+        return this._approxPoly;
+    }
+
+    get contour() {
+        return this._contour;
     }
 
     _createFullShapeEntry() {

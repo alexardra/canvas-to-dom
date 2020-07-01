@@ -40,8 +40,13 @@ export default class ComplexShapesProcessor {
         contours.delete();
     }
 
-    _drawCircle(mat, circle) {
+    _clearCircle(mat, circle) {
         let color = new cv.Scalar(0, 0, 0, 0);
+        cv.circle(mat, circle.center, circle.radius + 2, color, cv.FILLED);
+    }
+
+    _drawCircle(mat, circle) {
+        let color = new cv.Scalar(255, 255, 255, 255);
         cv.circle(mat, circle.center, circle.radius + 2, color, cv.FILLED);
     }
 
@@ -57,19 +62,36 @@ export default class ComplexShapesProcessor {
         return false;
     }
 
+    _createShapeFromCircle(circle) {
+        let mask = cv.Mat.zeros(this._mat.rows, this._mat.cols, cv.CV_8U);
+        this._drawCircle(mask, circle);
+
+        let contours = new cv.MatVector();
+        let hierarchy = new cv.Mat();
+        cv.findContours(mask, contours, hierarchy, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
+
+        return new Shape(contours.get(0));
+    }
+
+
     process(shape) {
         let mask = cv.Mat.zeros(this._mat.rows, this._mat.cols, cv.CV_8U);
         this._drawContour(mask, shape.contour);
 
         for (let circle of this.circles) {
             if (this._isCircleInsideContour(shape.contour, circle)) {
-                this._drawCircle(mask, circle);
+                this._clearCircle(mask, circle);
+                let shape = this._createShapeFromCircle(circle);
+                console.log(shape.fullShapeEntry)
             }
         }
 
         let contours = new cv.MatVector();
         let hierarchy = new cv.Mat();
         cv.findContours(mask, contours, hierarchy, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
+
+        let childShape = new Shape(contours.get(0));
+        console.log(childShape.fullShapeEntry);
 
         cv.imshow("dst", mask);
     }

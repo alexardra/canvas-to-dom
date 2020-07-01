@@ -2,7 +2,7 @@ import * as cv from "../../vendor/opencv.js";
 
 export default class Shape {
 
-    constructor(mat, contour) {
+    constructor(contour) {
         this._contour = contour;
 
         this._moments = null;
@@ -14,8 +14,6 @@ export default class Shape {
         this._zOrder = null;
 
         this._isComplex = null;
-        this._mat = mat;
-
         this._process();
     }
 
@@ -73,7 +71,7 @@ export default class Shape {
                 shape = "polygon";
             }
         } else if (this._vertices.length == 5) {
-            shape = "pentagon";
+            shape = "pentagon"; // TODO 
         } else {
             if (cv.isContourConvex(this._approxPoly)) {
                 shape = "circle";

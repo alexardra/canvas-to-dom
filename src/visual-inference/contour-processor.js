@@ -33,7 +33,7 @@ export default class ContourProcessor {
     _createShapes() {
         let shapes = [];
         for (let i = 0; i < this._contours.size(); i++) {
-            shapes.push(new Shape(this._mat, this._contours.get(i)));
+            shapes.push(new Shape(this._contours.get(i)));
         }
         return shapes;
     }
@@ -126,7 +126,6 @@ export default class ContourProcessor {
             if (i in this._duplicateContourIndicesMap) {
                 // if shape is complex - process shape 
                 if (this._shapes[i].isComplex) {
-                    console.log(this._shapes[i].children);
                     this._complexShapesProcessor.process(this._shapes[i]);
                 }
             }

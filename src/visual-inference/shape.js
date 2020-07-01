@@ -176,6 +176,14 @@ export default class Shape {
         return this._contour;
     }
 
+    set children(children) {
+        this._children = children;
+    }
+
+    get children() {
+        return this._children;
+    }
+
     _createFullShapeEntry() {
         let fullShapeInfo = {};
         fullShapeInfo.identity = this.identity;

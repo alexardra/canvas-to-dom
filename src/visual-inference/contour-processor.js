@@ -107,11 +107,6 @@ export default class ContourProcessor {
         let shapeEntryInfos = Array(this._shapes.length).fill(null);
         for (let i = 0; i < this._shapes.length; i++) {
             if (i in this._duplicateContourIndicesMap) {
-                // if shape is complex - process shape 
-                if (this._shapes[i].isComplex) {
-                    this._complexShapesProcessor.process(this._shapes[i]);
-                }
-
                 this._shapes[i].color = this._colorExtractor.createColorFromShape(this._contours.get(i));
                 shapeEntryInfos[i] = this._shapes[i].fullShapeEntry;
             }
@@ -120,7 +115,22 @@ export default class ContourProcessor {
         let shapeTree = [];
         this._translateContourIndicesToShapes(shapeTree, [this.hierachyTree], shapeEntryInfos, 0);
         shapeTree[0].identity = "canvas"; // TODO: should always be square - ensure with bounding box
+
+        this._processComplexShapes();
+
         return shapeTree[0];
+    }
+
+    _processComplexShapes() {
+        for (let i = 0; i < this._shapes.length; i++) {
+            if (i in this._duplicateContourIndicesMap) {
+                // if shape is complex - process shape 
+                if (this._shapes[i].isComplex) {
+                    console.log(this._shapes[i].children);
+                    this._complexShapesProcessor.process(this._shapes[i]);
+                }
+            }
+        }
     }
 
     _draw(contour) {
@@ -139,6 +149,7 @@ export default class ContourProcessor {
             for (let sibling of siblings) {
                 shapes[sibling].zOrder = depth;
                 shapeTree.push(shapes[sibling]);
+                this._shapes[sibling].children = entry[sibling].map(e => Object.keys(e)).map(x => Number(x[0]));
                 this._translateContourIndicesToShapes(shapes[sibling].children, entry[sibling], shapes, depth + 1);
             }
         }

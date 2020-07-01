@@ -45,12 +45,26 @@ export default class ComplexShapesProcessor {
         cv.circle(mat, circle.center, circle.radius + 2, color, cv.FILLED);
     }
 
+    _isCircleInsideContour(contour, circle) {
+        for (let iy = -1 * circle.radius; iy < circle.radius; iy++) {
+            const dx = Math.floor(Math.sqrt(circle.radius * circle.radius - iy * iy));
+            for (let ix = -1 * dx; ix < dx; ix++) {
+                const cx = circle.center.x + ix;
+                const cy = circle.center.y + iy;
+                if (cv.pointPolygonTest(contour, new cv.Point(cx, cy), false) == 1) return true;
+            }
+        }
+        return false;
+    }
+
     process(shape) {
         let mask = cv.Mat.zeros(this._mat.rows, this._mat.cols, cv.CV_8U);
         this._drawContour(mask, shape.contour);
 
-        for (let circle of this.circles) { // TODO - draw circles inside contour
-            this._drawCircle(mask, circle);
+        for (let circle of this.circles) {
+            if (this._isCircleInsideContour(shape.contour, circle)) {
+                this._drawCircle(mask, circle);
+            }
         }
 
         let contours = new cv.MatVector();
@@ -60,3 +74,4 @@ export default class ComplexShapesProcessor {
         cv.imshow("dst", mask);
     }
 }
+

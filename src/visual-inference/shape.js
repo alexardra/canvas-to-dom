@@ -182,6 +182,14 @@ export default class Shape {
         return this._children;
     }
 
+    set index(index) {
+        this._index = index;
+    }
+
+    get index() {
+        return this._index;
+    }
+
     _createFullShapeEntry() {
         let fullShapeInfo = {};
         fullShapeInfo.identity = this.identity;

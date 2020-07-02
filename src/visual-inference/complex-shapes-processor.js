@@ -73,16 +73,20 @@ export default class ComplexShapesProcessor {
         return new Shape(contours.get(0));
     }
 
+    isShapeObsolete(shape) { // TODO - implement
+        return false;
+    }
 
-    process(shape) {
+
+    extractChildren(shape) {
+        let extractedShapes = [];
         let mask = cv.Mat.zeros(this._mat.rows, this._mat.cols, cv.CV_8U);
         this._drawContour(mask, shape.contour);
 
         for (let circle of this.circles) {
             if (this._isCircleInsideContour(shape.contour, circle)) {
                 this._clearCircle(mask, circle);
-                let shape = this._createShapeFromCircle(circle);
-                console.log(shape.fullShapeEntry)
+                extractedShapes.push(this._createShapeFromCircle(circle));
             }
         }
 
@@ -90,10 +94,11 @@ export default class ComplexShapesProcessor {
         let hierarchy = new cv.Mat();
         cv.findContours(mask, contours, hierarchy, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
 
-        let childShape = new Shape(contours.get(0));
-        console.log(childShape.fullShapeEntry);
+        // should contain just one contour - TODO: check
+        let restOfParentShape = new Shape(contours.get(0));
+        extractedShapes.push(restOfParentShape);
 
-        cv.imshow("dst", mask);
+        return extractedShapes;
     }
 }
 

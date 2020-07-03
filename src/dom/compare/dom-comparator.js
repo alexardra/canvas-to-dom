@@ -8,14 +8,11 @@ export default class DomComparator {
     }
 
     areEqual(options) {
-        this._validateOptions(options);
+        options = this._validateOptions(options);
         const firstDomNodes = this._domToNodeList(this._firstDom);
         const secondDomNodes = this._domToNodeList(this._secondDom);
 
-        console.log(firstDomNodes, secondDomNodes);
-        console.log(options);
         if (firstDomNodes.length != secondDomNodes.length) return false;
-
 
         for (let nodeToCompare of firstDomNodes) {
             const foundNodes = secondDomNodes.filter((node) => {
@@ -45,6 +42,7 @@ export default class DomComparator {
     }
 
     _validateOptions(options) {
+        if (!options) options = {};
         for (let tagProperty of TagProperties) {
             if (["zOrder", "color"].includes(tagProperty)) continue;
             if (!(tagProperty in options)) {
@@ -55,6 +53,7 @@ export default class DomComparator {
                 }
             }
         }
+        return options;
     }
 
     _domToNodeList(dom) {

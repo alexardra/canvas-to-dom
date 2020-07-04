@@ -13,6 +13,7 @@ export default class Shape {
         this._rotatedRect = null;
         this._zOrder = null;
 
+        this._isComplex = null;
         this._process();
     }
 
@@ -23,7 +24,7 @@ export default class Shape {
         this._vertices = this._createVertices();
         this._shape = this._createShape();
 
-        this._approxPoly.delete();
+        // this._approxPoly.delete();
     }
 
     _createMoments() {
@@ -70,16 +71,19 @@ export default class Shape {
                 shape = "polygon";
             }
         } else if (this._vertices.length == 5) {
-            shape = "pentagon";
+            shape = "pentagon"; // TODO 
         } else {
             if (cv.isContourConvex(this._approxPoly)) {
                 shape = "circle";
 
                 let circle = cv.minEnclosingCircle(this._contour); // TODO: make more precise
+                // console.log(circle);
                 this._diameter = 2 * Math.round(Math.sqrt(this.area / Math.PI));
             } else {
                 shape = "polygon";
+                this._isComplex = true;
             }
+
         }
         return shape;
     }
@@ -155,6 +159,37 @@ export default class Shape {
         }
     }
 
+    get isComplex() {
+        if (this._isComplex == null) {
+            this._isComplex = false;
+        }
+        return this._isComplex;
+    }
+
+    get approxPoly() {
+        return this._approxPoly;
+    }
+
+    get contour() {
+        return this._contour;
+    }
+
+    set children(children) {
+        this._children = children;
+    }
+
+    get children() {
+        return this._children;
+    }
+
+    set index(index) {
+        this._index = index;
+    }
+
+    get index() {
+        return this._index;
+    }
+
     _createFullShapeEntry() {
         let fullShapeInfo = {};
         fullShapeInfo.identity = this.identity;
@@ -186,7 +221,9 @@ export default class Shape {
         let perimetersClose = Math.abs(this.perimeter - shape.perimeter) < 100;
         if (!perimetersClose) return false;
 
+        if (this.vertices.length != shape.vertices.length) return false;
         let verticesClose = false;
+
         for (let i = 0; i < this.vertices.length; i++) {
             let verticeXDelta = Math.abs(this.vertices[i][0] - shape.vertices[i][0]);
             let verticeYDelta = Math.abs(this.vertices[i][1] - shape.vertices[i][1]);

@@ -15,7 +15,7 @@
             display: block;
         }
 
-        .app {
+        canvas {
             margin: 15px 0;
             float: left;
         }
@@ -60,63 +60,40 @@
 
 <body>
     <div class="example">
-        <canvas class="app"></canvas>
+        <canvas id="overlapping"></canvas>
         <div class="result">
-
+        </div>
+    </div>
+    <div class="example">
+        <canvas id="simple"></canvas>
+        <div class="result">
         </div>
     </div>
 </body>
+<script src="simple.js"></script>
+<script src="overlapping.js"></script>
 <script src="app.js"></script>
 <script>
-    var canvas = document.getElementsByTagName("canvas")[0];
-    var context = canvas.getContext("2d");
+    let cs = [];
+    let canvas = document.getElementById("overlapping");
+    drawOverlappingFrame(canvas);
+    cs.push(canvas);
 
-    canvas.width = 300;
-    canvas.height = 300;
+    canvas = document.getElementById("simple");
+    drawSimpleFrame(canvas);
+    cs.push(canvas);
 
-    context.fillStyle = "white";
-    context.fillRect(0, 0, canvas.width, canvas.height);
-
-    context.strokeStyle = "red";
-    context.arc(50, 75, 25, 0, 2 * Math.PI);
-    context.fillStyle = "red";
-    context.fill();
-    context.stroke();
-
-    context.beginPath();
-    context.lineWidth = "2";
-    context.strokeStyle = "blue";
-    context.rect(70, 75, 40, 50);
-    context.fillStyle = "blue";
-    context.fill();
-    context.stroke();
-
-
-    context.beginPath();
-    context.lineWidth = "2";
-    context.strokeStyle = "red";
-    context.rect(120, 120, 60, 40);
-    context.fillStyle = "red";
-    context.fill();
-    context.stroke();
-
-    context.beginPath();
-    context.strokeStyle = "blue";
-    context.arc(170, 160, 25, 0, 2 * Math.PI);
-    context.fillStyle = "blue";
-    context.fill();
-    context.stroke();
 
     loadCanvasToDom().then(() => {
         console.log("canvas-to-dom loaded");
-        let dom = canvasToDOM(canvas);
-
-        walk(dom.getElementsByTagName("canvas")[0], document.getElementsByClassName("result")[0]);
+        for (let i = 0; i < cs.length; i++) {
+            let dom = canvasToDOM(cs[i]);
+            walk(dom.getElementsByTagName("canvas")[0], document.getElementsByClassName("result")[i]);
+        }
     });
 
     function walk(node, result) {
-        let children = node.childNodes;
-
+        let children = node.children;
         if (children.length > 0) {
             let element = startFormatedTag(node, "ul");
             for (let i = 0; i < children.length; i++) {
@@ -125,7 +102,6 @@
             element.appendChild(endFormatedTag(node, "ul"));
             result.appendChild(element);
         } else {
-
             let element = startFormatedTag(node, "li");
             element.appendChild(endFormatedTag(node, "li"))
             result.appendChild(element);

@@ -36,7 +36,7 @@ export default class DomGenerator {
         if (this._dom == null) {
             this._dom = this._generateDomFromInfo(this._domInfo);
         }
-        return `<canvas>${this._dom}</canvas>`;
+        return `<canvas>${this._dom} </canvas>`;
     }
 
     addTagProperty(tagGenerator, property, value) {

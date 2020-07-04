@@ -8,24 +8,25 @@ import { getValidShapeTreeFromElement } from "./helpers";
 import DomComparator from "../dom/compare/dom-comparator"
 import ComplexShapesProcessor from "../visual-inference/complex-shapes-processor.js";
 
-const loadDOM = () => {
+window.loadDOM = () => {
     return new Promise(resolve => {
         window.onload = resolve;
     });
 }
 
-const loadOpenCV = () => {
+window.loadOpenCV = () => {
     return new Promise(resolve => {
         cv.onRuntimeInitialized = resolve;
     });
 }
 
-(async () => {
-    await loadDOM();
-    await loadOpenCV();
-    console.log("opencv loaded");
-    canvasToDOM("app");
-})();
+window.loadCanvasToDom = () => {
+    return new Promise(resolve => {
+        loadOpenCV().then(() => {
+            resolve();
+        })
+    });
+}
 
 const getValidOptions = (options = {}) => {
     for (const option in SupportedOptions) {
@@ -55,7 +56,7 @@ const getValidOptions = (options = {}) => {
     return options;
 }
 
-const canvasToDOM = (canvasEl, options) => {
+window.canvasToDOM = (canvasEl, options) => {
     options = getValidOptions(options);
 
     let src;
@@ -93,7 +94,7 @@ const canvasToDOM = (canvasEl, options) => {
     return new DOMParser().parseFromString(domGenerator.dom, "text/html");
 }
 
-const canvasDOMCompare = (firstEl, secondEl) => {
+window.canvasDOMCompare = (firstEl, secondEl) => {
     //TODO: compare two Documents
     const domComparator = new DomComparator(getValidShapeTreeFromElement(firstEl), getValidShapeTreeFromElement(secondEl));
     return domComparator.areEqual(); // TODO: implement options

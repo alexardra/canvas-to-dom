@@ -53,8 +53,10 @@
     context.fill();
     context.stroke();
 
-
-
+    loadCanvasToDom().then(() => {
+        console.log("canvas-to-dom loaded");
+        canvasToDOM("app");
+    });  
 </script>
 
 </html>

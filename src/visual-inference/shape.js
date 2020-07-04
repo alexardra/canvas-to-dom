@@ -77,7 +77,6 @@ export default class Shape {
                 shape = "circle";
 
                 let circle = cv.minEnclosingCircle(this._contour); // TODO: make more precise
-                // console.log(circle);
                 this._diameter = 2 * Math.round(Math.sqrt(this.area / Math.PI));
             } else {
                 shape = "polygon";

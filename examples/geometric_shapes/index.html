@@ -4,17 +4,71 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Geometric Shapes</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .example {
+            width: 100%;
+            height: 330px;
+            display: block;
+        }
+
+        .app {
+            margin: 15px 0;
+            float: left;
+        }
+
+        .result {
+            width: calc(100% - 300px);
+            height: 100%;
+            padding: 0px 5px;
+            float: left;
+            overflow-y: auto;
+        }
+
+        .result span {
+            font-size: 12px;
+        }
+
+        .result .name {
+            color: #0091ca;
+            font-weight: 600;
+        }
+
+        .result .attribute span:nth-of-type(1) {
+            color: green;
+            font-weight: 600;
+        }
+
+        .result .attribute span:nth-of-type(2) {
+            color: green;
+            font-weight: 400;
+        }
+
+        .result ul {
+            padding-left: 25px;
+        }
+
+        .result li {
+            padding-left: 25px;
+            list-style-type: none;
+        }
+    </style>
 </head>
 
 <body>
-    <canvas id="app"></canvas>
-    <canvas id="temp"></canvas>
-    <!-- <canvas id="erode"></canvas> -->
-    <canvas id="dst"></canvas>
+    <div class="example">
+        <canvas class="app"></canvas>
+        <div class="result">
+
+        </div>
+    </div>
 </body>
 <script src="app.js"></script>
 <script>
-    var canvas = document.getElementById("app");
+    var canvas = document.getElementsByTagName("canvas")[0];
     var context = canvas.getContext("2d");
 
     canvas.width = 300;
@@ -55,8 +109,68 @@
 
     loadCanvasToDom().then(() => {
         console.log("canvas-to-dom loaded");
-        canvasToDOM("app");
-    });  
+        let dom = canvasToDOM(canvas);
+
+        walk(dom.getElementsByTagName("canvas")[0], document.getElementsByClassName("result")[0]);
+    });
+
+    function walk(node, result) {
+        let children = node.childNodes;
+
+        if (children.length > 0) {
+            let element = startFormatedTag(node, "ul");
+            for (let i = 0; i < children.length; i++) {
+                walk(children[i], element);
+            }
+            element.appendChild(endFormatedTag(node, "ul"));
+            result.appendChild(element);
+        } else {
+
+            let element = startFormatedTag(node, "li");
+            element.appendChild(endFormatedTag(node, "li"))
+            result.appendChild(element);
+        }
+    }
+
+    function startFormatedTag(node, el) {
+        let attributes = Array.from(node.attributes);
+
+        let li = document.createElement(el);
+        let start = document.createElement("span");
+        start.classList.add("name");
+        let startText = attributes.length == 0 ? "<" + node.nodeName.toLowerCase() : "<" + node.nodeName.toLowerCase() + " ";
+        start.appendChild(document.createTextNode(startText));
+        li.appendChild(start);
+
+        for (let i = 0; i < attributes.length; i++) {
+            let attribute = document.createElement("span");
+            attribute.classList.add("attribute");
+            let attributeName = document.createElement("span");
+            attributeName.appendChild(document.createTextNode(attributes[i].name + "="));
+            let attributeValue = document.createElement("span");
+            let attributeText = i == attributes.length - 1 ? '"' + attributes[i].value + '"' : '"' + attributes[i].value + '"' + " ";
+            attributeValue.appendChild(document.createTextNode(attributeText));
+            attribute.appendChild(attributeName);
+            attribute.appendChild(attributeValue);
+            li.appendChild(attribute);
+        }
+        if (el == "ul") {
+            let end = document.createElement("span");
+            end.classList.add("name");
+            end.appendChild(document.createTextNode(">"));
+            li.appendChild(end);
+        }
+        return li;
+    }
+
+    function endFormatedTag(node, el) {
+        let end = document.createElement("span");
+        end.classList.add("name");
+        let text = el == "ul" ? "</" + node.nodeName.toLowerCase() + ">" : "/>";
+        end.appendChild(document.createTextNode(text));
+        return end;
+    }
+
 </script>
 
 </html>

@@ -83,8 +83,6 @@ window.canvasToDOM = (canvasEl, options) => {
 
     const contourProcessor = new ContourProcessor(dst, colorExtractor, complexShapesProcessor);
 
-    console.log(contourProcessor.shapeTree);
-
     if (options.type == "json") return contourProcessor.shapeTree;
 
     const domGenerator = new DomGenerator(contourProcessor.shapeTree);

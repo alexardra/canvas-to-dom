@@ -74,7 +74,6 @@ export default class ComplexShapesProcessor {
     }
 
     isShapeObsolete(shape) {
-        console.log(shape.children)
         let white = new cv.Scalar(255, 255, 255, 255);
         let black = new cv.Scalar(0, 0, 0, 0);
 
@@ -88,9 +87,7 @@ export default class ComplexShapesProcessor {
 
         this._drawContour(original, shape.contour, white);
 
-        cv.imshow("dst", original);
         cv.bitwise_and(original, mask, original);
-
 
         let contours = new cv.MatVector();
         let hierarchy = new cv.Mat();
@@ -100,7 +97,6 @@ export default class ComplexShapesProcessor {
         this._drawContour(out, contours.get(0), white);
 
         let result = cv.matchShapes(shape.contour, contours.get(0), 1, 0);
-        // cv.imshow("dst", out);
 
         return Math.floor(result) == 0;
     }

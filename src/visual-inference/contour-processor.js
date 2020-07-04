@@ -133,7 +133,6 @@ export default class ContourProcessor {
                     if (this._shapes[i].children.length > 1) {
                         const isObsolete = this._complexShapesProcessor.isShapeObsolete(this._shapes[i]);
                         if (isObsolete) {
-                            console.log(`${i} is obsolete`)
                             let entry = hierarchyProcessor.getHierarchyEntry(i);
                             hierarchyProcessor.replaceEntryWithChildren(entry);
                         }

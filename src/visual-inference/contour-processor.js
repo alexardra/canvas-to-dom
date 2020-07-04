@@ -1,5 +1,6 @@
 import * as cv from "../../vendor/opencv.js";
 import Shape from "./shape.js";
+import HierarchyProcessor from "./hierarchy-processor.js";
 
 export default class ContourProcessor {
 
@@ -104,8 +105,9 @@ export default class ContourProcessor {
     }
 
     _createShapeTree() {
-        this._generateChildrenForShapesFromHierarchy([this.hierachyTree], 0);
-        this._processComplexShapes();
+        let hierarchyProcessor = new HierarchyProcessor(this.hierarchyTree);
+        hierarchyProcessor.addChildrenToShapesFromHierarchy(this._shapes);
+        this._processComplexShapes(hierarchyProcessor);
 
         let shapeEntryInfos = Array(this._shapes.length).fill(null);
         for (let i = 0; i < this._shapes.length; i++) {
@@ -116,54 +118,37 @@ export default class ContourProcessor {
         }
 
         let shapeTree = [];
-        this._translateContourIndicesToShapes(shapeTree, [this.hierachyTree], shapeEntryInfos, 0);
+        this._translateContourIndicesToShapes(shapeTree, [this.hierarchyTree], shapeEntryInfos, 0);
         shapeTree[0].identity = "canvas"; // TODO: should always be square - ensure with bounding box
 
 
         return shapeTree[0];
     }
 
-    _processComplexShapes() {
+    _processComplexShapes(hierarchyProcessor) {
         const countShapes = this._shapes.length;
         for (let i = 0; i < countShapes; i++) {
             if (i in this._duplicateContourIndicesMap) {
-                // if shape is complex - process shape 
                 if (this._shapes[i].isComplex) {
-
                     const hasShapeChildren = Object.keys(this._shapes[i].children).length > 0;
 
                     if (hasShapeChildren) {
                         const isObsolete = this._complexShapesProcessor.isShapeObsolete(this._shapes[i]);
                         if (isObsolete) {
-                            // remove shape from hierarchy 
-                            console.log(`shape ${i} is obsolete`);
-                            let entry = [];
-                            this._getHierarchyEntry([this.hierachyTree], i, entry);
-
-                            let childEntries = Object.values(entry[0])[0];
-                            for (let childEntry of childEntries) {
-                                let [key, value] = Object.entries(childEntry)[0];
-                                entry[0][key] = value
-                            }
-                            delete entry[0][i];
+                            let entry = hierarchyProcessor.getHierarchyEntry(i);
+                            hierarchyProcessor.replaceEntryWithChildren(entry);
                         }
                     } else {
                         const generatedChildShapes = this._complexShapesProcessor.extractChildren(this._shapes[i]);
                         if (generatedChildShapes.length > 0) {
-                            let entry = [];
-                            this._getHierarchyEntryContainingIndex([this.hierachyTree], i, entry);
-
-                            if (entry == null || !(i in entry[0])) {
-                                throw new Error("Some problem with hierarchy, shape with given index should be contained");
-                            } else {
-                                delete entry[0][i];
-                                delete this._duplicateContourIndicesMap[i];
-                                for (let generatedShape of generatedChildShapes) {
-                                    generatedShape.index = this._shapes.length;
-                                    this._shapes.push(generatedShape);
-                                    entry[0][generatedShape.index] = [];
-                                    this._duplicateContourIndicesMap[generatedShape.index] = [];
-                                }
+                            let entry = hierarchyProcessor.getHierarchyEntryContainingKey(i);
+                            delete entry[i];
+                            delete this._duplicateContourIndicesMap[i];
+                            for (let generatedShape of generatedChildShapes) {
+                                generatedShape.index = this._shapes.length;
+                                this._shapes.push(generatedShape);
+                                entry[generatedShape.index] = [];
+                                this._duplicateContourIndicesMap[generatedShape.index] = [];
                             }
                         }
                     }
@@ -172,35 +157,6 @@ export default class ContourProcessor {
         }
     }
 
-    _getHierarchyEntry(hierarchies, index, resultEntry) {
-        if (resultEntry.length != 0) return;
-
-        for (let entry of hierarchies) {
-            if (index == Number(Object.keys(entry)[0])) {
-                resultEntry.push(entry);
-            }
-            let siblings = Object.keys(entry).map(Number);
-            for (let sibling of siblings) {
-                this._getHierarchyEntry(entry[sibling], index, resultEntry);
-            }
-        }
-
-    }
-
-    _getHierarchyEntryContainingIndex(hierarchies, index, resultEntry) {
-        if (resultEntry.length != 0) return;
-
-        for (let entry of hierarchies) {
-            let siblings = Object.keys(entry).map(Number);
-            for (let sibling of siblings) {
-                if (sibling == index) {
-                    resultEntry.push(entry);
-                } else {
-                    this._getHierarchyEntryContainingIndex(entry[sibling], index, resultEntry);
-                }
-            }
-        }
-    }
 
     _translateContourIndicesToShapes(shapeTree, hierarchies, shapes, depth) {
         for (let entry of hierarchies) {
@@ -214,22 +170,7 @@ export default class ContourProcessor {
         }
     }
 
-    _generateChildrenForShapesFromHierarchy(hierarchies, depth) {
-        for (let entry of hierarchies) {
-            let siblings = Object.keys(entry).map(Number);
-            for (let sibling of siblings) {
-                this._shapes[sibling].children = entry[sibling].map(e => Object.keys(e)).map(x => {
-                    const index = Number(x[0]);
-                    // return { index: this._shapes[index] };
-                    return this._shapes[index];
-                });
-                this._generateChildrenForShapesFromHierarchy(entry[sibling], depth + 1);
-            }
-        }
-    }
-
-
-    get hierachyTree() {
+    get hierarchyTree() {
         if (this._tree == null) {
             this._tree = this._createHierarchyTree();
         }

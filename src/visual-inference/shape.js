@@ -221,7 +221,9 @@ export default class Shape {
         let perimetersClose = Math.abs(this.perimeter - shape.perimeter) < 100;
         if (!perimetersClose) return false;
 
+        if (this.vertices.length != shape.vertices.length) return false;
         let verticesClose = false;
+
         for (let i = 0; i < this.vertices.length; i++) {
             let verticeXDelta = Math.abs(this.vertices[i][0] - shape.vertices[i][0]);
             let verticeYDelta = Math.abs(this.vertices[i][1] - shape.vertices[i][1]);

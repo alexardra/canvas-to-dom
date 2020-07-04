@@ -130,15 +130,14 @@ export default class ContourProcessor {
         for (let i = 0; i < countShapes; i++) {
             if (i in this._duplicateContourIndicesMap) {
                 if (this._shapes[i].isComplex) {
-                    const hasShapeChildren = Object.keys(this._shapes[i].children).length > 0;
-
-                    if (hasShapeChildren) {
+                    if (this._shapes[i].children.length > 1) {
                         const isObsolete = this._complexShapesProcessor.isShapeObsolete(this._shapes[i]);
                         if (isObsolete) {
+                            console.log(`${i} is obsolete`)
                             let entry = hierarchyProcessor.getHierarchyEntry(i);
                             hierarchyProcessor.replaceEntryWithChildren(entry);
                         }
-                    } else {
+                    } else if (this._shapes[i].children.length == 0) {
                         const generatedChildShapes = this._complexShapesProcessor.extractChildren(this._shapes[i]);
                         if (generatedChildShapes.length > 0) {
                             let entry = hierarchyProcessor.getHierarchyEntryContainingKey(i);

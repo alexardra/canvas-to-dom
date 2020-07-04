@@ -56,10 +56,10 @@ export default class ComplexShapesProcessor {
             for (let ix = -1 * dx; ix < dx; ix++) {
                 const cx = circle.center.x + ix;
                 const cy = circle.center.y + iy;
-                if (cv.pointPolygonTest(contour, new cv.Point(cx, cy), false) == 1) return true;
+                if (cv.pointPolygonTest(contour, new cv.Point(cx, cy), false) != 1) return false;
             }
         }
-        return false;
+        return true;
     }
 
     _createShapeFromCircle(circle) {
@@ -73,7 +73,8 @@ export default class ComplexShapesProcessor {
         return new Shape(contours.get(0));
     }
 
-    isShapeObsolete(shape) { // TODO - implement
+    isShapeObsolete(shape) {
+        console.log(shape.children)
         let white = new cv.Scalar(255, 255, 255, 255);
         let black = new cv.Scalar(0, 0, 0, 0);
 
@@ -87,9 +88,9 @@ export default class ComplexShapesProcessor {
 
         this._drawContour(original, shape.contour, white);
 
+        cv.imshow("dst", original);
         cv.bitwise_and(original, mask, original);
 
-        // cv.imshow("dst", original);
 
         let contours = new cv.MatVector();
         let hierarchy = new cv.Mat();
@@ -99,9 +100,9 @@ export default class ComplexShapesProcessor {
         this._drawContour(out, contours.get(0), white);
 
         let result = cv.matchShapes(shape.contour, contours.get(0), 1, 0);
-        cv.imshow("dst", out);
+        // cv.imshow("dst", out);
 
-        return result == 0;
+        return Math.floor(result) == 0;
     }
 
 

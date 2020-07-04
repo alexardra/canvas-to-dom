@@ -136,6 +136,7 @@ export default class ContourProcessor {
                         const isObsolete = this._complexShapesProcessor.isShapeObsolete(this._shapes[i]);
                         if (isObsolete) {
                             // remove shape from hierarchy 
+                            console.log(`shape ${i} is obsolete`)
                         }
                     } else {
                         const generatedChildShapes = this._complexShapesProcessor.extractChildren(this._shapes[i]);
@@ -195,7 +196,8 @@ export default class ContourProcessor {
             for (let sibling of siblings) {
                 this._shapes[sibling].children = entry[sibling].map(e => Object.keys(e)).map(x => {
                     const index = Number(x[0]);
-                    return { index: this._shapes[index] };
+                    // return { index: this._shapes[index] };
+                    return this._shapes[index];
                 });
                 this._generateChildrenForShapesFromHierarchy(entry[sibling], depth + 1);
             }

@@ -32,13 +32,13 @@ export default class ComplexShapesProcessor {
         return this._circles;
     }
 
-    _drawContour(mat, contour) {
+    _drawContour(mat, contour, color) {
         let contours = new cv.MatVector();
-        let color = new cv.Scalar(255, 255, 255, 255);
         contours.push_back(contour);
-        cv.drawContours(mat, contours, 0, color, -1, cv.LINE_8);
+        cv.drawContours(mat, contours, 0, color, 1, cv.LINE_8);
         contours.delete();
     }
+
 
     _clearCircle(mat, circle) {
         let color = new cv.Scalar(0, 0, 0, 0);
@@ -74,14 +74,41 @@ export default class ComplexShapesProcessor {
     }
 
     isShapeObsolete(shape) { // TODO - implement
-        return false;
+        let white = new cv.Scalar(255, 255, 255, 255);
+        let black = new cv.Scalar(0, 0, 0, 0);
+
+        let mask = cv.Mat.zeros(this._mat.rows, this._mat.cols, cv.CV_8U);  //black
+        cv.rectangle(mask, new cv.Point(0, 0), new cv.Point(mask.rows, mask.cols), white, cv.FILLED, cv.LINE_8, 0);
+        for (let childShape of shape.children) {
+            this._drawContour(mask, childShape.contour, black);
+        }
+
+        let original = cv.Mat.zeros(this._mat.rows, this._mat.cols, cv.CV_8U);
+
+        this._drawContour(original, shape.contour, white);
+
+        cv.bitwise_and(original, mask, original);
+
+        // cv.imshow("dst", original);
+
+        let contours = new cv.MatVector();
+        let hierarchy = new cv.Mat();
+        cv.findContours(original, contours, hierarchy, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
+
+        let out = cv.Mat.zeros(this._mat.rows, this._mat.cols, cv.CV_8U);
+        this._drawContour(out, contours.get(0), white);
+
+        let result = cv.matchShapes(shape.contour, contours.get(0), 1, 0);
+        cv.imshow("dst", out);
+
+        return result == 0;
     }
 
 
     extractChildren(shape) {
         let extractedShapes = [];
         let mask = cv.Mat.zeros(this._mat.rows, this._mat.cols, cv.CV_8U);
-        this._drawContour(mask, shape.contour);
+        this._drawContour(mask, shape.contour, new cv.Scalar(255, 255, 255, 255));
 
         for (let circle of this.circles) {
             if (this._isCircleInsideContour(shape.contour, circle)) {

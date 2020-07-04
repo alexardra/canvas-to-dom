@@ -136,7 +136,16 @@ export default class ContourProcessor {
                         const isObsolete = this._complexShapesProcessor.isShapeObsolete(this._shapes[i]);
                         if (isObsolete) {
                             // remove shape from hierarchy 
-                            console.log(`shape ${i} is obsolete`)
+                            console.log(`shape ${i} is obsolete`);
+                            let entry = [];
+                            this._getHierarchyEntry([this.hierachyTree], i, entry);
+
+                            let childEntries = Object.values(entry[0])[0];
+                            for (let childEntry of childEntries) {
+                                let [key, value] = Object.entries(childEntry)[0];
+                                entry[0][key] = value
+                            }
+                            delete entry[0][i];
                         }
                     } else {
                         const generatedChildShapes = this._complexShapesProcessor.extractChildren(this._shapes[i]);
@@ -161,6 +170,21 @@ export default class ContourProcessor {
                 }
             }
         }
+    }
+
+    _getHierarchyEntry(hierarchies, index, resultEntry) {
+        if (resultEntry.length != 0) return;
+
+        for (let entry of hierarchies) {
+            if (index == Number(Object.keys(entry)[0])) {
+                resultEntry.push(entry);
+            }
+            let siblings = Object.keys(entry).map(Number);
+            for (let sibling of siblings) {
+                this._getHierarchyEntry(entry[sibling], index, resultEntry);
+            }
+        }
+
     }
 
     _getHierarchyEntryContainingIndex(hierarchies, index, resultEntry) {

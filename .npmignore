@@ -1,0 +1,23 @@
+vendor/
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Dependency directory
+node_modules
+
+# Optional npm cache directory
+.npm
+
+# exclude build files
+build/*
+!build/.gitkeep
+
+# exclude generated asset files
+assets

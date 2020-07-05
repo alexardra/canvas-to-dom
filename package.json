@@ -1,10 +1,11 @@
 {
-  "name": "canvas-to-dom",
-  "version": "1.0.0",
+  "name": "@ardnaxela/canvas-to-dom",
+  "version": "0.0.2",
   "description": "Generate dom tree from HTML5 canvas frame",
   "main": "index.js",
   "directories": {
-    "example": "examples"
+    "example": "examples",
+    "test": "tests"
   },
   "scripts": {
     "build": "webpack",
@@ -19,7 +20,7 @@
     "url": "git+https://github.com/alexardra/canvas-to-dom.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "ardnaxela",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/alexardra/canvas-to-dom/issues"

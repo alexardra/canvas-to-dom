@@ -36,9 +36,20 @@ export default class ContourProcessor {
         for (let i = 0; i < this._contours.size(); i++) {
             shapes.push(new Shape(this._contours.get(i)));
         }
+        // let white = new cv.Scalar(255, 255, 255, 255);
+        // let mask = cv.Mat.zeros(this._mat.rows, this._mat.cols, cv.CV_8U);  //black
+        // this._drawContour(mask, this._contours.get(4), white);
+        // cv.imshow("simple", mask);
+
         return shapes;
     }
 
+    // _drawContour(mat, contour, color) {
+    //     let contours = new cv.MatVector();
+    //     contours.push_back(contour);
+    //     cv.drawContours(mat, contours, 0, color, 1, cv.LINE_8);
+    //     contours.delete();
+    // }
 
     _createDuplicateContourIndicesMap() {
         let duplicateContourIndicesMap = {};
@@ -113,6 +124,7 @@ export default class ContourProcessor {
         for (let i = 0; i < this._shapes.length; i++) {
             if (i in this._duplicateContourIndicesMap) {
                 this._shapes[i].color = this._colorExtractor.createColorFromShape(this._shapes[i].contour);
+                console.log(i, this._shapes[i].fullShapeEntry.identity);
                 shapeEntryInfos[i] = this._shapes[i].fullShapeEntry;
             }
         }

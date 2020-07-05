@@ -26,8 +26,8 @@ export default class TreeParser {
             this._tagsWithMissingProperties[element.outerHTML] = tagParser.missingProperties;
         }
 
-        if (element.childNodes && element.childNodes.length) {
-            const nodes = Array.from(element.childNodes);
+        if (element.children && element.children.length) {
+            const nodes = Array.from(element.children);
             nodes.forEach((node) => {
                 shapeTree["children"].push({});
                 this._createShapeTreeFromDom(node, shapeTree["children"][shapeTree["children"].length - 1]);

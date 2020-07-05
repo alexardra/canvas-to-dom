@@ -218,3 +218,185 @@ test("triangle: incorrect additional height property", () => {
     expect(treeValidator.error).toHaveProperty("message");
     expect(treeValidator.error.message).toMatch(/^Invalid property.*height.*$/);
 });
+
+test("triangle: incorrect additional diameter", () => {
+    const testDom = DomTrees["triangle"]["incorrect additional diameter"];
+
+    const document = new DOMParser().parseFromString(testDom, "text/html");
+    const treeValidator = new TreeValidator(document);
+    expect(treeValidator.isValid).toBeFalsy();
+    expect(treeValidator.error).toBeTruthy();
+    expect(treeValidator.error).toHaveProperty("message");
+    expect(treeValidator.error.message).toMatch(/^Invalid property.*diameter.*$/);
+});
+
+test("rectangle/square: no missing properties", () => {
+    const testDoms = [];
+    testDoms.push(DomTrees["rectangle"]["no missing properties"]);
+    testDoms.push(DomTrees["square"]["no missing properties"]);
+
+    for (let testDom of testDoms) {
+        const document = new DOMParser().parseFromString(testDom, "text/html");
+        const treeValidator = new TreeValidator(document);
+        expect(treeValidator.isValid).toBeTruthy();
+        expect(treeValidator.containsAllProperties).toBeTruthy();
+        expect(treeValidator.tagsWithMissingProperties).toMatchObject({});
+    }
+});
+
+test("rectangle/square: missing properties", () => {
+    const testDoms = [];
+    testDoms.push(DomTrees["rectangle"]["missing properties"]);
+    testDoms.push(DomTrees["square"]["missing properties"]);
+
+    for (let testDom of testDoms) {
+        const document = new DOMParser().parseFromString(testDom, "text/html");
+        const treeValidator = new TreeValidator(document);
+        expect(treeValidator.isValid).toBeTruthy();
+        expect(treeValidator.containsAllProperties).toBeFalsy();
+        expect(Object.keys(treeValidator.tagsWithMissingProperties).length).toEqual(1);
+
+        const missingProperties = Object.values(treeValidator.tagsWithMissingProperties)[0];
+        expect(missingProperties.sort()).toEqual(["center", "color", "height", "orientation", "width", "z-order"].sort());
+    }
+});
+
+test("rectangle/square: missing width property", () => {
+    const testDoms = [];
+    testDoms.push(DomTrees["rectangle"]["missing width property"]);
+    testDoms.push(DomTrees["square"]["missing width property"]);
+
+    for (let testDom of testDoms) {
+        const document = new DOMParser().parseFromString(testDom, "text/html");
+        const treeValidator = new TreeValidator(document);
+        expect(treeValidator.isValid).toBeTruthy();
+        expect(treeValidator.containsAllProperties).toBeFalsy();
+        expect(Object.keys(treeValidator.tagsWithMissingProperties).length).toEqual(1);
+
+        const missingProperties = Object.values(treeValidator.tagsWithMissingProperties)[0];
+        expect(missingProperties.sort()).toEqual(["width"].sort());
+    }
+});
+
+test("rectangle/square: incorrect center property", () => {
+    const testDoms = [];
+    testDoms.push(DomTrees["rectangle"]["incorrect center property"]);
+    testDoms.push(DomTrees["square"]["incorrect center property"]);
+
+    for (let testDom of testDoms) {
+        const document = new DOMParser().parseFromString(testDom, "text/html");
+        const treeValidator = new TreeValidator(document);
+        expect(treeValidator.isValid).toBeFalsy();
+        expect(treeValidator.error).toBeTruthy();
+        expect(treeValidator.error).toHaveProperty("message");
+        expect(treeValidator.error.message).toMatch(/^Invalid value.*center.*$/);
+    }
+});
+
+test("rectangle/square: incorrect additional points", () => {
+    const testDoms = [];
+    testDoms.push(DomTrees["rectangle"]["incorrect additional points"]);
+    testDoms.push(DomTrees["square"]["incorrect additional points"]);
+
+    for (let testDom of testDoms) {
+        const document = new DOMParser().parseFromString(testDom, "text/html");
+        const treeValidator = new TreeValidator(document);
+        expect(treeValidator.isValid).toBeFalsy();
+        expect(treeValidator.error).toBeTruthy();
+        expect(treeValidator.error).toHaveProperty("message");
+        expect(treeValidator.error.message).toMatch(/^Invalid property.*point-0.*$/);
+    }
+});
+
+test("circle: no missing properties", () => {
+    const testDom = DomTrees["circle"]["no missing properties"];
+
+    const document = new DOMParser().parseFromString(testDom, "text/html");
+    const treeValidator = new TreeValidator(document);
+    expect(treeValidator.isValid).toBeTruthy();
+    expect(treeValidator.containsAllProperties).toBeTruthy();
+    expect(treeValidator.tagsWithMissingProperties).toMatchObject({});
+});
+
+test("circle: missing properties", () => {
+    const testDom = DomTrees["circle"]["missing properties"];
+
+    const document = new DOMParser().parseFromString(testDom, "text/html");
+    const treeValidator = new TreeValidator(document);
+    expect(treeValidator.isValid).toBeTruthy();
+    expect(treeValidator.containsAllProperties).toBeFalsy();
+    expect(Object.keys(treeValidator.tagsWithMissingProperties).length).toEqual(1);
+
+    const missingProperties = Object.values(treeValidator.tagsWithMissingProperties)[0];
+    expect(missingProperties.sort()).toEqual(["center", "color", "diameter", "orientation", "z-order"].sort());
+});
+
+test("circle: missing diameter property", () => {
+    const testDom = DomTrees["circle"]["missing diameter property"];
+
+    const document = new DOMParser().parseFromString(testDom, "text/html");
+    const treeValidator = new TreeValidator(document);
+    expect(treeValidator.isValid).toBeTruthy();
+    expect(treeValidator.containsAllProperties).toBeFalsy();
+    expect(Object.keys(treeValidator.tagsWithMissingProperties).length).toEqual(1);
+
+    const missingProperties = Object.values(treeValidator.tagsWithMissingProperties)[0];
+    expect(missingProperties.sort()).toEqual(["diameter"].sort());
+});
+
+
+test("circle: missing color property", () => {
+    const testDom = DomTrees["circle"]["missing color property"];
+
+    const document = new DOMParser().parseFromString(testDom, "text/html");
+    const treeValidator = new TreeValidator(document);
+    expect(treeValidator.isValid).toBeTruthy();
+    expect(treeValidator.containsAllProperties).toBeFalsy();
+    expect(Object.keys(treeValidator.tagsWithMissingProperties).length).toEqual(1);
+
+    const missingProperties = Object.values(treeValidator.tagsWithMissingProperties)[0];
+    expect(missingProperties.sort()).toEqual(["color"].sort());
+});
+
+test("circle: incorrect additional points", () => {
+    const testDom = DomTrees["circle"]["incorrect additional points"];
+
+    const document = new DOMParser().parseFromString(testDom, "text/html");
+    const treeValidator = new TreeValidator(document);
+    expect(treeValidator.isValid).toBeFalsy();
+    expect(treeValidator.error).toBeTruthy();
+    expect(treeValidator.error).toHaveProperty("message");
+    expect(treeValidator.error.message).toMatch(/^Invalid property.*point-0.*$/);
+});
+
+test("circle: incorrect additional width", () => {
+    const testDom = DomTrees["circle"]["incorrect additional width"];
+
+    const document = new DOMParser().parseFromString(testDom, "text/html");
+    const treeValidator = new TreeValidator(document);
+    expect(treeValidator.isValid).toBeFalsy();
+    expect(treeValidator.error).toBeTruthy();
+    expect(treeValidator.error).toHaveProperty("message");
+    expect(treeValidator.error.message).toMatch(/^Invalid property.*width.*$/);
+});
+
+test("circle: incorrect additional height", () => {
+    const testDom = DomTrees["circle"]["incorrect additional height"];
+
+    const document = new DOMParser().parseFromString(testDom, "text/html");
+    const treeValidator = new TreeValidator(document);
+    expect(treeValidator.isValid).toBeFalsy();
+    expect(treeValidator.error).toBeTruthy();
+    expect(treeValidator.error).toHaveProperty("message");
+    expect(treeValidator.error.message).toMatch(/^Invalid property.*height.*$/);
+});
+
+test("polygon: no missing properties", () => {
+    const testDom = DomTrees["circle"]["no missing properties"];
+
+    const document = new DOMParser().parseFromString(testDom, "text/html");
+    const treeValidator = new TreeValidator(document);
+    expect(treeValidator.isValid).toBeTruthy();
+    expect(treeValidator.containsAllProperties).toBeTruthy();
+    expect(treeValidator.tagsWithMissingProperties).toMatchObject({});
+});

@@ -648,5 +648,396 @@
                 }
             ]
         }
+    },
+    "rectangle": {
+        "no missing properties": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "rectangle",
+                    "center": {
+                        "cx": 89.31,
+                        "cy": 99.32
+                    },
+                    "width": 35,
+                    "height": 45,
+                    "zOrder": 1,
+                    "orientation": "0",
+                    "color": "#0000ffff"
+                }
+            ]
+        },
+        "missing properties": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "rectangle"
+                }
+            ]
+        },
+        "missing width property": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "rectangle",
+                    "center": {
+                        "cx": 89.31,
+                        "cy": 99.32
+                    },
+                    "height": 45,
+                    "zOrder": 1,
+                    "orientation": "0",
+                    "color": "#0000ffff"
+                }
+            ]
+        },
+        "missing height property": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "rectangle",
+                    "center": {
+                        "cx": 89.31,
+                        "cy": 99.32
+                    },
+                    "width": 35,
+                    "zOrder": 1,
+                    "orientation": "0",
+                    "color": "#0000ffff"
+                }
+            ]
+        },
+        "incorrect center property": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "rectangle",
+                    "center": 1,
+                    "width": 35,
+                    "height": 45,
+                    "zOrder": 1,
+                    "orientation": "0",
+                    "color": "#0000ffff"
+                }
+            ]
+        },
+        "incorrect additional points": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "rectangle",
+                    "points": [
+                        {
+                            "cx": 89.31,
+                            "cy": 99.32
+                        },
+                        {
+                            "cx": 89.31,
+                            "cy": 99.32
+                        }
+                    ],
+                    "center": {
+                        "cx": 89.31,
+                        "cy": 99.32
+                    },
+                    "width": 35,
+                    "height": 45,
+                    "zOrder": 1,
+                    "orientation": "0",
+                    "color": "#0000ffff"
+                }
+            ]
+        },
+        "incorrect additional diameter": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "rectangle",
+                    "center": {
+                        "cx": 89.31,
+                        "cy": 99.32
+                    },
+                    "width": 35,
+                    "height": 45,
+                    "diameter": 1,
+                    "zOrder": 1,
+                    "orientation": "0",
+                    "color": "#0000ffff"
+                }
+            ]
+        }
+    },
+    "square": {
+        "no missing properties": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "square",
+                    "center": {
+                        "cx": 89.31,
+                        "cy": 99.32
+                    },
+                    "width": 35,
+                    "height": 45,
+                    "zOrder": 1,
+                    "orientation": "0",
+                    "color": "#0000ffff"
+                }
+            ]
+        },
+        "missing properties": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "square"
+                }
+            ]
+        },
+        "missing width property": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "square",
+                    "center": {
+                        "cx": 89.31,
+                        "cy": 99.32
+                    },
+                    "height": 45,
+                    "zOrder": 1,
+                    "orientation": "0",
+                    "color": "#0000ffff"
+                }
+            ]
+        },
+        "missing height property": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "square",
+                    "center": {
+                        "cx": 89.31,
+                        "cy": 99.32
+                    },
+                    "width": 35,
+                    "zOrder": 1,
+                    "orientation": "0",
+                    "color": "#0000ffff"
+                }
+            ]
+        },
+        "incorrect center property": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "square",
+                    "center": 1,
+                    "width": 35,
+                    "height": 45,
+                    "zOrder": 1,
+                    "orientation": "0",
+                    "color": "#0000ffff"
+                }
+            ]
+        },
+        "incorrect additional points": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "square",
+                    "points": [
+                        {
+                            "cx": 89.31,
+                            "cy": 99.32
+                        },
+                        {
+                            "cx": 89.31,
+                            "cy": 99.32
+                        }
+                    ],
+                    "center": {
+                        "cx": 89.31,
+                        "cy": 99.32
+                    },
+                    "width": 35,
+                    "height": 45,
+                    "zOrder": 1,
+                    "orientation": "0",
+                    "color": "#0000ffff"
+                }
+            ]
+        },
+        "incorrect additional diameter": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "square",
+                    "center": {
+                        "cx": 89.31,
+                        "cy": 99.32
+                    },
+                    "width": 35,
+                    "height": 45,
+                    "diameter": 1,
+                    "zOrder": 1,
+                    "orientation": "0",
+                    "color": "#0000ffff"
+                }
+            ]
+        }
+    },
+    "circle": {
+        "no missing properties": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "circle",
+                    "center": {
+                        "cx": 100,
+                        "cy": 100
+                    },
+                    "diameter": 3,
+                    "zOrder": 1,
+                    "orientation": "0",
+                    "color": "#fefefefe"
+                }
+            ]
+        },
+        "missing properties": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "circle"
+                }
+            ]
+        },
+        "missing diameter property": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "circle",
+                    "center": {
+                        "cx": 100,
+                        "cy": 100
+                    },
+                    "zOrder": 1,
+                    "orientation": "0",
+                    "color": "#fefefefe"
+                }
+            ]
+        },
+        "missing color property": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "circle",
+                    "center": {
+                        "cx": 100,
+                        "cy": 100
+                    },
+                    "diameter": 3,
+                    "zOrder": 1,
+                    "orientation": "0"
+                }
+            ]
+        },
+        "incorrect additional points": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "circle",
+                    "center": {
+                        "cx": 100,
+                        "cy": 100
+                    },
+                    "points": [
+                        {
+                            "cx": 89.31,
+                            "cy": 99.32
+                        },
+                        {
+                            "cx": 89.31,
+                            "cy": 99.32
+                        }
+                    ],
+                    "diameter": 3,
+                    "zOrder": 1,
+                    "orientation": "0",
+                    "color": "#fefefefe"
+                }
+            ]
+        },
+        "incorrect additional width": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "circle",
+                    "center": {
+                        "cx": 100,
+                        "cy": 100
+                    },
+                    "width": 10,
+                    "diameter": 3,
+                    "zOrder": 1,
+                    "orientation": "0",
+                    "color": "#fefefefe"
+                }
+            ]
+        },
+        "incorrect additional height": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "circle",
+                    "center": {
+                        "cx": 100,
+                        "cy": 100
+                    },
+                    "height": 10,
+                    "diameter": 3,
+                    "zOrder": 1,
+                    "orientation": "0",
+                    "color": "#fefefefe"
+                }
+            ]
+        }
+    },
+    "polygon": {
+        "no missing properties": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "polygon",
+                    "center": {
+                        "cx": 143.08,
+                        "cy": 136.17
+                    },
+                    "points": [
+                        {
+                            "cx": 123,
+                            "cy": 156
+                        },
+                        {
+                            "cx": 123,
+                            "cy": 156
+                        },
+                        {
+                            "cx": 123,
+                            "cy": 156
+                        },
+                        {
+                            "cx": 123,
+                            "cy": 156
+                        },
+                        {
+                            "cx": 123,
+                            "cy": 156
+                        }
+                    ],
+                    "zOrder": 1,
+                    "orientation": "90",
+                    "color": "#fd005bff"
+                }
+            ]
+        }
     }
 }

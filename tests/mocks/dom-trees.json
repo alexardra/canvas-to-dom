@@ -29,12 +29,39 @@
         "missing points property": "<canvas><triangle center=\"(192.97,192.46)\" color=\"#8585ffff\" z-order=\"1\" orientation=\"26.57\"></triangle> </canvas>",
         "incorrect additional points": "<canvas><triangle center=\"(192.97,192.46)\" point-0=\"(160,200)\" point-1=\"(160,200)\" point-2=\"(160,200)\" point-3=\"(160,200)\" color=\"#8585ffff\" z-order=\"1\" orientation=\"26.57\"></triangle> </canvas>",
         "incorrect additional width property": "<canvas><triangle center=\"(192.97,192.46)\" width=\"10\" point-0=\"(160,200)\" point-1=\"(160,200)\" point-2=\"(160,200)\" color=\"#8585ffff\" z-order=\"1\" orientation=\"26.57\"></triangle> </canvas>",
-        "incorrect additional height property": "<canvas><triangle center=\"(192.97,192.46)\" height=\"10\" point-0=\"(160,200)\" point-1=\"(160,200)\" point-2=\"(160,200)\" color=\"#8585ffff\" z-order=\"1\" orientation=\"26.57\"></triangle> </canvas>"
+        "incorrect additional height property": "<canvas><triangle center=\"(192.97,192.46)\" height=\"10\" point-0=\"(160,200)\" point-1=\"(160,200)\" point-2=\"(160,200)\" color=\"#8585ffff\" z-order=\"1\" orientation=\"26.57\"></triangle> </canvas>",
+        "incorrect additional diameter": "<canvas><triangle center=\"(192.97,192.46)\" diameter=\"10\" point-0=\"(160,200)\" point-1=\"(160,200)\" point-2=\"(160,200)\" color=\"#8585ffff\" z-order=\"1\" orientation=\"26.57\"></triangle> </canvas>"
     },
-    "rectangle": {},
-    "square": {},
-    "circle": {},
-    "polygon": {},
+    "rectangle": {
+        "no missing properties": "<canvas><rectangle center=\"(89.31,99.32)\" width=\"35\" height=\"45\" color=\"#0000ffff\" z-order=\"1\" orientation=\"0\"/> </canvas>",
+        "missing properties": "<canvas><rectangle></rectangle></canvas>",
+        "missing width property": "<canvas><rectangle center=\"(89.31,99.32)\" height=\"45\" color=\"#0000ffff\" z-order=\"1\" orientation=\"0\"/> </canvas>",
+        "missing height property": "<canvas><rectangle center=\"(89.31,99.32)\" width=\"35\" color=\"#0000ffff\" z-order=\"1\" orientation=\"0\"/> </canvas>",
+        "incorrect center property": "<canvas><rectangle center=\"1\" width=\"35\" height=\"45\" color=\"#0000ffff\" z-order=\"1\" orientation=\"0\"/> </canvas>",
+        "incorrect additional points": "<canvas><rectangle center=\"(89.31,99.32)\" point-0=\"(89.31,99.32)\" point-1=\"(89.31,99.32)\" width=\"35\" height=\"45\" color=\"#0000ffff\" z-order=\"1\" orientation=\"0\"/> </canvas>",
+        "incorrect additional diameter": "<canvas><rectangle center=\"(89.31,99.32)\" width=\"35\" height=\"45\" diameter=\"1\" color=\"#0000ffff\" z-order=\"1\" orientation=\"0\"/> </canvas>"
+    },
+    "square": {
+        "no missing properties": "<canvas><square center=\"(89.31,99.32)\" width=\"35\" height=\"45\" color=\"#0000ffff\" z-order=\"1\" orientation=\"0\"/> </canvas>",
+        "missing properties": "<canvas><square></square></canvas>",
+        "missing width property": "<canvas><square center=\"(89.31,99.32)\" height=\"45\" color=\"#0000ffff\" z-order=\"1\" orientation=\"0\"/> </canvas>",
+        "missing height property": "<canvas><square center=\"(89.31,99.32)\" width=\"35\" color=\"#0000ffff\" z-order=\"1\" orientation=\"0\"/> </canvas>",
+        "incorrect center property": "<canvas><square center=\"1\" width=\"35\" height=\"45\" color=\"#0000ffff\" z-order=\"1\" orientation=\"0\"/> </canvas>",
+        "incorrect additional points": "<canvas><square center=\"(89.31,99.32)\" point-0=\"(89.31,99.32)\" point-1=\"(89.31,99.32)\" width=\"35\" height=\"45\" color=\"#0000ffff\" z-order=\"1\" orientation=\"0\"/> </canvas>",
+        "incorrect additional diameter": "<canvas><square center=\"(89.31,99.32)\" width=\"35\" height=\"45\" diameter=\"1\" color=\"#0000ffff\" z-order=\"1\" orientation=\"0\"/> </canvas>"
+    },
+    "circle": {
+        "no missing properties": "<canvas><circle center=\"(100,100)\" diameter=\"3\" color=\"#fefefefe\" z-order=\"1\" orientation=\"0\"></circle> </canvas>",
+        "missing properties": "<canvas><circle></circle></canvas>",
+        "missing diameter property": "<canvas><circle center=\"(100,100)\" color=\"#fefefefe\" z-order=\"1\" orientation=\"0\"></circle> </canvas>",
+        "missing color property": "<canvas><circle center=\"(100,100)\" diameter=\"3\" z-order=\"1\" orientation=\"0\"></circle> </canvas>",
+        "incorrect additional points": "<canvas><circle center=\"(100,100)\" point-0=\"(89.31,99.32)\" point-1=\"(89.31,99.32)\" diameter=\"3\" color=\"#fefefefe\" orientation=\"0\"></circle> </canvas>",
+        "incorrect additional width": "<canvas><circle center=\"(100,100)\" width=\"10\"  diameter=\"3\" color=\"#fefefefe\" z-order=\"1\" orientation=\"0\"></circle> </canvas>",
+        "incorrect additional height": "<canvas><circle center=\"(100,100)\" height=\"10\" diameter=\"3\" color=\"#fefefefe\" z-order=\"1\" orientation=\"0\"></circle> </canvas>"
+    },
+    "polygon": {
+        "no missing properties": "<polygon center=\"(143.08,136.17)\" point-0=\"(123,156)\" point-1=\"(123,156)\" point-2=\"(123,156)\" point-3=\"(123,156)\" point-4=\"(123,156)\" point-5=\"(123,156)\" color=\"#fd005bff\" z-order=\"1\" orientation=\"90\"/>"
+    },
     "correct z-index structure": {},
     "incorrect z-index structure": {}
 }

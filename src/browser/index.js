@@ -78,8 +78,8 @@ window.canvasToDOM = (canvasEl, options) => {
     const colorExtractor = new ColorExtractor(src);
     const preProcessor = new PreProcessor(dst);
     preProcessor.binarize();
-    let x = src.clone();
-    const complexShapesProcessor = new ComplexShapesProcessor(x);
+
+    const complexShapesProcessor = new ComplexShapesProcessor(src.clone());
 
     const contourProcessor = new ContourProcessor(dst, colorExtractor, complexShapesProcessor);
 

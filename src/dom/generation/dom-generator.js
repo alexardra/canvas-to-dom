@@ -44,12 +44,11 @@ export default class DomGenerator {
             let { cx, cy } = value;
             tagGenerator.addAttribute("center", `(${cx},${cy})`);
         } else if (property === "points") {
-            value.map((point, index) => { tagGenerator.addAttribute(`point-${index}`, `(${value[0].cx},${value[0].cy})`); });
+            value.map((point, index) => { tagGenerator.addAttribute(`point-${index}`, `(${point.cx},${point.cy})`); });
         } else if (property === "zOrder") {
             tagGenerator.addAttribute("z-order", value);
         } else {
             tagGenerator.addAttribute(property, value);
         }
-
     }
 }

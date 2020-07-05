@@ -60,6 +60,11 @@
 
 <body>
     <div class="example">
+        <canvas id="chart"></canvas>
+        <div class="result">
+        </div>
+    </div>
+    <div class="example">
         <canvas id="overlapping"></canvas>
         <div class="result">
         </div>
@@ -70,19 +75,25 @@
         </div>
     </div>
 </body>
+<script src="chart.js"></script>
 <script src="simple.js"></script>
 <script src="overlapping.js"></script>
 <script src="app.js"></script>
 <script>
     let cs = [];
-    let canvas = document.getElementById("overlapping");
+    let canvas;
+
+    canvas = document.getElementById("chart");
+    drawChartFrame(canvas);
+    cs.push(canvas);
+
+    canvas = document.getElementById("overlapping");
     drawOverlappingFrame(canvas);
     cs.push(canvas);
 
     canvas = document.getElementById("simple");
     drawSimpleFrame(canvas);
     cs.push(canvas);
-
 
     loadCanvasToDom().then(() => {
         console.log("canvas-to-dom loaded");

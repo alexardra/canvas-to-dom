@@ -58,17 +58,26 @@ export default class Shape {
         } else if (this._vertices.length === 3) {
             shape = "triangle";
         } else if (this._vertices.length === 4) {
-            let cxDelta = Math.abs(this.center.cx - this._rotatedRect.center.x);
-            let cyDelta = Math.abs(this.center.cy - this._rotatedRect.center.y);
-            let centersClose = cxDelta < 2 && cyDelta < 2;
-
-            if (centersClose) {
-                const { x, y, width, height } = cv.boundingRect(this._approxPoly);
-                const aspectRatio = width / height;
-                shape = (aspectRatio >= 0.95 && aspectRatio <= 1.05) ? "square" : "rectangle";
-                this._width = width, this._height = height;
+            let firstPoint = this._vertices[0];
+            let lastPoint = this._vertices[this._vertices.length - 1];
+            let cxDelta = Math.abs(firstPoint[0] - lastPoint[0]);
+            let cyDelta = Math.abs(firstPoint[1] - lastPoint[1]);
+            if (cxDelta < 10 && cyDelta < 10) {
+                shape = "triangle";
+                this._vertices.pop();
             } else {
-                shape = "polygon";
+                let cxDelta = Math.abs(this.center.cx - this._rotatedRect.center.x);
+                let cyDelta = Math.abs(this.center.cy - this._rotatedRect.center.y);
+                let centersClose = cxDelta < 2 && cyDelta < 2;
+
+                if (centersClose) {
+                    const { x, y, width, height } = cv.boundingRect(this._approxPoly);
+                    const aspectRatio = width / height;
+                    shape = (aspectRatio >= 0.95 && aspectRatio <= 1.05) ? "square" : "rectangle";
+                    this._width = width, this._height = height;
+                } else {
+                    shape = "polygon";
+                }
             }
         } else if (this._vertices.length == 5) {
             shape = "pentagon"; // TODO 

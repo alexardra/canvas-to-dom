@@ -21,8 +21,20 @@
         "missing color property": "<canvas><line center=\"(149.5,149.5)\" point-0=\"(128,129)\" point-1=\"(128,129)\" z-order=\"1\" orientation=\"43.23\"></line></canvas>",
         "invalid center coordinates": "<canvas><line center=\"(100,100.1232)\" point-0=\"(128,129)\" point-1=\"(128,129)\" color=\"#fefefe\" z-order=\"1\" orientation=\"43.23\"></line></canvas>",
         "invalid z-order property value": "<canvas><line center=\"(100,200)\" point-0=\"(128,129)\" point-1=\"(128,129)\" color=\"#fefefe\" z-order=\"2.23\" orientation=\"43.23\"></line></canvas>",
-        "invalid points property": "",
         "invalid color format": "<canvas><line center=\"(100,200)\" point-0=\"(128,129)\" point-1=\"(128,129)\" color=\"rgba(100, 100, 100, 100)\" z-order=\"1\" orientation=\"43.23\"></line></canvas>",
         "invalid property": "<canvas><line center=\"(149.5,149.5)\" point-0=\"(128,129)\" point-1=\"(128,129)\" color=\"#fefefe\" z-order=\"1\" orientation=\"43.23\" width=\"12\"></line></canvas>"
-    }
+    },
+    "triangle": {
+        "no missing properties": "<canvas><triangle center=\"(192.97,192.46)\" point-0=\"(160,200)\" point-1=\"(160,200)\" point-2=\"(160,200)\" color=\"#8585ffff\" z-order=\"1\" orientation=\"26.57\"></triangle> </canvas>",
+        "missing points property": "<canvas><triangle center=\"(192.97,192.46)\" color=\"#8585ffff\" z-order=\"1\" orientation=\"26.57\"></triangle> </canvas>",
+        "incorrect additional points": "<canvas><triangle center=\"(192.97,192.46)\" point-0=\"(160,200)\" point-1=\"(160,200)\" point-2=\"(160,200)\" point-3=\"(160,200)\" color=\"#8585ffff\" z-order=\"1\" orientation=\"26.57\"></triangle> </canvas>",
+        "incorrect additional width property": "<canvas><triangle center=\"(192.97,192.46)\" width=\"10\" point-0=\"(160,200)\" point-1=\"(160,200)\" point-2=\"(160,200)\" color=\"#8585ffff\" z-order=\"1\" orientation=\"26.57\"></triangle> </canvas>",
+        "incorrect additional height property": "<canvas><triangle center=\"(192.97,192.46)\" height=\"10\" point-0=\"(160,200)\" point-1=\"(160,200)\" point-2=\"(160,200)\" color=\"#8585ffff\" z-order=\"1\" orientation=\"26.57\"></triangle> </canvas>"
+    },
+    "rectangle": {},
+    "square": {},
+    "circle": {},
+    "polygon": {},
+    "correct z-index structure": {},
+    "incorrect z-index structure": {}
 }

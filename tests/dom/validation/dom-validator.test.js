@@ -152,7 +152,6 @@ test("line: invalid z-order property value", () => {
     expect(treeValidator.error.message).toMatch(/^Invalid value.*z-order$/);
 });
 
-
 test("line: invalid property", () => {
     const testDom = DomTrees["line"]["invalid property"];
 
@@ -162,4 +161,60 @@ test("line: invalid property", () => {
     expect(treeValidator.error).toBeTruthy();
     expect(treeValidator.error).toHaveProperty("message");
     expect(treeValidator.error.message).toMatch(/^Invalid property/);
+});
+
+test("triangle: no missing properties", () => {
+    const testDom = DomTrees["triangle"]["no missing properties"];
+
+    const document = new DOMParser().parseFromString(testDom, "text/html");
+    const treeValidator = new TreeValidator(document);
+    expect(treeValidator.isValid).toBeTruthy();
+    expect(treeValidator.containsAllProperties).toBeTruthy();
+    expect(treeValidator.tagsWithMissingProperties).toMatchObject({});
+});
+
+test("triangle: missing points property", () => {
+    const testDom = DomTrees["triangle"]["missing points property"];
+
+    const document = new DOMParser().parseFromString(testDom, "text/html");
+    const treeValidator = new TreeValidator(document);
+    expect(treeValidator.isValid).toBeTruthy();
+    expect(treeValidator.containsAllProperties).toBeFalsy();
+    expect(Object.keys(treeValidator.tagsWithMissingProperties).length).toEqual(1);
+
+    const missingProperties = Object.values(treeValidator.tagsWithMissingProperties)[0];
+    expect(missingProperties.sort()).toEqual(["point-0", "point-1", "point-2"].sort());
+});
+
+test("triangle: incorrect additional points", () => {
+    const testDom = DomTrees["triangle"]["incorrect additional points"];
+
+    const document = new DOMParser().parseFromString(testDom, "text/html");
+    const treeValidator = new TreeValidator(document);
+    expect(treeValidator.isValid).toBeFalsy();
+    expect(treeValidator.error).toBeTruthy();
+    expect(treeValidator.error).toHaveProperty("message");
+    expect(treeValidator.error.message).toMatch(/^Invalid property.*point-3.*$/);
+});
+
+test("triangle: incorrect additional width property", () => {
+    const testDom = DomTrees["triangle"]["incorrect additional width property"];
+
+    const document = new DOMParser().parseFromString(testDom, "text/html");
+    const treeValidator = new TreeValidator(document);
+    expect(treeValidator.isValid).toBeFalsy();
+    expect(treeValidator.error).toBeTruthy();
+    expect(treeValidator.error).toHaveProperty("message");
+    expect(treeValidator.error.message).toMatch(/^Invalid property.*width.*$/);
+});
+
+test("triangle: incorrect additional height property", () => {
+    const testDom = DomTrees["triangle"]["incorrect additional height property"];
+
+    const document = new DOMParser().parseFromString(testDom, "text/html");
+    const treeValidator = new TreeValidator(document);
+    expect(treeValidator.isValid).toBeFalsy();
+    expect(treeValidator.error).toBeTruthy();
+    expect(treeValidator.error).toHaveProperty("message");
+    expect(treeValidator.error.message).toMatch(/^Invalid property.*height.*$/);
 });

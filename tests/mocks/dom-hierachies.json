@@ -509,5 +509,144 @@
                 }
             ]
         }
+    },
+    "triangle": {
+        "no missing properties": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "triangle",
+                    "points": [
+                        {
+                            "cx": 160,
+                            "cy": 200
+                        },
+                        {
+                            "cx": 200,
+                            "cy": 220
+                        },
+                        {
+                            "cx": 220,
+                            "cy": 160
+                        }
+                    ],
+                    "center": {
+                        "cx": 192.97,
+                        "cy": 192.46
+                    },
+                    "zOrder": 1,
+                    "orientation": "26.57",
+                    "color": "#8585ffff"
+                }
+            ]
+        },
+        "missing points property": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "triangle",
+                    "center": {
+                        "cx": 192.97,
+                        "cy": 192.46
+                    },
+                    "zOrder": 1,
+                    "orientation": "26.57",
+                    "color": "#8585ffff"
+                }
+            ]
+        },
+        "incorrect additional points": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "triangle",
+                    "points": [
+                        {
+                            "cx": 160,
+                            "cy": 200
+                        },
+                        {
+                            "cx": 200,
+                            "cy": 220
+                        },
+                        {
+                            "cx": 220,
+                            "cy": 160
+                        },
+                        {
+                            "cx": 160,
+                            "cy": 200
+                        }
+                    ],
+                    "center": {
+                        "cx": 192.97,
+                        "cy": 192.46
+                    },
+                    "zOrder": 1,
+                    "orientation": "26.57",
+                    "color": "#8585ffff"
+                }
+            ]
+        },
+        "incorrect additional width property": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "triangle",
+                    "points": [
+                        {
+                            "cx": 160,
+                            "cy": 200
+                        },
+                        {
+                            "cx": 200,
+                            "cy": 220
+                        },
+                        {
+                            "cx": 220,
+                            "cy": 160
+                        }
+                    ],
+                    "center": {
+                        "cx": 192.97,
+                        "cy": 192.46
+                    },
+                    "width": 10,
+                    "zOrder": 1,
+                    "orientation": "26.57",
+                    "color": "#8585ffff"
+                }
+            ]
+        },
+        "incorrect additional height property": {
+            "identity": "canvas",
+            "children": [
+                {
+                    "identity": "triangle",
+                    "points": [
+                        {
+                            "cx": 160,
+                            "cy": 200
+                        },
+                        {
+                            "cx": 200,
+                            "cy": 220
+                        },
+                        {
+                            "cx": 220,
+                            "cy": 160
+                        }
+                    ],
+                    "center": {
+                        "cx": 192.97,
+                        "cy": 192.46
+                    },
+                    "height": 10,
+                    "zOrder": 1,
+                    "orientation": "26.57",
+                    "color": "#8585ffff"
+                }
+            ]
+        }
     }
 }

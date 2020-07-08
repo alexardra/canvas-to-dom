@@ -2,13 +2,16 @@ const fs = require("fs");
 const http = require("http");
 const path = require("path");
 const puppeteer = require("puppeteer");
+const timesnap = require("timesnap")
+
+
 
 const supportedOptions = [
     "url",
     "selectorId",
     "selectorCls",
     "outputFrame",
-    "frameGrabTimeout"
+    "frame"
 ]
 
 const getOptionsFromCmd = () => {
@@ -33,34 +36,55 @@ const getOptionsFromCmd = () => {
 const generateFullOptions = (cmdOptions) => {
     const options = cmdOptions;
 
-    if (options.hasOwnProperty("selectorId")) {
+    if (!("url" in options)) {
+        throw new Error("url option not specified")
+    }
+
+    if ("selectorId" in options) {
         options.selector = options.selectorId;
-    } else if (options.hasOwnProperty("selectorCls")) {
+    } else if ("selectorCls" in options) {
         options.selector = options.selectorCls;
     } else {
         options.selector = "canvas";
     }
 
-    if (!options.hasOwnProperty("outputFrame")) {
+    if (!("outputFrame" in options)) {
         options.outputFrame = "screenshot.png";
     }
 
-    if (!options.hasOwnProperty("frameGrabTimeout")) {
-        options.frameGrabTimeout = 0;
+    if (!("frame" in options)) {
+        options.frame = 0;
+    } else {
+        try {
+            frame = parseInt(frame);
+        } catch {
+            throw new Error(`Invalid frame argument '${frame}', must be integer`);
+        }
     }
-
     return options;
 }
 
-const getCanvasScreenshotUrlFromPage = async (page, canvasEl, frameGrabTimeout) => {
-    return await page.evaluate(async (canvasEl, frameGrabTimeout) => {
-        return await new Promise(resolve => {
-            setTimeout(() => {
-                const imgUrl = canvasEl.toDataURL("image/png");
-                resolve(imgUrl);
-            }, frameGrabTimeout);
-        });
-    }, canvasEl, frameGrabTimeout);
+const getCanvasScreenshotUrlFromPage = async (options) => {
+    let fps = options.frame - 1;
+    let duration = 1 / fps;
+    let start = 1;
+    let outputDir = path.resolve('../../assets/frame'); //TODO: specify from options
+
+    await timesnap({
+        url: options.url,
+        viewport: {
+            width: 800,
+            height: 600
+        },
+        selector: options.selector,
+        fps: fps,
+        duration: duration,
+        start: start,
+        frames: 1,
+        outputDirectory: outputDir
+    });
+
+    fs.renameSync(path.join(outputDir, "1.png"), path.join(outputDir, options.outputFrame));
 }
 
 const generateFrameFromUrl = async (url, outputFrame) => {
@@ -120,8 +144,7 @@ const generateAssets = async (options) => {
         await page.waitForSelector(options.selector);
         const canvasEl = await page.$(options.selector);
 
-        let imgUrl = await getCanvasScreenshotUrlFromPage(page, canvasEl, options);
-        generateFrameFromUrl(imgUrl, options.outputFrame);
+        await getCanvasScreenshotUrlFromPage(options);
 
         await generateImageAssetsFromPage(page);
 

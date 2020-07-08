@@ -8,10 +8,10 @@
     "test": "tests"
   },
   "scripts": {
-    "build": "webpack",
-    "build:browser": "webpack --config webpack.browser.config.js",
-    "watch": "webpack --watch",
-    "watch:browser": "webpack --config webpack.browser.config.js --watch",
+    "build": "webpack --config webpack/webpack.config.js",
+    "build:browser": "webpack --config webpack/webpack.browser.config.js",
+    "watch": "webpack --config webpack/webpack.config.js --watch",
+    "watch:browser": "webpack --config webpack/webpack.browser.config.js --watch",
     "start:dev": "node examples/geometric_shapes/server",
     "test": "jest"
   },

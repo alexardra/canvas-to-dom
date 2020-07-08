@@ -1,3 +1,5 @@
+const path = require("path");
+
 module.exports = {
     entry: {
         main: "./src/app/index.js"
@@ -15,7 +17,7 @@ module.exports = {
         extensions: ["*", ".js"]
     },
     output: {
-        path: __dirname + "/build",
+        path: path.resolve(__dirname, "../build"),
         publicPath: "/",
         filename: "app.js"
     },

@@ -1,5 +1,5 @@
-import TreeValidator from "../dom/validation/tree-validator.js";
-import DomGenerator from "../dom/generation/dom-generator";
+import TreeValidator from "./dom/validation/tree-validator.js";
+import DomGenerator from "./dom/generation/dom-generator";
 
 export const getValidShapeTreeFromElement = (element) => {
     if (element.constructor != String &&

@@ -1,4 +1,5 @@
 import { TagProperties, TagPropertyMap } from "../supported-features";
+import ZIndexComparator from "./z-index-comparator";
 
 export default class DomComparator {
 
@@ -13,12 +14,18 @@ export default class DomComparator {
         const secondDomNodes = this._domToNodeList(this._secondDom);
 
         if (firstDomNodes.length != secondDomNodes.length) return false;
+        const zIndexComparator = new ZIndexComparator("zOrder" in options ? options.zOrder : -1);
 
         for (let nodeToCompare of firstDomNodes) {
             const foundNodes = secondDomNodes.filter((node) => {
                 if (node.nodeName !== nodeToCompare.nodeName) return false;
 
                 for (let property of TagPropertyMap[node.nodeName.toLowerCase()]) {
+                    if (property == "z-order") {
+                        if (!zIndexComparator.areEqual(node.getAttribute("z-order"), nodeToCompare.getAttribute("z-order"))) {
+                            return false;
+                        }
+                    }
                     if (["z-order", "color"].includes(property)) continue; // TEMP - different comparison
 
                     let nodeAttribute = node.getAttribute(property);

@@ -124,7 +124,6 @@ export default class ContourProcessor {
         for (let i = 0; i < this._shapes.length; i++) {
             if (i in this._duplicateContourIndicesMap) {
                 this._shapes[i].color = this._colorExtractor.createColorFromShape(this._shapes[i].contour);
-                console.log(i, this._shapes[i].fullShapeEntry.identity);
                 shapeEntryInfos[i] = this._shapes[i].fullShapeEntry;
             }
         }

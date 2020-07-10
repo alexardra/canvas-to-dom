@@ -15,9 +15,11 @@ node_modules
 # Optional npm cache directory
 .npm
 
-# exclude build files
-build/*
-!build/.gitkeep
+# exclude .gitkeep files
+*.gitkeep
 
 # exclude generated asset files
 assets
+
+# tests
+tests/

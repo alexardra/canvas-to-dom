@@ -1,6 +1,6 @@
 
 import DomComparator from "../../../src/dom/compare/dom-comparator";
-import { getValidShapeTreeFromElement } from "../../../src/browser/helpers";
+import { getValidShapeTreeFromElement } from "../../../src/helpers";
 import DomHierarchies from "../../mocks/dom-hierachies.json";
 import DomTrees from "../../mocks/dom-trees.json";
 

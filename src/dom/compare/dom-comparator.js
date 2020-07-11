@@ -1,5 +1,6 @@
 import { TagProperties, TagPropertyMap } from "../supported-features";
 import ZIndexComparator from "./z-index-comparator";
+import ColorComparator from "./color-comparator";
 
 export default class DomComparator {
 
@@ -15,6 +16,7 @@ export default class DomComparator {
 
         if (firstDomNodes.length != secondDomNodes.length) return false;
         const zIndexComparator = new ZIndexComparator("zOrder" in options ? options.zOrder : -1);
+        const colorComparator = new ColorComparator();
 
         for (let nodeToCompare of firstDomNodes) {
             const foundNodes = secondDomNodes.filter((node) => {
@@ -25,24 +27,25 @@ export default class DomComparator {
                         if (!zIndexComparator.areEqual(node.getAttribute("z-order"), nodeToCompare.getAttribute("z-order"))) {
                             return false;
                         }
+                    } else if (property == "color") {
+                        if (!colorComparator.areEqual(node.getAttribute("color"), nodeToCompare.getAttribute("color"))) {
+                            return false;
+                        }
+                    } else {
+                        let nodeAttribute = node.getAttribute(property);
+                        let nodeToCompareAttribute = nodeToCompare.getAttribute(property);
+                        const delta = property.startsWith("point") ? options.points.delta : options[property].delta;
+
+                        if (property == "center" || property.startsWith("point")) {
+                            let [nodeCx, nodeCy] = nodeAttribute.replace(/\s/g, "").substring(1, nodeAttribute.length - 1).split(',').map(Number);
+                            let [compareCx, compareCy] = nodeToCompareAttribute.replace(/\s/g, "").substring(1, nodeToCompareAttribute.length - 1).split(',').map(Number);
+
+                            if (Math.abs(nodeCx - compareCx) > delta || Math.abs(nodeCy - compareCy) > delta) return false;
+                        } else if (Math.abs(node.getAttribute(property) - nodeToCompare.getAttribute(property)) > delta) return false;
                     }
-                    if (["z-order", "color"].includes(property)) continue; // TEMP - different comparison
-
-                    let nodeAttribute = node.getAttribute(property);
-                    let nodeToCompareAttribute = nodeToCompare.getAttribute(property);
-                    const delta = property.startsWith("point") ? options.points.delta : options[property].delta;
-
-                    if (property == "center" || property.startsWith("point")) {
-                        let [nodeCx, nodeCy] = nodeAttribute.replace(/\s/g, "").substring(1, nodeAttribute.length - 1).split(',').map(Number);
-                        let [compareCx, compareCy] = nodeToCompareAttribute.replace(/\s/g, "").substring(1, nodeToCompareAttribute.length - 1).split(',').map(Number);
-
-                        if (Math.abs(nodeCx - compareCx) > delta || Math.abs(nodeCy - compareCy) > delta) return false;
-                    } else if (Math.abs(node.getAttribute(property) - nodeToCompare.getAttribute(property)) > delta) return false;
-
                 }
                 return true;
             })
-
             if (foundNodes.length < 1) return false;
         }
         return true;

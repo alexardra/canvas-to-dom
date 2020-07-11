@@ -78,7 +78,7 @@ export const canvasToDOM = (canvasEl, options) => {
 
     const colorExtractor = new ColorExtractor(src);
     const preProcessor = new PreProcessor(dst);
-    preProcessor.binarize();
+    dst = preProcessor.binarize();
 
     const complexShapesProcessor = new ComplexShapesProcessor(src.clone());
 

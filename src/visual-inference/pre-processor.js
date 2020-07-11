@@ -7,23 +7,20 @@ export default class PreProcessor {
     }
 
     binarize() {
-        // convert to greyscale
-        cv.cvtColor(this._mat, this._mat, cv.COLOR_RGBA2GRAY, 0);
-        // blur - reduce noise
-        let ksize = new cv.Size(5, 5);
-        cv.GaussianBlur(this._mat, this._mat, ksize, 0, 0, cv.BORDER_DEFAULT);
+        // convert from rgba to rgb
+        cv.cvtColor(this._mat, this._mat, cv.COLOR_RGBA2RGB, 0);
 
-        //threshold - binarization
-        cv.adaptiveThreshold(this._mat, this._mat, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, 5, 2);
+        // blur
+        let blurred = new cv.Mat();
+        cv.blur(this._mat, blurred, new cv.Size(3, 3), new cv.Point(-1, -1), cv.BORDER_DEFAULT);
+
+        // detect edges with canny 
+        let cthresh = 75;
+        let cannyMat = new cv.Mat();
+        cv.Canny(blurred, cannyMat, cthresh, cthresh * 2, 3, 0);
+
+        // make border edge
+        cv.copyMakeBorder(cannyMat, cannyMat, 1, 1, 1, 1, cv.BORDER_CONSTANT, new cv.Scalar(255, 255, 255, 255));
+        return cannyMat;
     }
-
-    _erode_boundaries() { // TODO
-        let kernel = cv.Mat.ones(2, 2, cv.CV_8U);
-        let anchor = new cv.Point(-1, -1);
-
-        cv.erode(this._mat, this._mat, kernel, anchor, 1, cv.BORDER_CONSTANT, cv.morphologyDefaultBorderValue());
-        kernel.delete();
-        anchor.delete();
-    }
-
 }

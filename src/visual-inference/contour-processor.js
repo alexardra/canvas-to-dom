@@ -28,6 +28,7 @@ export default class ContourProcessor {
         let contours = new cv.MatVector();
         let hierarchy = new cv.Mat();
         cv.findContours(this._mat, contours, hierarchy, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
+
         return [contours, hierarchy];
     }
 
@@ -36,7 +37,6 @@ export default class ContourProcessor {
         for (let i = 0; i < this._contours.size(); i++) {
             shapes.push(new Shape(this._contours.get(i)));
         }
-
         return shapes;
     }
 

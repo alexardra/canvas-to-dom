@@ -34,7 +34,7 @@ export default class ContourProcessor {
         let c = new cv.MatVector();
         c.push_back(contours.get(3));
         cv.drawContours(mask, c, 0, new cv.Scalar(255, 255, 255, 255), 1, cv.LINE_8);
-        cv.imshow("test", mask)
+        cv.imshow("overlapping", mask)
 
         return [contours, hierarchy];
     }
@@ -51,10 +51,12 @@ export default class ContourProcessor {
         let duplicateContourIndicesMap = {};
         let duplicateContourIndices = [];
         for (let i = 0; i < this._contours.size() - 1; i++) {
-            if (this._shapes[i].area < 30) { // noise
+            if (this._shapes[i].vertices.length < 2) { // noise
+                console.log(`Shape ${i} is noise`);
                 this._noise.push(i);
                 continue;
             }
+            console.log(this._noise);
             for (let j = i + 1; j < this._contours.size(); j++) {
                 if (this._shapes[i].canApproxShape(this._shapes[j]) && !duplicateContourIndices.includes(j)) {
                     if (i in duplicateContourIndicesMap) {
@@ -125,6 +127,7 @@ export default class ContourProcessor {
         for (let i = 0; i < this._shapes.length; i++) {
             if (this._noise.includes(i)) continue;
             if (i in this._duplicateContourIndicesMap) {
+                console.log(this._shapes[i])
                 this._shapes[i].color = this._colorExtractor.createColorFromShape(this._shapes[i]);
                 shapeEntryInfos[i] = this._shapes[i].fullShapeEntry;
             }
@@ -142,7 +145,8 @@ export default class ContourProcessor {
         for (let i = 0; i < countShapes; i++) {
             if (i in this._duplicateContourIndicesMap) {
                 if (this._shapes[i].isComplex) {
-                    if (this._shapes[i].children.length > 1) {
+                    console.log(this._shapes[i], i);
+                    if (this._shapes[i].children && this._shapes[i].children.length > 1) {
                         const isObsolete = this._complexShapesProcessor.isShapeObsolete(this._shapes[i]);
                         if (isObsolete) {
                             let entry = hierarchyProcessor.getHierarchyEntry(i);

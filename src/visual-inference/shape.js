@@ -43,6 +43,7 @@ export default class Shape {
         for (let i = 0; i < this._approxPoly.data32S.length; i += 2) {
             vertices.push(this._approxPoly.data32S.slice(i, i + 2));
         }
+        vertices = this._removeDuplicateVertices(vertices);
         return vertices;
     }
 
@@ -58,26 +59,17 @@ export default class Shape {
         } else if (this._vertices.length === 3) {
             shape = "triangle";
         } else if (this._vertices.length === 4) {
-            let firstPoint = this._vertices[0];
-            let lastPoint = this._vertices[this._vertices.length - 1];
-            let cxDelta = Math.abs(firstPoint[0] - lastPoint[0]);
-            let cyDelta = Math.abs(firstPoint[1] - lastPoint[1]);
-            if (cxDelta < 10 && cyDelta < 10) {
-                shape = "triangle";
-                this._vertices.pop();
-            } else {
-                let cxDelta = Math.abs(this.center.cx - this._rotatedRect.center.x);
-                let cyDelta = Math.abs(this.center.cy - this._rotatedRect.center.y);
-                let centersClose = cxDelta < 2 && cyDelta < 2;
+            let cxDelta = Math.abs(this.center.cx - this._rotatedRect.center.x);
+            let cyDelta = Math.abs(this.center.cy - this._rotatedRect.center.y);
+            let centersClose = cxDelta < 2 && cyDelta < 2;
 
-                if (centersClose) {
-                    const { x, y, width, height } = cv.boundingRect(this._approxPoly);
-                    const aspectRatio = width / height;
-                    shape = (aspectRatio >= 0.95 && aspectRatio <= 1.05) ? "square" : "rectangle";
-                    this._width = width, this._height = height;
-                } else {
-                    shape = "polygon";
-                }
+            if (centersClose) {
+                const { x, y, width, height } = cv.boundingRect(this._approxPoly);
+                const aspectRatio = width / height;
+                shape = (aspectRatio >= 0.95 && aspectRatio <= 1.05) ? "square" : "rectangle";
+                this._width = width, this._height = height;
+            } else {
+                shape = "polygon";
             }
         } else if (this._vertices.length == 5) {
             shape = "pentagon"; // TODO 
@@ -216,6 +208,22 @@ export default class Shape {
         fullShapeInfo.color = this.color;
         fullShapeInfo.children = [];
         return fullShapeInfo;
+    }
+
+    _removeDuplicateVertices(vertices) {
+        let duplicateIndices = [];
+        for (let index = 0; index < vertices.length; index++) {
+            if (duplicateIndices.includes(index)) continue;
+            for (let nextIndex = index + 1; nextIndex < vertices.length; nextIndex++) {
+                if (duplicateIndices.includes(nextIndex)) continue;
+                const cxDelta = Math.abs(vertices[index][0] - vertices[nextIndex][0]);
+                const cyDelta = Math.abs(vertices[index][1] - vertices[nextIndex][1]);
+                if (cxDelta < 10 && cyDelta < 10) { // TODO: 10 too much (?)
+                    duplicateIndices.push(nextIndex);
+                }
+            }
+        }
+        return vertices.filter((v, index) => { return !duplicateIndices.includes(index); })
     }
 
     canApproxShape(shape) {

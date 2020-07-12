@@ -43,13 +43,15 @@ export default class ColorExtractor {
 
         contours.delete();
         contours = new cv.MatVector();
-        for (let child of shape.children) {
-            contours.push_back(child.contour);
+        if (shape.children) {
+            for (let child of shape.children) {
+                contours.push_back(child.contour);
+            }
         }
         cv.drawContours(mask, contours, 0, new cv.Scalar(0, 0, 0, 0), -1, cv.LINE_8);
         contours.delete();
 
         cv.bitwise_and(this._mat, mask, mask);
-        return this.rgba2hex(this._createChannelValuesFromMask(mask, shape).map(this._createAverageColor))
+        return this.rgba2hex(this._createChannelValuesFromMask(mask, shape).map(this._createAverageColor));
     }
 }

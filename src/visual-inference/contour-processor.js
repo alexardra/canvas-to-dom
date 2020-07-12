@@ -15,6 +15,7 @@ export default class ContourProcessor {
         this._shapes = null;
         this._shapeTree = null;
 
+        this._noise = [];
         this._process();
     }
 
@@ -28,6 +29,12 @@ export default class ContourProcessor {
         let contours = new cv.MatVector();
         let hierarchy = new cv.Mat();
         cv.findContours(this._mat, contours, hierarchy, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
+
+        let mask = cv.Mat.zeros(this._mat.rows, this._mat.cols, cv.CV_8U);
+        let c = new cv.MatVector();
+        c.push_back(contours.get(3));
+        cv.drawContours(mask, c, 0, new cv.Scalar(255, 255, 255, 255), 1, cv.LINE_8);
+        cv.imshow("test", mask)
 
         return [contours, hierarchy];
     }
@@ -44,6 +51,10 @@ export default class ContourProcessor {
         let duplicateContourIndicesMap = {};
         let duplicateContourIndices = [];
         for (let i = 0; i < this._contours.size() - 1; i++) {
+            if (this._shapes[i].area < 30) { // noise
+                this._noise.push(i);
+                continue;
+            }
             for (let j = i + 1; j < this._contours.size(); j++) {
                 if (this._shapes[i].canApproxShape(this._shapes[j]) && !duplicateContourIndices.includes(j)) {
                     if (i in duplicateContourIndicesMap) {
@@ -106,11 +117,13 @@ export default class ContourProcessor {
 
     _createShapeTree() {
         let hierarchyProcessor = new HierarchyProcessor(this.hierarchyTree);
+        hierarchyProcessor.removeNoise(this._noise);
         hierarchyProcessor.addChildrenToShapesFromHierarchy(this._shapes);
         this._processComplexShapes(hierarchyProcessor);
 
         let shapeEntryInfos = Array(this._shapes.length).fill(null);
         for (let i = 0; i < this._shapes.length; i++) {
+            if (this._noise.includes(i)) continue;
             if (i in this._duplicateContourIndicesMap) {
                 this._shapes[i].color = this._colorExtractor.createColorFromShape(this._shapes[i]);
                 shapeEntryInfos[i] = this._shapes[i].fullShapeEntry;
@@ -119,8 +132,7 @@ export default class ContourProcessor {
 
         let shapeTree = [];
         this._translateContourIndicesToShapes(shapeTree, [this.hierarchyTree], shapeEntryInfos, 0);
-        shapeTree[0].identity = "canvas"; // TODO: should always be square - ensure with bounding box
-
+        shapeTree[0].identity = "canvas"; // should always be square - preprocessor ensures it
 
         return shapeTree[0];
     }

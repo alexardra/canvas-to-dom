@@ -84,4 +84,21 @@ export default class HierarchyProcessor {
         delete entry[key];
     }
 
+
+    _removeEntry(hierarchies, key) {
+        for (let entry of hierarchies) {
+            let entryKey = Object.keys(entry).map(Number)[0];
+            entry[entryKey] = entry[entryKey].filter((x) => {
+                return Number(Object.keys(x)[0]) != key;
+            });
+            this._removeEntry(entry[entryKey], key);
+        }
+    }
+
+
+    removeNoise(noise) {
+        for (let key of noise) {
+            this._removeEntry([this.hierarchyTree], key);
+        }
+    }
 }

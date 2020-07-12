@@ -38,13 +38,39 @@ export default class Shape {
         return approx;
     }
 
+    meanAbsoluteDeviation(vertices) { // TODO: remove from methods
+        let mean = vertices.reduce((a, b) => a + b, 0) / vertices.length;
+        let meanAbsoluteDeviation = vertices.map((vertice) => { return Math.abs(vertice - mean); }).reduce((a, b) => a + b, 0) / vertices.length;
+
+        return meanAbsoluteDeviation;
+    }
+
     _createVertices() {
         let vertices = []
         for (let i = 0; i < this._approxPoly.data32S.length; i += 2) {
             vertices.push(this._approxPoly.data32S.slice(i, i + 2));
         }
-        vertices = this._removeDuplicateVertices(vertices);
+
+        let xDelta = this.meanAbsoluteDeviation(vertices.map(vertice => vertice[0]));
+        let yDelta = this.meanAbsoluteDeviation(vertices.map(vertice => vertice[1]));
+        vertices = this._removeDuplicateVertices(vertices, xDelta, yDelta);
         return vertices;
+    }
+
+    _removeDuplicateVertices(vertices, xDelta, yDelta) {
+        let duplicateIndices = [];
+        for (let index = 0; index < vertices.length; index++) {
+            if (duplicateIndices.includes(index)) continue;
+            for (let nextIndex = index + 1; nextIndex < vertices.length; nextIndex++) {
+                if (duplicateIndices.includes(nextIndex)) continue;
+                const cxDelta = Math.abs(vertices[index][0] - vertices[nextIndex][0]);
+                const cyDelta = Math.abs(vertices[index][1] - vertices[nextIndex][1]);
+                if (cxDelta < xDelta && cyDelta < yDelta) {
+                    duplicateIndices.push(nextIndex);
+                }
+            }
+        }
+        return vertices.filter((v, index) => { return !duplicateIndices.includes(index); })
     }
 
     _createRotatedRect() {
@@ -208,22 +234,6 @@ export default class Shape {
         fullShapeInfo.color = this.color;
         fullShapeInfo.children = [];
         return fullShapeInfo;
-    }
-
-    _removeDuplicateVertices(vertices) {
-        let duplicateIndices = [];
-        for (let index = 0; index < vertices.length; index++) {
-            if (duplicateIndices.includes(index)) continue;
-            for (let nextIndex = index + 1; nextIndex < vertices.length; nextIndex++) {
-                if (duplicateIndices.includes(nextIndex)) continue;
-                const cxDelta = Math.abs(vertices[index][0] - vertices[nextIndex][0]);
-                const cyDelta = Math.abs(vertices[index][1] - vertices[nextIndex][1]);
-                if (cxDelta < 10 && cyDelta < 10) { // TODO: 10 too much (?)
-                    duplicateIndices.push(nextIndex);
-                }
-            }
-        }
-        return vertices.filter((v, index) => { return !duplicateIndices.includes(index); })
     }
 
     canApproxShape(shape) {

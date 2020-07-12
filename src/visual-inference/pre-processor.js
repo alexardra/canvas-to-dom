@@ -21,6 +21,18 @@ export default class PreProcessor {
 
         // make border edge
         cv.copyMakeBorder(cannyMat, cannyMat, 1, 1, 1, 1, cv.BORDER_CONSTANT, new cv.Scalar(255, 255, 255, 255));
+
+        this._erode_boundaries(cannyMat);
         return cannyMat;
+    }
+
+    _erode_boundaries(mat) {
+        let anchor = new cv.Point(-1, -1);
+        let erosionSize = new cv.Size(3, 3);
+        let borderValue = cv.Scalar.all(Number.MAX_VALUE);
+
+        let structuringElement = cv.getStructuringElement(cv.MORPH_RECT, erosionSize);
+        cv.dilate(mat, mat, structuringElement, anchor, 1, cv.BORDER_CONSTANT, borderValue);
+        cv.erode(mat, mat, structuringElement, anchor, 1, cv.BORDER_CONSTANT, borderValue);
     }
 }

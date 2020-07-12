@@ -1,4 +1,5 @@
 import * as cv from "../../vendor/opencv.js";
+import { meanAbsoluteDeviation } from "../helpers";
 
 export default class Shape {
 
@@ -38,21 +39,14 @@ export default class Shape {
         return approx;
     }
 
-    meanAbsoluteDeviation(vertices) { // TODO: remove from methods
-        let mean = vertices.reduce((a, b) => a + b, 0) / vertices.length;
-        let meanAbsoluteDeviation = vertices.map((vertice) => { return Math.abs(vertice - mean); }).reduce((a, b) => a + b, 0) / vertices.length;
-
-        return meanAbsoluteDeviation;
-    }
-
     _createVertices() {
         let vertices = []
         for (let i = 0; i < this._approxPoly.data32S.length; i += 2) {
             vertices.push(this._approxPoly.data32S.slice(i, i + 2));
         }
 
-        let xDelta = this.meanAbsoluteDeviation(vertices.map(vertice => vertice[0]));
-        let yDelta = this.meanAbsoluteDeviation(vertices.map(vertice => vertice[1]));
+        let xDelta = meanAbsoluteDeviation(vertices.map(vertice => vertice[0]));
+        let yDelta = meanAbsoluteDeviation(vertices.map(vertice => vertice[1]));
         vertices = this._removeDuplicateVertices(vertices, xDelta, yDelta);
         return vertices;
     }

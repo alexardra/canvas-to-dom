@@ -59,30 +59,31 @@
 </head>
 
 <body>
-    <div class="example">
-        <canvas id="chart"></canvas>
-        <div class="result">
-        </div>
-    </div>
-    <div class="example">
-        <canvas id="overlapping"></canvas>
-        <div class="result">
-        </div>
-    </div>
-    <div class="example">
-        <canvas id="simple"></canvas>
-        <div class="result">
-        </div>
-    </div>
 </body>
 <script src="chart.js"></script>
 <script src="simple.js"></script>
 <script src="overlapping.js"></script>
+<script src="lines.js"></script>
 <script src="app.js"></script>
 <script>
+    let ids = ["lines", "chart", "overlapping", "simple"];
+    for (let i = 0; i < ids.length; i++) {
+        let example = document.createElement("div");
+        example.setAttribute("class", "example");
+        let c = document.createElement("canvas");
+        c.setAttribute("id", ids[i]);
+        let result = document.createElement("div");
+        result.setAttribute("class", "result");
+        example.appendChild(c);
+        example.appendChild(result);
+        document.getElementsByTagName("body")[0].appendChild(example);
+    }
     let cs = [];
     let canvas;
 
+    canvas = document.getElementById("lines");
+    drawLinesFrame(canvas);
+    cs.push(canvas);
     canvas = document.getElementById("chart");
     drawChartFrame(canvas);
     cs.push(canvas);
@@ -96,68 +97,11 @@
     cs.push(canvas);
 
     loadCanvasToDom().then(() => {
-        console.log("canvas-to-dom loaded");
         for (let i = 0; i < cs.length; i++) {
             let dom = canvasToDOM(cs[i]);
-            walk(dom.getElementsByTagName("canvas")[0], document.getElementsByClassName("result")[i]);
+            visualize(dom.getElementsByTagName("canvas")[0], document.getElementsByClassName("result")[i]);
         }
     });
-
-    function walk(node, result) {
-        let children = node.children;
-        if (children.length > 0) {
-            let element = startFormatedTag(node, "ul");
-            for (let i = 0; i < children.length; i++) {
-                walk(children[i], element);
-            }
-            element.appendChild(endFormatedTag(node, "ul"));
-            result.appendChild(element);
-        } else {
-            let element = startFormatedTag(node, "li");
-            element.appendChild(endFormatedTag(node, "li"))
-            result.appendChild(element);
-        }
-    }
-
-    function startFormatedTag(node, el) {
-        let attributes = Array.from(node.attributes);
-
-        let li = document.createElement(el);
-        let start = document.createElement("span");
-        start.classList.add("name");
-        let startText = attributes.length == 0 ? "<" + node.nodeName.toLowerCase() : "<" + node.nodeName.toLowerCase() + " ";
-        start.appendChild(document.createTextNode(startText));
-        li.appendChild(start);
-
-        for (let i = 0; i < attributes.length; i++) {
-            let attribute = document.createElement("span");
-            attribute.classList.add("attribute");
-            let attributeName = document.createElement("span");
-            attributeName.appendChild(document.createTextNode(attributes[i].name + "="));
-            let attributeValue = document.createElement("span");
-            let attributeText = i == attributes.length - 1 ? '"' + attributes[i].value + '"' : '"' + attributes[i].value + '"' + " ";
-            attributeValue.appendChild(document.createTextNode(attributeText));
-            attribute.appendChild(attributeName);
-            attribute.appendChild(attributeValue);
-            li.appendChild(attribute);
-        }
-        if (el == "ul") {
-            let end = document.createElement("span");
-            end.classList.add("name");
-            end.appendChild(document.createTextNode(">"));
-            li.appendChild(end);
-        }
-        return li;
-    }
-
-    function endFormatedTag(node, el) {
-        let end = document.createElement("span");
-        end.classList.add("name");
-        let text = el == "ul" ? "</" + node.nodeName.toLowerCase() + ">" : "/>";
-        end.appendChild(document.createTextNode(text));
-        return end;
-    }
-
 </script>
 
 </html>

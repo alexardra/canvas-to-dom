@@ -7,6 +7,7 @@ import { SupportedOptions } from "./dom/supported-features";
 import { getValidShapeTreeFromElement } from "./helpers";
 import DomComparator from "./dom/compare/dom-comparator"
 import ComplexShapesProcessor from "./visual-inference/complex-shapes-processor.js";
+import { Visualizer } from "./visualizer.js";
 
 
 export const loadDOM = () => {
@@ -99,3 +100,7 @@ export const canvasDOMCompare = (firstEl, secondEl) => {
     return domComparator.areEqual(); // TODO: implement options
 }
 
+export const visualize = (node, resultPlaceholder) => {
+    const visualizer = new Visualizer();
+    visualizer.render(node, resultPlaceholder);
+}

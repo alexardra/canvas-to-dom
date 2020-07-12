@@ -14,29 +14,39 @@ window.drawChartFrame = function (canvas) {
     context.fill();
     context.stroke();
 
-    // context.beginPath();
-    // context.strokeStyle = "green";
-    // context.moveTo(25, 25);
-    // context.lineTo(35, 35);
-    // context.lineTo(15, 35);
-    // context.lineTo(25, 25);
-    // context.fillStyle = "green";
-    // context.fill();
-    // context.stroke();
-
-    // context.beginPath();
-    // context.lineWidth = "2";
-    // context.strokeStyle = "black";
-    // context.rect(50, 30, 30, 250);
-    // context.fillStyle = "black";
-    // context.fill();
-    // context.stroke();
+    context.beginPath();
+    context.strokeStyle = "green";
+    context.moveTo(25, 25);
+    context.lineTo(35, 35);
+    context.lineTo(15, 35);
+    context.lineTo(25, 25);
+    context.fillStyle = "green";
+    context.fill();
+    context.stroke();
 
     context.beginPath();
     context.lineWidth = "2";
     context.strokeStyle = "black";
-    context.rect(100, 30, 50, 250);
+    context.rect(50, 30, 30, 250);
     context.fillStyle = "black";
+    context.fill();
+    context.stroke();
+
+    context.beginPath();
+    context.strokeStyle = "green";
+    context.moveTo(57.5, 50);
+    context.lineTo(72.5, 50);
+    context.lineTo(65, 70);
+    context.lineTo(57.5, 50);
+    context.fillStyle = "green";
+    context.fill();
+    context.stroke();
+
+    context.beginPath();
+    context.lineWidth = "2";
+    context.strokeStyle = "red";
+    context.rect(100, 30, 50, 250);
+    context.fillStyle = "red";
     context.fill();
     context.stroke();
 

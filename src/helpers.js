@@ -24,3 +24,8 @@ export const getValidShapeTreeFromElement = (element) => {
     }
     return element;
 }
+
+export const meanAbsoluteDeviation = (arr) => { // TODO: remove from methods
+    let mean = arr.reduce((a, b) => a + b, 0) / arr.length;
+    return arr.map((x) => { return Math.abs(x - mean); }).reduce((a, b) => a + b, 0) / arr.length;
+}

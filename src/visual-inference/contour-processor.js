@@ -30,12 +30,6 @@ export default class ContourProcessor {
         let hierarchy = new cv.Mat();
         cv.findContours(this._mat, contours, hierarchy, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
 
-        let mask = cv.Mat.zeros(this._mat.rows, this._mat.cols, cv.CV_8U);
-        let c = new cv.MatVector();
-        c.push_back(contours.get(3));
-        cv.drawContours(mask, c, 0, new cv.Scalar(255, 255, 255, 255), 1, cv.LINE_8);
-        cv.imshow("overlapping", mask)
-
         return [contours, hierarchy];
     }
 
@@ -56,7 +50,6 @@ export default class ContourProcessor {
                 this._noise.push(i);
                 continue;
             }
-            console.log(this._noise);
             for (let j = i + 1; j < this._contours.size(); j++) {
                 if (this._shapes[i].canApproxShape(this._shapes[j]) && !duplicateContourIndices.includes(j)) {
                     if (i in duplicateContourIndicesMap) {
@@ -127,7 +120,6 @@ export default class ContourProcessor {
         for (let i = 0; i < this._shapes.length; i++) {
             if (this._noise.includes(i)) continue;
             if (i in this._duplicateContourIndicesMap) {
-                console.log(this._shapes[i])
                 this._shapes[i].color = this._colorExtractor.createColorFromShape(this._shapes[i]);
                 shapeEntryInfos[i] = this._shapes[i].fullShapeEntry;
             }
@@ -145,7 +137,6 @@ export default class ContourProcessor {
         for (let i = 0; i < countShapes; i++) {
             if (i in this._duplicateContourIndicesMap) {
                 if (this._shapes[i].isComplex) {
-                    console.log(this._shapes[i], i);
                     if (this._shapes[i].children && this._shapes[i].children.length > 1) {
                         const isObsolete = this._complexShapesProcessor.isShapeObsolete(this._shapes[i]);
                         if (isObsolete) {

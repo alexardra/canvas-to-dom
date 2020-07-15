@@ -13,15 +13,15 @@ export default class ColorComparator {
             return deltaE <= 1.0;
         }
         if (this._precision == "close") {
-            return deltaE <= 2.0 && deltaE > 1.0;
+            return deltaE <= 5.0;
         }
         if (this._precision == "similar") {
-            return deltaE <= 10.0 && deltaE > 2;
+            return deltaE <= 10.0;
         }
         if (this._precision == "distinct") {
-            return deltaE <= 49.0 && deltaE > 10;
+            return deltaE <= 49.0;
         }
-        return true;
+        return true; // precision == "opposite"
     }
 
     getDelta(lab1, lab2) {
@@ -118,12 +118,12 @@ export default class ColorComparator {
         let deltaA = lab1[1] - lab2[1];
         let deltaB = lab1[2] - lab2[2];
 
-        let c1 = Math.Sqrt(Math.Pow(lab1[1], 2) + Math.Pow(lab1[2], 2));
-        let c2 = Math.Sqrt(Math.Pow(lab2[1], 2) + Math.Pow(lab2[2], 2));
+        let c1 = Math.sqrt(Math.pow(lab1[1], 2) + Math.pow(lab1[2], 2));
+        let c2 = Math.sqrt(Math.pow(lab2[1], 2) + Math.pow(lab2[2], 2));
         let deltaC = c1 - c2;
 
-        let deltaH = Math.Pow(deltaA, 2) + Math.Pow(deltaB, 2) - Math.Pow(deltaC, 2);
-        deltaH = deltaH < 0 ? 0 : Math.Sqrt(deltaH);
+        let deltaH = Math.pow(deltaA, 2) + Math.pow(deltaB, 2) - Math.pow(deltaC, 2);
+        deltaH = deltaH < 0 ? 0 : Math.sqrt(deltaH);
 
         const sl = 1.0;
         const kc = 1.0;
@@ -132,10 +132,10 @@ export default class ColorComparator {
         let sc = 1.0 + this.KConstants[1] * c1;
         let sh = 1.0 + this.KConstants[2] * c1;
 
-        let i = Math.Pow(deltaL / (this.KConstants[0] * sl), 2) +
-            Math.Pow(deltaC / (kc * sc), 2) +
-            Math.Pow(deltaH / (kh * sh), 2);
-        return i < 0 ? 0 : Math.Sqrt(i);
+        let i = Math.pow(deltaL / (this.KConstants[0] * sl), 2) +
+            Math.pow(deltaC / (kc * sc), 2) +
+            Math.pow(deltaH / (kh * sh), 2);
+        return i < 0 ? 0 : Math.sqrt(i);
     }
 
 	/**

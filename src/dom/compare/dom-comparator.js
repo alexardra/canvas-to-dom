@@ -60,12 +60,12 @@ export default class DomComparator {
                 if (!(tagProperty in options)) {
                     options[tagProperty] = {
                         "precision": "identical",
-                        "method": "CIE76"
+                        "method": "CIE2000"
                     }
                 } else if (!("precision" in options[tagProperty])) {
                     options[tagProperty]["precision"] = "identical";
                 } else if (!("method" in options[tagProperty])) {
-                    options[tagProperty]["method"] = "CIE76";
+                    options[tagProperty]["method"] = "CIE2000";
                 } else {
                     const precision = options[tagProperty]["precision"];
                     if (!["identical", "close", "similar", "distinct", "opposite"].includes(precision)) {

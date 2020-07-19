@@ -1,0 +1,24 @@
+{
+  "name": "canvas-to-dom-assets-generator",
+  "version": "1.0.0",
+  "description": "Helper package for generating assets for canvas-to-dom in node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexardra/canvas-to-dom.git"
+  },
+  "keywords": [],
+  "author": "ardnaxela",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexardra/canvas-to-dom/issues"
+  },
+  "homepage": "https://github.com/alexardra/canvas-to-dom/libs/assets-generator/#readme",
+  "dependencies": {
+    "puppeteer": "^5.2.0",
+    "timesnap": "^0.1.2"
+  }
+}

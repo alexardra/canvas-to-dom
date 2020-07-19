@@ -9,7 +9,7 @@ const supportedOptions = [
     "url",
     "selectorId",
     "selectorCls",
-    "outputFrame",
+    "outputFrameName",
     "frame",
     "outputDir"
 ]
@@ -41,30 +41,31 @@ const validateOptions = (cmdOptions) => {
     }
 
     if ("selectorId" in options) {
-        options.selector = options.selectorId;
+        options.selector = "#" + options.selectorId;
     } else if ("selectorCls" in options) {
-        options.selector = options.selectorCls;
+        options.selector = "." + options.selectorCls;
     } else {
         options.selector = "canvas";
     }
 
-    if (!("outputFrame" in options)) {
-        options.outputFrame = "screenshot.png";
+    if (!("outputFrameName" in options)) {
+        options.outputFrameName = "screenshot.png";
     }
 
     if (!("frame" in options)) {
         options.frame = 0;
     } else {
         try {
-            frame = parseInt(frame);
-        } catch {
-            throw new Error(`Invalid frame argument '${frame}', must be integer`);
+            frame = parseInt(options.frame);
+        } catch (e) {
+            throw new Error(`Invalid frame argument '${options.frame}', must be integer`);
         }
     }
 
     if (!("outputDir" in options)) {
-        const parentDir = path.resolve(__dirname, "../..");
-        options.outputDir = path.join(parentDir, "assets");
+        options.outputDir = path.join(__dirname, "assets");
+    } else {
+        options.outputDir = path.join(options.outputDir, "assets");
     }
 
     if (!fs.existsSync(options.outputDir)) {
@@ -94,7 +95,7 @@ const getCanvasScreenshotUrlFromPage = async (options) => {
         outputDirectory: outputDir
     });
 
-    fs.renameSync(path.join(outputDir, "1.png"), path.join(outputDir, options.outputFrame));
+    fs.renameSync(path.join(outputDir, "1.png"), path.join(outputDir, options.outputFrameName));
 }
 
 
@@ -139,7 +140,7 @@ const generateImageAssetsFromPage = async (page, outputDir) => {
 
 const generateAssets = async (options) => {
     options = validateOptions(options);
-
+    console.log(options);
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     try {
@@ -153,6 +154,12 @@ const generateAssets = async (options) => {
     await browser.close();
 }
 
+module.exports = (options) => {
+    if (!options) options = {};
 
-module.exports.getOptionsFromCmd = getOptionsFromCmd;
-module.exports.generateAssets = generateAssets; 
+    if (("cli" in options && options.cli) || Object.keys(options).length === 0) {
+        options = getOptionsFromCmd();
+    }
+    console.log(options);
+    generateAssets(options);
+}

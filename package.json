@@ -1,6 +1,6 @@
 {
   "name": "@ardnaxela/canvas-to-dom",
-  "version": "0.0.7",
+  "version": "1.0.0",
   "description": "Generate dom tree from HTML5 canvas frame",
   "main": "index.js",
   "directories": {
@@ -19,7 +19,12 @@
     "type": "git",
     "url": "git+https://github.com/alexardra/canvas-to-dom.git"
   },
-  "keywords": [],
+  "keywords": [
+    "canvas",
+    "DOM",
+    "test",
+    "testing"
+  ],
   "author": "ardnaxela",
   "license": "MIT",
   "bugs": {

@@ -140,7 +140,7 @@ const generateImageAssetsFromPage = async (page, outputDir) => {
 
 const generateAssets = async (options) => {
     options = validateOptions(options);
-    console.log(options);
+
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     try {
@@ -160,6 +160,5 @@ module.exports = (options) => {
     if (("cli" in options && options.cli) || Object.keys(options).length === 0) {
         options = getOptionsFromCmd();
     }
-    console.log(options);
     generateAssets(options);
 }

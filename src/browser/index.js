@@ -6,3 +6,5 @@ window.loadCanvasToDom = loadCanvasToDom;
 window.canvasToDOM = canvasToDOM;
 window.canvasDOMCompare = canvasDOMCompare;
 window.visualize = visualize;
+
+// Any browser-specific functionality should be added here

@@ -1,6 +1,6 @@
-import { TagProperties, TagPropertyMap } from "../supported-features";
-import ZIndexComparator from "./z-index-comparator";
-import ColorComparator from "./color-comparator";
+import { TagProperties, TagPropertyMap } from "../supported-features.js";
+import ZIndexComparator from "./z-index-comparator.js";
+import ColorComparator from "./color-comparator.js";
 
 export default class DomComparator {
 

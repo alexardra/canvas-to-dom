@@ -1,4 +1,4 @@
-import { TagPropertyMap, TagPatterns } from "../supported-features"
+import { TagPropertyMap, TagPatterns } from "../supported-features.js"
 
 export default class TagParser {
 

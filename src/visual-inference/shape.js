@@ -1,5 +1,5 @@
 import * as cv from "../../vendor/opencv.js";
-import { meanAbsoluteDeviation } from "../helpers";
+import { meanAbsoluteDeviation } from "../helpers.js";
 
 export default class Shape {
 

@@ -1,4 +1,4 @@
-import TreeParser from "./tree-parser";
+import TreeParser from "./tree-parser.js";
 
 export default class TreeValidator {
 

@@ -1,5 +1,5 @@
-import TagGenerator from "./tag-generator";
-import { TagProperties } from "../supported-features";
+import TagGenerator from "./tag-generator.js";
+import { TagProperties } from "../supported-features.js";
 
 
 export default class DomGenerator {

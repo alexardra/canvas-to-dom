@@ -1,4 +1,4 @@
-import TagParser from "./tag-parser";
+import TagParser from "./tag-parser.js";
 
 export default class TreeParser {
 

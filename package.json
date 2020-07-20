@@ -1,5 +1,5 @@
 {
-  "name": "@ardnaxela/canvas-to-dom",
+  "name": "canvas-to-dom",
   "version": "1.0.0",
   "description": "Generate dom tree from HTML5 canvas frame",
   "main": "index.js",

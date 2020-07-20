@@ -25,3 +25,18 @@ tests/
 
 # CI
 .github/
+
+# libs
+libs/
+
+# examples
+examples/
+
+# webpack
+webpack/
+
+# babel
+babel.config.js
+
+# build
+build/

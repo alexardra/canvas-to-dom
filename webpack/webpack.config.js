@@ -21,5 +21,5 @@ module.exports = {
         publicPath: "/",
         filename: "app.js"
     },
-    mode: "development"
+    mode: "production"
 };

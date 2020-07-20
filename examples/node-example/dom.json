@@ -1,0 +1,40 @@
+{
+    "identity": "canvas",
+    "center": {
+        "cx": 150.5,
+        "cy": 150.5
+    },
+    "orientation": 0,
+    "width": 302,
+    "height": 302,
+    "color": "#000000",
+    "children": [
+        {
+            "identity": "rectangle",
+            "center": {
+                "cx": 150.5,
+                "cy": 188
+            },
+            "orientation": 90,
+            "width": 302,
+            "height": 227,
+            "color": "#000000",
+            "children": [],
+            "zOrder": 1
+        },
+        {
+            "identity": "rectangle",
+            "center": {
+                "cx": 150.5,
+                "cy": 37.5
+            },
+            "orientation": 90,
+            "width": 302,
+            "height": 76,
+            "color": "#fcfbfb",
+            "children": [],
+            "zOrder": 1
+        }
+    ],
+    "zOrder": 0
+}

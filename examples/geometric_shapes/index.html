@@ -59,14 +59,21 @@
 </head>
 
 <body>
+    <canvas id="test1"></canvas>
+    <canvas id="test2"></canvas>
+    <canvas id="test3"></canvas>
+    <canvas id="test4"></canvas>
 </body>
 <script src="chart.js"></script>
 <script src="simple.js"></script>
 <script src="overlapping.js"></script>
 <script src="lines.js"></script>
-<script src="canvas-to-dom.min.js"></script>
+<script src="smile.js"></script>
+<!-- <script src="canvas-to-dom.min.js"></script> -->
+<script src="app.js"></script>
 <script>
-    let ids = ["lines", "chart", "overlapping", "simple"];
+    // let ids = ["lines", "chart", "overlapping", "simple", "smile"];
+    let ids = ["smile"];
     for (let i = 0; i < ids.length; i++) {
         let example = document.createElement("div");
         example.setAttribute("class", "example");
@@ -81,20 +88,25 @@
     let cs = [];
     let canvas;
 
-    canvas = document.getElementById("lines");
-    drawLinesFrame(canvas);
-    cs.push(canvas);
-    canvas = document.getElementById("chart");
-    drawChartFrame(canvas);
+    // canvas = document.getElementById("lines");
+    // drawLinesFrame(canvas);
+    // cs.push(canvas);
+    // canvas = document.getElementById("chart");
+    // drawChartFrame(canvas);
+    // cs.push(canvas);
+
+    // canvas = document.getElementById("overlapping");
+    // drawOverlappingFrame(canvas);
+    // cs.push(canvas);
+
+    // canvas = document.getElementById("simple");
+    // drawSimpleFrame(canvas);
+    // cs.push(canvas);
+
+    canvas = document.getElementById("smile");
+    drawSmileFrame(canvas);
     cs.push(canvas);
 
-    canvas = document.getElementById("overlapping");
-    drawOverlappingFrame(canvas);
-    cs.push(canvas);
-
-    canvas = document.getElementById("simple");
-    drawSimpleFrame(canvas);
-    cs.push(canvas);
 
     loadCanvasToDom().then(() => {
         for (let i = 0; i < cs.length; i++) {

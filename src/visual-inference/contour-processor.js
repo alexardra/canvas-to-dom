@@ -8,7 +8,6 @@ export default class ContourProcessor {
         this._mat = mat;
         this._colorExtractor = colorExtractor;
         this._complexShapesProcessor = complexShapesProcessor;
-
         this._tree = null;
         this._contours = null;
         this._hierarchy = null;
@@ -29,17 +28,35 @@ export default class ContourProcessor {
         let contours = new cv.MatVector();
         let hierarchy = new cv.Mat();
         cv.findContours(this._mat, contours, hierarchy, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
+        //        console.log(contours.size());
+        // this._drawContour(contours.get(5));
 
         return [contours, hierarchy];
     }
 
+    _drawContour(contour) {
+        let color = new cv.Scalar(255, 255, 255, 255);
+        let mat = cv.Mat.zeros(this._mat.rows, this._mat.cols, cv.CV_8U);  //black
+
+        let contours = new cv.MatVector();
+        contours.push_back(contour);
+        cv.drawContours(mat, contours, 0, color, 1, cv.LINE_8);
+        // contours.delete();
+
+        cv.imshow("test3", mat);
+    }
+
     _createShapes() {
         let shapes = [];
+        console.log(this._complexShapesProcessor.circles);
         for (let i = 0; i < this._contours.size(); i++) {
-            shapes.push(new Shape(this._contours.get(i)));
+            let shape = new Shape(this._contours.get(i));
+            shape.createShape(this._complexShapesProcessor.circles);
+            shapes.push(shape);
         }
         return shapes;
     }
+
 
     _createDuplicateContourIndicesMap() {
         let duplicateContourIndicesMap = {};
@@ -120,6 +137,7 @@ export default class ContourProcessor {
         for (let i = 0; i < this._shapes.length; i++) {
             if (this._noise.includes(i)) continue;
             if (i in this._duplicateContourIndicesMap) {
+                console.log(this._shapes[i]);
                 this._shapes[i].color = this._colorExtractor.createColorFromShape(this._shapes[i]);
                 shapeEntryInfos[i] = this._shapes[i].fullShapeEntry;
             }

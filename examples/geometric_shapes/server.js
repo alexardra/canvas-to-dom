@@ -12,4 +12,8 @@ app.get("/canvas-to-dom.min.js", (req, res) => {
     res.sendFile(path.join(__dirname, "../../build/canvas-to-dom.min.js"));
 });
 
+app.get("/app.js", (req, res) => {
+    res.sendFile(path.join(__dirname, "../../build/app.js"));
+});
+
 app.listen(3000, () => console.log("App listening on port 3000!"));

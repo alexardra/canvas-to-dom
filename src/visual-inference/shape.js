@@ -23,8 +23,6 @@ export default class Shape {
         this._approxPoly = this._createApproxPoly();
         this._rotatedRect = this._createRotatedRect();
         this._vertices = this._createVertices();
-        this._shape = this._createShape();
-
         // this._approxPoly.delete();
     }
 
@@ -71,7 +69,23 @@ export default class Shape {
         return cv.minAreaRect(this._contour);
     }
 
-    _createShape() {
+    createShape(circles) {
+        for (let circle of circles) {
+            // console.log(Math.abs(circle.center.x - this.center.cx), Math.abs(circle.center.y - this.center.cy))
+            if (Math.abs(circle.center.x - this.center.cx) < 2 && Math.abs(circle.center.y - this.center.cy) < 2) {
+                this._diameter = 2 * Math.round(circle.radius * 100) / 100;
+                this._shape = "circle";
+                return;
+            }
+        }
+        let circle = cv.minEnclosingCircle(this._contour);
+        // console.log(circle);
+        let minArea = circle.radius * circle.radius * 3.14;
+        console.log(minArea, this.area);
+        this._shape = this._createOtherShape();
+    }
+
+    _createOtherShape() {
         let shape = null;
 
         if (this._vertices.length == 2) {

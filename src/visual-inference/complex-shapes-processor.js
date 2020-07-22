@@ -11,7 +11,7 @@ export default class ComplexShapesProcessor {
     _createCircles() {
         let cvCircles = new cv.Mat();
         cv.cvtColor(this._mat, this._mat, cv.COLOR_RGBA2GRAY, 0);
-        cv.HoughCircles(this._mat, cvCircles, cv.HOUGH_GRADIENT, 1, 45, 75, 40, 0, 0);
+        cv.HoughCircles(this._mat, cvCircles, cv.HOUGH_GRADIENT, 1, 5, 75, 30, 0, 0);
 
         let circles = [];
         for (let i = 0; i < cvCircles.cols; ++i) {
@@ -21,7 +21,6 @@ export default class ComplexShapesProcessor {
             circles.push(new cv.Circle(center, radius));
         }
         cvCircles.delete();
-
         return circles;
     }
 
@@ -38,7 +37,6 @@ export default class ComplexShapesProcessor {
         cv.drawContours(mat, contours, 0, color, 1, cv.LINE_8);
         contours.delete();
     }
-
 
     _clearCircle(mat, circle) {
         let color = new cv.Scalar(0, 0, 0, 0);

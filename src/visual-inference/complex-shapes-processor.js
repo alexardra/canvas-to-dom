@@ -1,5 +1,6 @@
 import * as cv from "../../vendor/opencv.js";
 import Shape from "./shape.js";
+import PreProcessor from "./pre-processor.js";
 
 export default class ComplexShapesProcessor {
 
@@ -11,11 +12,12 @@ export default class ComplexShapesProcessor {
     _createCircles() {
         let cvCircles = new cv.Mat();
         cv.cvtColor(this._mat, this._mat, cv.COLOR_RGBA2GRAY, 0);
-        cv.HoughCircles(this._mat, cvCircles, cv.HOUGH_GRADIENT, 1, 5, 75, 30, 0, 0);
+        cv.HoughCircles(this._mat, cvCircles, cv.HOUGH_GRADIENT, 1, 45, 75, 30, 0, 0);
 
         let circles = [];
         for (let i = 0; i < cvCircles.cols; ++i) {
-            const x = cvCircles.data32F[i * 3], y = cvCircles.data32F[i * 3 + 1];
+            const x = cvCircles.data32F[i * 3],
+                y = cvCircles.data32F[i * 3 + 1];
             const radius = cvCircles.data32F[i * 3 + 2];
             const center = new cv.Point(x, y);
             circles.push(new cv.Circle(center, radius));
@@ -68,14 +70,16 @@ export default class ComplexShapesProcessor {
         let hierarchy = new cv.Mat();
         cv.findContours(mask, contours, hierarchy, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
 
-        return new Shape(contours.get(0));
+        let shape = new Shape(contours.get(0));
+        shape.createShape(this.circles);
+        return shape;
     }
 
     isShapeObsolete(shape) {
         let white = new cv.Scalar(255, 255, 255, 255);
         let black = new cv.Scalar(0, 0, 0, 0);
 
-        let mask = cv.Mat.zeros(this._mat.rows, this._mat.cols, cv.CV_8U);  //black
+        let mask = cv.Mat.zeros(this._mat.rows, this._mat.cols, cv.CV_8U); //black
         cv.rectangle(mask, new cv.Point(0, 0), new cv.Point(mask.rows, mask.cols), white, cv.FILLED, cv.LINE_8, 0);
         for (let childShape of shape.children) {
             this._drawContour(mask, childShape.contour, black);
@@ -84,6 +88,7 @@ export default class ComplexShapesProcessor {
         let original = cv.Mat.zeros(this._mat.rows, this._mat.cols, cv.CV_8U);
 
         this._drawContour(original, shape.contour, white);
+        new PreProcessor().erode_boundaries(mask);
 
         cv.bitwise_and(original, mask, original);
 
@@ -93,9 +98,7 @@ export default class ComplexShapesProcessor {
 
         let out = cv.Mat.zeros(this._mat.rows, this._mat.cols, cv.CV_8U);
         this._drawContour(out, contours.get(0), white);
-
         let result = cv.matchShapes(shape.contour, contours.get(0), 1, 0);
-
         return Math.floor(result) == 0;
     }
 
@@ -118,9 +121,9 @@ export default class ComplexShapesProcessor {
 
         // should contain just one contour - TODO: check
         let restOfParentShape = new Shape(contours.get(0));
+        restOfParentShape.createShape(this.circles);
         extractedShapes.push(restOfParentShape);
 
         return extractedShapes;
     }
 }
-

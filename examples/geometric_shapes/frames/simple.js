@@ -1,9 +1,9 @@
-window.drawSimpleFrame = function (canvas) {
+window.drawSimpleFrame = function(canvas) {
     canvas.width = 300;
     canvas.height = 300;
     let context = canvas.getContext("2d");
 
-    context.fillStyle = "white";
+    context.fillStyle = "brown";
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     context.beginPath();
@@ -13,8 +13,9 @@ window.drawSimpleFrame = function (canvas) {
 
     context.beginPath();
     context.lineWidth = "2";
-    context.strokeStyle = "yellow";
+    context.fillStyle = "yellow";
     context.rect(80, 90, 20, 20);
+    context.fill();
     context.stroke();
 
     context.beginPath();

@@ -50,7 +50,7 @@ const getValidOptions = (options = {}) => {
                 }
             }
         } else {
-            options[option] = typeof (SupportedOptions[option].default) == "object" ?
+            options[option] = typeof(SupportedOptions[option].default) == "object" ?
                 Object.assign({}, SupportedOptions[option].default) :
                 SupportedOptions[option].default;
         }
@@ -63,7 +63,7 @@ export const canvasToDOM = (canvasEl, options) => {
 
     let src;
     try {
-        const canvas = typeof (canvasEl) == "string" ? document.getElementById(canvasEl) : canvasEl;
+        const canvas = typeof(canvasEl) == "string" ? document.getElementById(canvasEl) : canvasEl;
         const context = canvas.getContext("2d");
         const imgData = context.getImageData(
             options.fragment.x ? options.fragment.x : 0,
@@ -94,10 +94,16 @@ export const canvasToDOM = (canvasEl, options) => {
     return new DOMParser().parseFromString(domGenerator.dom, "text/html");
 }
 
-export const canvasDOMCompare = (firstEl, secondEl) => {
-    //TODO: compare two Documents
-    const domComparator = new DomComparator(getValidShapeTreeFromElement(firstEl), getValidShapeTreeFromElement(secondEl));
-    return domComparator.areEqual(); // TODO: implement options
+export const canvasDOMCompare = (firstEl, secondEl, options) => {
+    if (!firstEl || !secondEl) return false;
+    try {
+        const domComparator = new DomComparator(getValidShapeTreeFromElement(firstEl), getValidShapeTreeFromElement(secondEl));
+        return domComparator.areEqual(options);
+    } catch (e) {
+        console.log(e);
+        return false
+    }
+
 }
 
 export const visualize = (node, resultPlaceholder) => {

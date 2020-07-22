@@ -14,7 +14,6 @@ export default class Shape {
         this._rotatedRect = null;
         this._zOrder = null;
 
-        this._isComplex = null;
         this._process();
     }
 
@@ -22,7 +21,7 @@ export default class Shape {
         this._moments = this._createMoments();
         this._approxPoly = this._createApproxPoly();
         this._rotatedRect = this._createRotatedRect();
-        this._vertices = this._createVertices();
+        [this._unfilteredVertices, this._vertices] = this._createVertices();
         // this._approxPoly.delete();
     }
 
@@ -45,8 +44,8 @@ export default class Shape {
 
         let xDelta = meanAbsoluteDeviation(vertices.map(vertice => vertice[0]));
         let yDelta = meanAbsoluteDeviation(vertices.map(vertice => vertice[1]));
-        vertices = this._removeDuplicateVertices(vertices, xDelta, yDelta);
-        return vertices;
+        let filteredVertices = this._removeDuplicateVertices(vertices, xDelta, yDelta);
+        return [vertices, filteredVertices];
     }
 
     _removeDuplicateVertices(vertices, xDelta, yDelta) {
@@ -71,22 +70,26 @@ export default class Shape {
 
     createShape(circles) {
         for (let circle of circles) {
-            // console.log(Math.abs(circle.center.x - this.center.cx), Math.abs(circle.center.y - this.center.cy))
-            if (Math.abs(circle.center.x - this.center.cx) < 2 && Math.abs(circle.center.y - this.center.cy) < 2) {
+            if (Math.abs(circle.center.x - this.center.cx) < 5 && Math.abs(circle.center.y - this.center.cy) < 5) {
                 this._diameter = 2 * Math.round(circle.radius * 100) / 100;
                 this._shape = "circle";
                 return;
             }
         }
-        let circle = cv.minEnclosingCircle(this._contour);
-        // console.log(circle);
-        let minArea = circle.radius * circle.radius * 3.14;
-        console.log(minArea, this.area);
         this._shape = this._createOtherShape();
     }
 
     _createOtherShape() {
         let shape = null;
+        if (this._unfilteredVertices.length > 4) { // maybe undetected circle
+            let circle = cv.minEnclosingCircle(this._contour);
+            let minArea = Math.pow(circle.radius, 2) * Math.PI;
+            const isCircle = Math.round(1 - (Math.abs(this.area - minArea) / this.area)) >= 0.7;
+            if (isCircle) {
+                this._diameter = Math.round(Math.sqrt(minArea / Math.PI));
+                return "circle";
+            }
+        }
 
         if (this._vertices.length == 2) {
             shape = "line";
@@ -105,20 +108,10 @@ export default class Shape {
             } else {
                 shape = "polygon";
             }
-        } else if (this._vertices.length == 5) {
-            shape = "pentagon"; // TODO 
         } else {
-            if (cv.isContourConvex(this._approxPoly)) {
-                shape = "circle";
-
-                let circle = cv.minEnclosingCircle(this._contour); // TODO: make more precise
-                this._diameter = 2 * Math.round(Math.sqrt(this.area / Math.PI));
-            } else {
-                shape = "polygon";
-                this._isComplex = true;
-            }
-
+            shape = "polygon";
         }
+
         return shape;
     }
 
@@ -159,6 +152,10 @@ export default class Shape {
         return this._vertices;
     }
 
+    get unfilteredVertices() {
+        return this._unfilteredVertices;
+    }
+
     get identity() {
         return this._shape;
     }
@@ -191,13 +188,6 @@ export default class Shape {
         } else if (this.identity == "circle") {
             return this._diameter;
         }
-    }
-
-    get isComplex() {
-        if (this._isComplex == null) {
-            this._isComplex = false;
-        }
-        return this._isComplex;
     }
 
     get approxPoly() {
@@ -245,26 +235,34 @@ export default class Shape {
     }
 
     canApproxShape(shape) {
-        if (this.identity != shape.identity) return false;
-
         let cxDelta = Math.abs(this.center.cx - shape.center.cx);
         let cyDelta = Math.abs(this.center.cy - shape.center.cy);
-        let centersClose = cxDelta < 2 && cyDelta < 2;
+        let centersClose = cxDelta < 5 && cyDelta < 5;
         if (!centersClose) return false;
 
         let perimetersClose = Math.abs(this.perimeter - shape.perimeter) < 100;
         if (!perimetersClose) return false;
 
-        if (this.vertices.length != shape.vertices.length) return false;
+        let firstShapeVertices = shape.vertices;
+        let secondShapeVertices = this.vertices;
+        if (this.identity == "circle") {
+            firstShapeVertices = shape.unfilteredVertices;
+            secondShapeVertices = this.unfilteredVertices;
+        }
+        if (firstShapeVertices.length != secondShapeVertices.length) return false;
         let verticesClose = false;
 
-        for (let i = 0; i < this.vertices.length; i++) {
-            let verticeXDelta = Math.abs(this.vertices[i][0] - shape.vertices[i][0]);
-            let verticeYDelta = Math.abs(this.vertices[i][1] - shape.vertices[i][1]);
+        for (let i = 0; i < firstShapeVertices.length; i++) {
+            let verticeXDelta = Math.abs(firstShapeVertices[i][0] - secondShapeVertices[i][0]);
+            let verticeYDelta = Math.abs(firstShapeVertices[i][1] - secondShapeVertices[i][1]);
             if (verticeXDelta < 70 && verticeYDelta < 70) verticesClose = true;
         }
         if (!verticesClose) return false;
-
         return true;
     }
+
+    areChildrenNoise() {
+        console.log(this.children);
+    }
+
 }

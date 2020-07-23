@@ -22,10 +22,10 @@ export default class PreProcessor {
         // make border edge
         cv.copyMakeBorder(cannyMat, cannyMat, 1, 1, 1, 1, cv.BORDER_CONSTANT, new cv.Scalar(255, 255, 255, 255));
 
-        // cv.imshow("test1", cannyMat);
+        cv.imshow("canny", cannyMat);
 
         this.erode_boundaries(cannyMat);
-        // cv.imshow("test2", cannyMat);
+        cv.imshow("erode", cannyMat);
 
         return cannyMat;
     }

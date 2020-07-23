@@ -28,9 +28,8 @@ export default class ContourProcessor {
         let contours = new cv.MatVector();
         let hierarchy = new cv.Mat();
         cv.findContours(this._mat, contours, hierarchy, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
-        //        console.log(contours.size());
-        // this._drawContour(contours.get(5));
 
+        cv.imshow("contours", this._mat);
         return [contours, hierarchy];
     }
 
@@ -43,7 +42,7 @@ export default class ContourProcessor {
         cv.drawContours(mat, contours, 0, color, 1, cv.LINE_8);
         // contours.delete();
 
-        cv.imshow("test3", mat);
+        // cv.imshow("test3", mat);
     }
 
     _createShapes() {
@@ -136,9 +135,7 @@ export default class ContourProcessor {
         for (let i = 0; i < this._shapes.length; i++) {
             if (this._noise.includes(i)) continue;
             if (i in this._duplicateContourIndicesMap) {
-                // console.log(this._shapes[i], i);
                 this._shapes[i].color = this._colorExtractor.createColorFromShape(this._shapes[i]);
-                // console.log(this._shapes[i]);
                 shapeEntryInfos[i] = this._shapes[i].fullShapeEntry;
             }
         }

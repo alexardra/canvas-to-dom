@@ -101,7 +101,7 @@ export const canvasDOMCompare = (firstEl, secondEl, options) => {
         return domComparator.areEqual(options);
     } catch (e) {
         console.log(e);
-        return false
+        return false;
     }
 
 }

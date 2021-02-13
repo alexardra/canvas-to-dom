@@ -1,12 +1,13 @@
 # canvas-to-dom
 
-**canvas-to-dom** generates DOM from HTML5 canvas.
+**canvas-to-dom** is an experimental project, which generates DOM from HTML5 canvas through visual inference.
+It serves as a demonstration of how computer vision techniques can be applied to automate web animation testing process. 
 
-Library extracts canvas state information from arbitrary frame through visual inference. It serves as a testing framework and visualization tool for HTML5 canvas.
+Library extracts canvas state information from arbitrary frame. It is intended to be used as a testing framework and visualization tool for HTML5 canvas.
 
 ## Project Status
 
-This project is currently in development. Users can generate DOM from simple/basic frames only.
+This project is currently in development. Users can generate DOM from frames which contain simple geometric shapes.
 
 ## Installation
 

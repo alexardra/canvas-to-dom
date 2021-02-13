@@ -8,7 +8,6 @@ export default class ContourProcessor {
         this._mat = mat;
         this._colorExtractor = colorExtractor;
         this._complexShapesProcessor = complexShapesProcessor;
-
         this._tree = null;
         this._contours = null;
         this._hierarchy = null;
@@ -30,16 +29,32 @@ export default class ContourProcessor {
         let hierarchy = new cv.Mat();
         cv.findContours(this._mat, contours, hierarchy, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
 
+        cv.imshow("contours", this._mat);
         return [contours, hierarchy];
+    }
+
+    _drawContour(contour) {
+        let color = new cv.Scalar(255, 255, 255, 255);
+        let mat = cv.Mat.zeros(this._mat.rows, this._mat.cols, cv.CV_8U); //black
+
+        let contours = new cv.MatVector();
+        contours.push_back(contour);
+        cv.drawContours(mat, contours, 0, color, 1, cv.LINE_8);
+        // contours.delete();
+
+        // cv.imshow("test3", mat);
     }
 
     _createShapes() {
         let shapes = [];
         for (let i = 0; i < this._contours.size(); i++) {
-            shapes.push(new Shape(this._contours.get(i)));
+            let shape = new Shape(this._contours.get(i));
+            shape.createShape(this._complexShapesProcessor.circles);
+            shapes.push(shape);
         }
         return shapes;
     }
+
 
     _createDuplicateContourIndicesMap() {
         let duplicateContourIndicesMap = {};
@@ -136,7 +151,7 @@ export default class ContourProcessor {
         const countShapes = this._shapes.length;
         for (let i = 0; i < countShapes; i++) {
             if (i in this._duplicateContourIndicesMap) {
-                if (this._shapes[i].isComplex) {
+                if (this._shapes[i].identity == "polygon") {
                     if (this._shapes[i].children && this._shapes[i].children.length > 1) {
                         const isObsolete = this._complexShapesProcessor.isShapeObsolete(this._shapes[i]);
                         if (isObsolete) {
@@ -145,7 +160,7 @@ export default class ContourProcessor {
                         }
                     } else if (this._shapes[i].children.length == 0) {
                         const generatedChildShapes = this._complexShapesProcessor.extractChildren(this._shapes[i]);
-                        if (generatedChildShapes.length > 0) {
+                        if (generatedChildShapes.length > 1) {
                             let entry = hierarchyProcessor.getHierarchyEntryContainingKey(i);
                             delete entry[i];
                             delete this._duplicateContourIndicesMap[i];

@@ -7,7 +7,10 @@ export default class ColorExtractor {
     }
 
     _createChannelValuesFromMask(mask, shape) {
-        let r = [], g = [], b = [], a = [];
+        let r = [],
+            g = [],
+            b = [],
+            a = [];
         const { x, y, width, height } = cv.boundingRect(shape.approxPoly);
         for (let row = y; row < y + height; row++) {
             for (let col = x; col < x + width; col++) {

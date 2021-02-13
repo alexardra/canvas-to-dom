@@ -12,7 +12,8 @@ export const TagPropertyMap = {
     "triangle": ["point-0", "point-1", "point-2", "center", "z-order", "orientation", "color"],
     "rectangle": ["width", "height", "center", "z-order", "orientation", "color"],
     "square": ["width", "height", "center", "z-order", "orientation", "color"],
-    "circle": ["diameter", "center", "z-order", "orientation", "color"]
+    "circle": ["diameter", "center", "z-order", "orientation", "color"],
+    "polygon": ["point", "center", "z-order", "orientation", "color"]
 }
 
 export const TagPatterns = {

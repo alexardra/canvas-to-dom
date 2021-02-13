@@ -11,15 +11,16 @@ export default class TagParser {
         let shapeTree = {};
         shapeTree.identity = element.nodeName.toLowerCase();
         const tagProperties = TagPropertyMap[shapeTree.identity];
-
-        const attributes = Array.from(element.attributes).map(attribute => attribute.nodeName);
-        this._missingProperties = tagProperties.filter(property => !attributes.includes(property));
+        if (shapeTree.identity != "polygon") {
+            const attributes = Array.from(element.attributes).map(attribute => attribute.nodeName);
+            this._missingProperties = tagProperties.filter(property => !attributes.includes(property));
+        }
         if (element.attributes && element.attributes.length) {
             Array.from(element.attributes).forEach((attribute) => {
                 let key = attribute.nodeName;
                 let value = attribute.nodeValue;
 
-                if (!tagProperties.includes(key)) {
+                if (shapeTree.identity != "polygon" && !tagProperties.includes(key)) {
                     throw new Error(`Invalid property '${key}' in tag '<${shapeTree.identity}>'.`);
                 }
                 let isMatch = new RegExp(TagPatterns[key]).test(value);

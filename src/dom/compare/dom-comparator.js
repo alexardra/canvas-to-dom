@@ -6,14 +6,13 @@ export default class DomComparator {
 
     constructor(firstDom, secondDom) {
         this._firstDom = firstDom.getElementsByTagName("canvas")[0];
-        this._secondDom = secondDom.getElementsByTagName("canvas")[0];;
+        this._secondDom = secondDom.getElementsByTagName("canvas")[0];
     }
 
     areEqual(options) {
         options = this._validateOptions(options);
         const firstDomNodes = this._domToNodeList(this._firstDom);
         const secondDomNodes = this._domToNodeList(this._secondDom);
-
         if (firstDomNodes.length != secondDomNodes.length) return false;
         const zIndexComparator = new ZIndexComparator("zOrder" in options ? options.zOrder : -1);
         const colorComparator = new ColorComparator(options.color);
@@ -33,15 +32,17 @@ export default class DomComparator {
                         }
                     } else {
                         let nodeAttribute = node.getAttribute(property);
-                        let nodeToCompareAttribute = nodeToCompare.getAttribute(property);
-                        const delta = property.startsWith("point") ? options.points.delta : options[property].delta;
+                        if (nodeAttribute) {
+                            let nodeToCompareAttribute = nodeToCompare.getAttribute(property);
+                            const delta = property.startsWith("point") ? options.points.delta : options[property].delta;
 
-                        if (property == "center" || property.startsWith("point")) {
-                            let [nodeCx, nodeCy] = nodeAttribute.replace(/\s/g, "").substring(1, nodeAttribute.length - 1).split(',').map(Number);
-                            let [compareCx, compareCy] = nodeToCompareAttribute.replace(/\s/g, "").substring(1, nodeToCompareAttribute.length - 1).split(',').map(Number);
+                            if (property == "center" || property.startsWith("point")) {
+                                let [nodeCx, nodeCy] = nodeAttribute.replace(/\s/g, "").substring(1, nodeAttribute.length - 1).split(',').map(Number);
+                                let [compareCx, compareCy] = nodeToCompareAttribute.replace(/\s/g, "").substring(1, nodeToCompareAttribute.length - 1).split(',').map(Number);
 
-                            if (Math.abs(nodeCx - compareCx) > delta || Math.abs(nodeCy - compareCy) > delta) return false;
-                        } else if (Math.abs(node.getAttribute(property) - nodeToCompare.getAttribute(property)) > delta) return false;
+                                if (Math.abs(nodeCx - compareCx) > delta || Math.abs(nodeCy - compareCy) > delta) return false;
+                            } else if (Math.abs(node.getAttribute(property) - nodeToCompare.getAttribute(property)) > delta) return false;
+                        }
                     }
                 }
                 return true;
@@ -93,5 +94,3 @@ export default class DomComparator {
         return Array.from(dom.getElementsByTagName("*"));
     }
 }
-
-

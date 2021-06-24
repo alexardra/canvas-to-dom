@@ -17,7 +17,7 @@
     "babel-loader": "^8.1.0",
     "babel-polyfill": "^6.26.0",
     "node-loader": "^0.6.0",
-    "webpack": "^4.42.1",
+    "webpack": "^5.40.0",
     "webpack-cli": "^3.3.11"
   }
 }
